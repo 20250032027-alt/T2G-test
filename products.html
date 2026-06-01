@@ -27,6 +27,7 @@
       </nav>
       <button class="nav-cart" id="cart-btn" aria-label="Open cart">
         <svg viewBox="0 0 24 24"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 002 1.61h9.72a2 2 0 002-1.61L23 6H6"/></svg>
+        <span class="cart-badge">0</span>
       </button>
       <button class="nav-toggle" aria-label="Open menu"><span></span><span></span><span></span></button>
     </div>
@@ -47,8 +48,8 @@
   </div>
 </div>
 
-<!-- FLAGSHIP PRODUCT HERO (green bg, image left / text right) -->
-<section class="product-hero" id="coco-sugar">
+<!-- FLAGSHIP HERO -->
+<section class="product-hero" id="coco-sugar-hero">
   <div class="container">
     <div class="product-hero-inner">
       <div class="product-hero-img"><span>Coco Sugar product photo placeholder</span></div>
@@ -56,13 +57,13 @@
         <span class="kicker">Flagship Product</span>
         <h1>Coco Sugar</h1>
         <p>Use as a 1:1 replacement for white or brown sugar in baking, cooking, or to sweeten coffee, tea, cereals, and more. Made from 100% fresh coconut sap. GI of 35.</p>
-        <a href="contact.html" class="btn btn-outline-white">Order Now</a>
+        <button class="btn btn-outline-white store-action-btn" data-product-id-hero="coco-sugar">Select Options</button>
       </div>
     </div>
   </div>
 </section>
 
-<!-- PAYMENTS / SHIPMENT INFO STRIP -->
+<!-- PAYMENTS / SHIPMENT STRIP -->
 <div class="product-info-strip">
   <div class="container">
     <div class="product-info-cols">
@@ -81,80 +82,72 @@
         </div>
         <div class="pi-text">
           <h4>Shipment</h4>
-          <p>Can't pick up your order? You can arrange your own delivery courier, with costs covered by you.</p>
+          <p>Can't pick up your order? Arrange your own courier — costs covered by you.</p>
         </div>
       </div>
     </div>
   </div>
 </div>
 
-<!-- FULL PRODUCT GRID -->
-<section style="background:var(--white);">
+<!-- PRODUCT GRID -->
+<section style="background:var(--white);padding-bottom:60px;">
   <div class="container">
     <div class="products-store-grid">
 
-      <!-- Popcorn -->
-      <div class="store-card reveal" id="popcorn">
-        <div class="store-card-ph">Popcorn product image</div>
+      <div class="store-card reveal" data-product-id="popcorn">
+        <div class="store-card-ph">Popcorn image</div>
         <h3>Popcorn</h3>
         <p class="price">PHP 170.00</p>
-        <a href="contact.html" class="btn btn-green">Select Options</a>
+        <button class="btn btn-green store-action-btn">Select Options</button>
       </div>
 
-      <!-- Coco Balsamic Vinegar -->
-      <div class="store-card reveal" id="coco-balsamic" data-delay="60">
-        <div class="store-card-ph">Coco Balsamic Vinegar product image</div>
+      <div class="store-card reveal" data-product-id="coco-balsamic" data-delay="60">
+        <div class="store-card-ph">Coco Balsamic Vinegar image</div>
         <h3>Coco Balsamic Vinegar</h3>
         <p class="price">PHP 200.00</p>
-        <a href="contact.html" class="btn btn-green">Add to Cart</a>
+        <button class="btn btn-green store-action-btn">Add to Cart</button>
       </div>
 
-      <!-- Coco Vinegar -->
-      <div class="store-card reveal" data-delay="120">
-        <div class="store-card-ph">Coco Vinegar product image</div>
+      <div class="store-card reveal" data-product-id="coco-vinegar" data-delay="120">
+        <div class="store-card-ph">Coco Vinegar image</div>
         <h3>Coco Vinegar</h3>
         <p class="price">PHP 165.00</p>
-        <a href="contact.html" class="btn btn-green">Add to Cart</a>
+        <button class="btn btn-green store-action-btn">Add to Cart</button>
       </div>
 
-      <!-- Coco Seasoning -->
-      <div class="store-card reveal" data-delay="0">
-        <div class="store-card-ph">Coco Seasoning product image</div>
+      <div class="store-card reveal" data-product-id="coco-seasoning" data-delay="0">
+        <div class="store-card-ph">Coco Seasoning image</div>
         <h3>Coco Seasoning</h3>
         <p class="price">PHP 165.00</p>
-        <a href="contact.html" class="btn btn-green">Add to Cart</a>
+        <button class="btn btn-green store-action-btn">Add to Cart</button>
       </div>
 
-      <!-- Virgin Coco Oil -->
-      <div class="store-card reveal" id="virgin-coco-oil" data-delay="60">
-        <div class="store-card-ph">Virgin Coco Oil product image</div>
+      <div class="store-card reveal" data-product-id="virgin-coco-oil" data-delay="60">
+        <div class="store-card-ph">Virgin Coco Oil image</div>
         <h3>Virgin Coco Oil</h3>
         <p class="price">PHP 198.00 – PHP 350.00</p>
-        <a href="contact.html" class="btn btn-green">Select Options</a>
+        <button class="btn btn-green store-action-btn">Select Options</button>
       </div>
 
-      <!-- Coco Syrup -->
-      <div class="store-card reveal" id="coco-syrup" data-delay="120">
-        <div class="store-card-ph">Coco Syrup product image</div>
+      <div class="store-card reveal" data-product-id="coco-syrup" data-delay="120">
+        <div class="store-card-ph">Coco Syrup image</div>
         <h3>Coco Syrup</h3>
         <p class="price">PHP 165.00</p>
-        <a href="contact.html" class="btn btn-green">Add to Cart</a>
+        <button class="btn btn-green store-action-btn">Add to Cart</button>
       </div>
 
-      <!-- Coco Jam -->
-      <div class="store-card reveal" id="coco-jam" data-delay="0">
-        <div class="store-card-ph">Coco Jam product image</div>
+      <div class="store-card reveal" data-product-id="coco-jam" data-delay="0">
+        <div class="store-card-ph">Coco Jam image</div>
         <h3>Coco Jam</h3>
         <p class="price">PHP 165.00</p>
-        <a href="contact.html" class="btn btn-green">Add to Cart</a>
+        <button class="btn btn-green store-action-btn">Add to Cart</button>
       </div>
 
-      <!-- Coco Sugar -->
-      <div class="store-card reveal" data-delay="60">
-        <div class="store-card-ph">Coco Sugar product image</div>
+      <div class="store-card reveal" data-product-id="coco-sugar" data-delay="60">
+        <div class="store-card-ph">Coco Sugar image</div>
         <h3>Coco Sugar</h3>
         <p class="price">PHP 120.00 – PHP 400.00</p>
-        <a href="contact.html" class="btn btn-green">Select Options</a>
+        <button class="btn btn-green store-action-btn">Select Options</button>
       </div>
 
     </div>
@@ -181,7 +174,6 @@
   </div>
 </footer>
 
-
 <!-- CART DRAWER -->
 <div class="cart-overlay" id="cart-overlay">
   <div class="cart-backdrop" id="cart-backdrop"></div>
@@ -195,6 +187,14 @@
     </div>
   </div>
 </div>
+
 <script src="assets/main.js"></script>
+<script src="assets/cart.js"></script>
+<script>
+  // Hero "Select Options" button
+  document.querySelector('[data-product-id-hero]')?.addEventListener('click', function() {
+    buildModal(this.dataset.productIdHero);
+  });
+</script>
 </body>
 </html>
