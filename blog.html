@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Blog — Trunk to Gold (T2G)</title>
+  <link rel="icon" type="image/png" href="assets/img/logo.png">
+  <link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+
+<div id="topbar">
+  For bulk orders of more than PHP 4,000, contact +63 917 XXX XXXX or email <a href="mailto:trunk2gold@gmail.com">trunk2gold@gmail.com</a>
+</div>
+<header id="header">
+  <div class="container">
+    <div class="header-row">
+      <a id="logo" href="index.html"><img src="assets/img/logo.png" alt="Trunk to Gold"></a>
+      <div class="nav-spacer"></div>
+      <nav class="nav-links">
+        <a href="about.html">About</a>
+        <a href="products.html">Products</a>
+        <a href="export.html">Export</a>
+        <a href="faq.html">FAQ</a>
+        <a href="blog.html" class="active">Blog</a>
+        <a href="contact.html">Contact</a>
+      </nav>
+      <button class="nav-cart" id="cart-btn" aria-label="Open cart">
+        <svg viewBox="0 0 24 24"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 002 1.61h9.72a2 2 0 002-1.61L23 6H6"/></svg>
+      </button>
+      <button class="nav-toggle" aria-label="Open menu"><span></span><span></span><span></span></button>
+    </div>
+  </div>
+</header>
+<div class="mobile-menu" id="mobile-menu">
+  <div class="mobile-backdrop" id="mobile-backdrop"></div>
+  <div class="mobile-panel">
+    <button class="mobile-close" id="mobile-close" aria-label="Close menu">&#x2715;</button>
+    <nav>
+      <a href="about.html">About</a>
+      <a href="products.html">Products</a>
+      <a href="export.html">Export</a>
+      <a href="faq.html">FAQ</a>
+      <a href="blog.html">Blog</a>
+      <a href="contact.html">Contact</a>
+    </nav>
+  </div>
+</div>
+
+<section class="blog-page">
+  <div class="container">
+    <h1 class="sec-title">Blog</h1>
+    <p class="sec-desc">Stay up to date with T2G. News, product updates, health tips, and stories from our farms and communities in Misamis Oriental.</p>
+
+    <div class="blog-grid">
+
+      <!-- Post 1 -->
+      <div class="blog-card reveal" data-delay="0">
+        <div class="blog-card-img"><span>Blog image placeholder</span></div>
+        <div class="blog-card-body">
+          <h3>T2G Breathes New Life into the Coconut Industry in Misamis Oriental</h3>
+          <span class="blog-date">April 3, 2024</span>
+          <p>From a wok on a stove to a mechanized facility in San Isidro, Jasaan — this is how T2G got here, and where it is going next.</p>
+        </div>
+      </div>
+
+      <!-- Post 2 -->
+      <div class="blog-card reveal" data-delay="60">
+        <div class="blog-card-img"><span>Blog image placeholder</span></div>
+        <div class="blog-card-body">
+          <h3>Why Coconut Tappers in Balingasag Earn More Working with T2G</h3>
+          <span class="blog-date">Coming soon</span>
+          <p>Copra farming pays once a quarter. Coconut sap pays every week. We look at what that difference actually means for families in Misamis Oriental.</p>
+        </div>
+      </div>
+
+      <!-- Post 3 -->
+      <div class="blog-card reveal" data-delay="120">
+        <div class="blog-card-img"><span>Blog image placeholder</span></div>
+        <div class="blog-card-body">
+          <h3>Coco Savor: T2G's New Seasoning Sauce is Headed to Market</h3>
+          <span class="blog-date">Coming soon</span>
+          <p>Low sodium, gluten-free, allergen-free, and made entirely from coconut sap. We worked with DOST-ITDI to develop it. Here is what it is and how it came together.</p>
+        </div>
+      </div>
+
+      <!-- Post 4 -->
+      <div class="blog-card reveal" data-delay="0">
+        <div class="blog-card-img"><span>Blog image placeholder</span></div>
+        <div class="blog-card-body">
+          <h3>Bake Healthier with T2G Coco Sugar: Chocolate Chip Cookies</h3>
+          <span class="blog-date">Coming soon</span>
+          <p>A straightforward swap. Use T2G Coco Sugar in place of white sugar in any cookie recipe. Here is a version we actually made and ate.</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-inner">
+      <div class="footer-brand"><img src="assets/img/logo.png" alt="T2G"></div>
+      <div class="footer-address">San Isidro, Jasaan<br>Misamis Oriental, Philippines</div>
+      <div class="footer-contact">trunk2gold@gmail.com<br>+63 917 XXX XXXX</div>
+      <div class="footer-nav-col"><ul>
+        <li><a href="about.html">About</a></li><li><a href="products.html">Products</a></li>
+        <li><a href="export.html">Export</a></li><li><a href="faq.html">FAQ</a></li>
+        <li><a href="blog.html">Blog</a></li><li><a href="contact.html">Contact</a></li>
+      </ul></div>
+    </div>
+    <div class="footer-bottom">
+      <span>&copy; T2G Trunk to Gold Copyright 2025</span>
+      <div class="footer-social"><a href="#">f</a><a href="#">ig</a><a href="#">tt</a></div>
+    </div>
+  </div>
+</footer>
+
+
+<!-- CART DRAWER -->
+<div class="cart-overlay" id="cart-overlay">
+  <div class="cart-backdrop" id="cart-backdrop"></div>
+  <div class="cart-drawer">
+    <div class="cart-drawer-header">
+      <h2>Cart</h2>
+      <button class="cart-close-btn" id="cart-close-btn" aria-label="Close cart">&#x2715;</button>
+    </div>
+    <div class="cart-drawer-body">
+      <p class="cart-empty-msg">No products in the cart.</p>
+    </div>
+  </div>
+</div>
+<script src="assets/main.js"></script>
+</body>
+</html>

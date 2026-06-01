@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cart — Trunk to Gold (T2G)</title>
+  <link rel="icon" type="image/png" href="assets/img/logo.png">
+  <link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+
+<div id="topbar">
+  For bulk orders of more than PHP 4,000, contact +63 917 XXX XXXX or email <a href="mailto:trunk2gold@gmail.com">trunk2gold@gmail.com</a>
+</div>
+<header id="header">
+  <div class="container">
+    <div class="header-row">
+      <a id="logo" href="index.html"><img src="assets/img/logo.png" alt="Trunk to Gold"></a>
+      <div class="nav-spacer"></div>
+      <nav class="nav-links">
+        <a href="about.html">About</a>
+        <a href="products.html">Products</a>
+        <a href="export.html">Export</a>
+        <a href="faq.html">FAQ</a>
+        <a href="blog.html">Blog</a>
+        <a href="contact.html">Contact</a>
+      </nav>
+      <a href="cart.html" class="nav-cart active" aria-label="Cart">
+        <svg viewBox="0 0 24 24"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 002 1.61h9.72a2 2 0 002-1.61L23 6H6"/></svg>
+      </a>
+      <button class="nav-toggle" aria-label="Open menu"><span></span><span></span><span></span></button>
+    </div>
+  </div>
+</header>
+<div class="mobile-menu">
+  <button class="mobile-close">&#x2715;</button>
+  <nav>
+    <a href="about.html">About</a><a href="products.html">Products</a><a href="export.html">Export</a>
+    <a href="faq.html">FAQ</a><a href="blog.html">Blog</a><a href="contact.html">Contact</a>
+  </nav>
+</div>
+
+<section class="section" style="background:var(--grey-bg);min-height:60vh;">
+  <div class="container" style="max-width:700px;">
+    <h1 style="font-size:1.5rem;font-weight:700;color:var(--text);margin-bottom:32px;">Your Cart</h1>
+
+    <div id="cart-empty" style="text-align:center;padding:60px 0;">
+      <p style="font-size:1rem;color:var(--text-light);margin-bottom:24px;">Your cart is empty.</p>
+      <a href="products.html" class="btn btn-green">Browse Products</a>
+    </div>
+
+    <div id="cart-items" style="display:none;">
+      <!-- Cart items rendered by JS -->
+      <div style="background:var(--white);border:1px solid var(--border);border-radius:3px;padding:24px;margin-bottom:16px;">
+        <p style="font-size:.88rem;color:var(--text-light);">Cart functionality connects to your checkout backend. For now, orders can be placed via the <a href="contact.html" style="color:var(--green);">contact page</a>.</p>
+      </div>
+      <div style="text-align:right;margin-top:20px;">
+        <a href="contact.html" class="btn btn-green">Place Order via Contact</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-inner">
+      <div class="footer-brand"><img src="assets/img/logo.png" alt="T2G"></div>
+      <div class="footer-address">San Isidro, Jasaan<br>Misamis Oriental, Philippines</div>
+      <div class="footer-contact">trunk2gold@gmail.com<br>+63 917 XXX XXXX</div>
+      <div class="footer-nav-col"><ul>
+        <li><a href="about.html">About</a></li><li><a href="products.html">Products</a></li>
+        <li><a href="export.html">Export</a></li><li><a href="faq.html">FAQ</a></li>
+        <li><a href="blog.html">Blog</a></li><li><a href="contact.html">Contact</a></li>
+      </ul></div>
+    </div>
+    <div class="footer-bottom">
+      <span>&copy; T2G Trunk to Gold Copyright 2025</span>
+      <div class="footer-social"><a href="#">f</a><a href="#">ig</a><a href="#">tt</a></div>
+    </div>
+  </div>
+</footer>
+
+<script src="assets/main.js"></script>
+</body>
+</html>
