@@ -196,8 +196,8 @@ function renderCartDrawer() {
     <strong>PHP ${total.toFixed(2)}</strong>
   </div>
   <div class="cart-actions">
-    <a href="contact.html" class="btn btn-green cart-view-btn">View Cart</a>
-    <a href="contact.html" class="btn btn-green cart-checkout-btn">Checkout</a>
+    <a href="checkout.html" class="btn btn-green cart-view-btn">View Cart</a>
+    <a href="checkout.html" class="btn btn-green cart-checkout-btn">Checkout</a>
   </div>`;
 
   body.innerHTML = html;
