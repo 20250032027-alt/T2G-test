@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Products — T2G Coconut Sugar, Syrup, VCO & More | Trunk to Gold</title>
+  <title>Products | T2G Coconut Sugar, Syrup, VCO & More | Trunk to Gold</title>
   <link rel="icon" type="image/png" href="assets/img/logo.png">
   <link rel="stylesheet" href="assets/style.css">
 </head>
@@ -82,74 +82,19 @@
         </div>
         <div class="pi-text">
           <h4>Shipment</h4>
-          <p>Can't pick up your order? Arrange your own courier — costs covered by you.</p>
+          <p>Can't pick up your order? Arrange your own courier. costs covered by you.</p>
         </div>
       </div>
     </div>
   </div>
 </div>
 
-<!-- PRODUCT GRID -->
+<!-- PRODUCT GRID - rendered dynamically by products-render.js from T2G_PRODUCTS -->
 <section style="background:var(--white);padding-bottom:60px;">
   <div class="container">
-    <div class="products-store-grid">
-
-      <div class="store-card reveal" data-product-id="popcorn">
-        <div class="store-card-ph">Popcorn image</div>
-        <h3>Popcorn</h3>
-        <p class="price">PHP 170.00</p>
-        <button class="btn btn-green store-action-btn">Select Options</button>
-      </div>
-
-      <div class="store-card reveal" data-product-id="coco-balsamic" data-delay="60">
-        <div class="store-card-ph">Coco Balsamic Vinegar image</div>
-        <h3>Coco Balsamic Vinegar</h3>
-        <p class="price">PHP 200.00</p>
-        <button class="btn btn-green store-action-btn">Add to Cart</button>
-      </div>
-
-      <div class="store-card reveal" data-product-id="coco-vinegar" data-delay="120">
-        <div class="store-card-ph">Coco Vinegar image</div>
-        <h3>Coco Vinegar</h3>
-        <p class="price">PHP 165.00</p>
-        <button class="btn btn-green store-action-btn">Add to Cart</button>
-      </div>
-
-      <div class="store-card reveal" data-product-id="coco-seasoning" data-delay="0">
-        <div class="store-card-ph">Coco Seasoning image</div>
-        <h3>Coco Seasoning</h3>
-        <p class="price">PHP 165.00</p>
-        <button class="btn btn-green store-action-btn">Add to Cart</button>
-      </div>
-
-      <div class="store-card reveal" data-product-id="virgin-coco-oil" data-delay="60">
-        <div class="store-card-ph">Virgin Coco Oil image</div>
-        <h3>Virgin Coco Oil</h3>
-        <p class="price">PHP 198.00 – PHP 350.00</p>
-        <button class="btn btn-green store-action-btn">Select Options</button>
-      </div>
-
-      <div class="store-card reveal" data-product-id="coco-syrup" data-delay="120">
-        <div class="store-card-ph">Coco Syrup image</div>
-        <h3>Coco Syrup</h3>
-        <p class="price">PHP 165.00</p>
-        <button class="btn btn-green store-action-btn">Add to Cart</button>
-      </div>
-
-      <div class="store-card reveal" data-product-id="coco-jam" data-delay="0">
-        <div class="store-card-ph">Coco Jam image</div>
-        <h3>Coco Jam</h3>
-        <p class="price">PHP 165.00</p>
-        <button class="btn btn-green store-action-btn">Add to Cart</button>
-      </div>
-
-      <div class="store-card reveal" data-product-id="coco-sugar" data-delay="60">
-        <div class="store-card-ph">Coco Sugar image</div>
-        <h3>Coco Sugar</h3>
-        <p class="price">PHP 120.00 – PHP 400.00</p>
-        <button class="btn btn-green store-action-btn">Select Options</button>
-      </div>
-
+    <div class="products-store-grid" id="dynamic-product-grid">
+      <!-- Cards are injected here by products-render.js on page load -->
+      <!-- Static fallback cards removed: all data lives in assets/cart.js -->
     </div>
   </div>
 </section>
@@ -196,5 +141,7 @@
     buildModal(this.dataset.productIdHero);
   });
 </script>
+<script src="assets/devmode.js"></script>
+<script src="assets/products-render.js"></script>
 </body>
 </html>

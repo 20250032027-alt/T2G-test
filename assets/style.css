@@ -1,5 +1,5 @@
 /* ================================================
-   T2G — Trunk to Gold  |  Coco Natura Clone Style
+   T2G. Trunk to Gold  |  Coco Natura Clone Style
    ================================================ */
 
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,600&display=swap');
@@ -120,7 +120,7 @@ address { font-style: normal; }
 .nav-toggle.open span:nth-child(2) { opacity: 0; }
 .nav-toggle.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
 
-/* Mobile menu — slides in from LEFT, X top-right */
+/* Mobile menu. slides in from LEFT, X top-right */
 .mobile-menu {
   display: flex;
   position: fixed;
@@ -951,7 +951,7 @@ address { font-style: normal; }
 .form-success { display: none; margin-top: 12px; font-size: .85rem; font-weight: 700; color: var(--green); text-align: center; padding: 12px; background: #e8f5e9; border-radius: 3px; }
 
 /* ================================================
-   FOOTER — matches Coco Natura reference layout
+   FOOTER. matches Coco Natura reference layout
    ================================================ */
 .footer {
   background: var(--dark);
@@ -1140,7 +1140,7 @@ address { font-style: normal; }
   /* blog */
   .blog-grid { grid-template-columns: 1fr; }
 
-  /* footer — stack to 2-col then 1-col */
+  /* footer. stack to 2-col then 1-col */
   .footer-inner {
     grid-template-columns: 1fr 1fr;
     gap: 20px;

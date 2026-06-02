@@ -1,5 +1,5 @@
 /* ============================================================
-   T2G Cart System — cart.js
+   T2G Cart System. cart.js
    Handles: product data, cart state, product modal, cart drawer
    ============================================================ */
 'use strict';
@@ -19,7 +19,7 @@ const T2G_PRODUCTS = {
         { value: 'dark-choco-cranberry', label: 'Dark Choco Cranberry', price: 170 },
       ]
     },
-    description: `<p>Enjoy movie nights with T2G Popcorn — a guilt-free snack made from all-natural ingredients and sweetened only with our coco sugar and coco syrup. No artificial flavors, no preservatives.</p><ul><li>All-natural ingredients</li><li>Nutritious</li><li>No additives or preservatives</li></ul>`,
+    description: `<p>Enjoy movie nights with T2G Popcorn. a guilt-free snack made from all-natural ingredients and sweetened only with our coco sugar and coco syrup. No artificial flavors, no preservatives.</p><ul><li>All-natural ingredients</li><li>Nutritious</li><li>No additives or preservatives</li></ul>`,
     related: ['coco-balsamic', 'coco-sugar', 'coco-vinegar', 'coco-jam'],
   },
   'coco-balsamic': {
@@ -29,7 +29,7 @@ const T2G_PRODUCTS = {
     priceDisplay: 'PHP 200.00',
     priceRange: null,
     variants: null,
-    description: `<p>Aged coconut sap vinegar with a deep, complex flavor. Dark, tangy, slightly sweet — a Philippine-made take on a classic condiment. Great for salad dressings, glazes, and gourmet dishes.</p><ul><li>Naturally fermented</li><li>All-natural</li><li>No additives</li></ul>`,
+    description: `<p>Aged coconut sap vinegar with a deep, complex flavor. Dark, tangy, slightly sweet. a Philippine-made take on a classic condiment. Great for salad dressings, glazes, and gourmet dishes.</p><ul><li>Naturally fermented</li><li>All-natural</li><li>No additives</li></ul>`,
     related: ['coco-vinegar', 'coco-seasoning', 'coco-syrup', 'coco-jam'],
   },
   'coco-vinegar': {
@@ -102,7 +102,7 @@ const T2G_PRODUCTS = {
         { value: '1kg', label: '1kg', price: 400 },
       ]
     },
-    description: `<p>Made from 100% fresh coconut sap, minimally processed to retain its natural minerals, vitamins, and amino acids. GI of 35 — a tested, real alternative to refined sugar.</p><ul><li>GI of 35 (low glycemic)</li><li>All-natural</li><li>Diabetic-friendly</li><li>No additives</li></ul>`,
+    description: `<p>Made from 100% fresh coconut sap, minimally processed to retain its natural minerals, vitamins, and amino acids. GI of 35. a tested, real alternative to refined sugar.</p><ul><li>GI of 35 (low glycemic)</li><li>All-natural</li><li>Diabetic-friendly</li><li>No additives</li></ul>`,
     related: ['coco-syrup', 'coco-jam', 'virgin-coco-oil', 'coco-seasoning'],
   },
 };
