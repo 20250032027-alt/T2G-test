@@ -1,9 +1,23 @@
 /* ============================================================
    products-render.js
-   Dynamically renders the product store grid from T2G_PRODUCTS
-   so Dev Mode changes show immediately on reload.
+   Dynamically renders the product grid from T2G_PRODUCTS.
+   Each product's imageName field determines the image file:
+   put a matching file in assets/img/ and it shows automatically.
    ============================================================ */
 'use strict';
+
+function getProductImage(p, cssClass, altText) {
+  const imgName = p.imageName || (p.id + '.png');
+  const src = 'assets/img/' + imgName;
+  // Try to render as <img>; if it 404s the onerror swaps to placeholder
+  return `<img
+    src="${src}"
+    alt="${altText || p.name}"
+    class="${cssClass}"
+    style="width:100%;height:100%;object-fit:contain;padding:12px;"
+    onerror="this.outerHTML='<div class=\\'${cssClass}\\' style=\\'width:100%;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:12px;text-align:center;gap:6px;\\'><span style=\\'font-size:.62rem;color:#bbb;font-weight:600;text-transform:uppercase;letter-spacing:.05em;\\'>Add image:</span><code style=\\'font-size:.68rem;background:#f0f0f0;padding:2px 6px;border-radius:3px;color:#888;\\'>${imgName}</code><span style=\\'font-size:.6rem;color:#ccc;\\'>assets/img/</span></div>'"
+  >`;
+}
 
 function renderProductGrid() {
   const grid = document.getElementById('dynamic-product-grid');
@@ -11,7 +25,7 @@ function renderProductGrid() {
 
   const products = Object.values(T2G_PRODUCTS);
   if (!products.length) {
-    grid.innerHTML = '<p style="color:var(--text-light);font-size:.9rem;padding:20px 0;">No products found. Open Dev Mode (Alt+1) to add products.</p>';
+    grid.innerHTML = '<p style="color:var(--text-light);font-size:.9rem;padding:20px 0;grid-column:1/-1;">No products found. Press Alt+1 to open Dev Mode and add products.</p>';
     return;
   }
 
@@ -19,16 +33,17 @@ function renderProductGrid() {
     const delay = (i % 3) * 60;
     const hasVariants = p.variants && p.variants.options && p.variants.options.length > 0;
     const btnLabel = hasVariants ? 'Select Options' : 'Add to Cart';
+    const img = getProductImage(p, 'store-card-img-el', p.name);
     return `
     <div class="store-card reveal" data-product-id="${p.id}" data-delay="${delay}">
-      <div class="store-card-ph">${p.name}<br><small style="font-size:.65rem;opacity:.6;">Image placeholder</small></div>
+      <div class="store-card-ph" style="overflow:hidden;">${img}</div>
       <h3>${p.name}</h3>
       <p class="price">${p.priceDisplay}</p>
       <button class="btn btn-green store-action-btn">${btnLabel}</button>
     </div>`;
   }).join('');
 
-  // Re-init scroll reveal for new cards
+  // Scroll reveal
   if (typeof IntersectionObserver !== 'undefined') {
     const io = new IntersectionObserver(entries => {
       entries.forEach(e => {
@@ -41,11 +56,10 @@ function renderProductGrid() {
     grid.querySelectorAll('.reveal').forEach(el => io.observe(el));
   }
 
-  // Wire up product card buttons
+  // Wire up cart buttons
   if (typeof initProductCards === 'function') initProductCards();
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-  // Give cart.js + devmode.js time to load saved products first
   setTimeout(renderProductGrid, 0);
 });
