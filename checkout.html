@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Checkout — Trunk to Gold (T2G)</title>
+  <title>Checkout | Trunk to Gold (T2G)</title>
   <meta name="description" content="Complete your T2G order. Choose delivery or pickup, enter your details, and pay via GCash or Cash on Pickup.">
   <meta name="robots" content="noindex">
   <link rel="icon" type="image/png" href="assets/img/logo.png">
@@ -312,7 +312,7 @@
 <body>
 
 <div id="topbar">
-  For bulk orders of more than PHP 4,000, contact +63 917 XXX XXXX or email <a href="mailto:trunk2gold@gmail.com">trunk2gold@gmail.com</a>
+  For bulk orders of more than PHP 4,000, contact (0917) 716 4225 or email <a href="mailto:t2gcorp2017@yahoo.com">t2gcorp2017@yahoo.com</a>
 </div>
 <header id="header">
   <div class="container">
@@ -401,7 +401,7 @@
               <div class="radio-opt-left">
                 <div class="radio-circle"><div class="radio-dot"></div></div>
                 <div>
-                  <div class="radio-label">T2G Office — San Isidro, Jasaan</div>
+                  <div class="radio-label">T2G Office. San Isidro, Jasaan</div>
                 </div>
               </div>
               <span class="radio-price">FREE</span>
@@ -441,7 +441,7 @@
               <option>Metro Manila</option><option>Region I</option><option>Region II</option>
               <option>Region III</option><option>Region IV-A</option><option>Region V</option>
               <option>Region VI</option><option>Region VII</option><option>Region VIII</option>
-              <option>Region IX</option><option selected>Region X — Northern Mindanao</option>
+              <option>Region IX</option><option selected>Region X. Northern Mindanao</option>
               <option>Region XI</option><option>Region XII</option><option>CAR</option>
               <option>BARMM</option><option>NCR</option>
             </select>
@@ -464,7 +464,7 @@
                 </div>
               </div>
               <div class="gcash-instructions show" id="gcash-info">
-                Transfer the full amount to GCash number <strong>09175650702</strong>. Then send the deposit slip or proof of transfer to <strong>trunk2gold@gmail.com</strong>.
+                Transfer the full amount to GCash number <strong>09177164225</strong>. Then send the deposit slip or proof of transfer to <strong>t2gcorp2017@yahoo.com</strong>.
               </div>
             </div>
             <div class="radio-opt" onclick="selectPayment(this, 'cash')">
@@ -533,7 +533,7 @@
         <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
       </div>
       <h2>Order Placed!</h2>
-      <p id="oc-msg">Thank you. We have received your order and will be in touch at the email you provided. If you chose GCash, please send your proof of payment to trunk2gold@gmail.com.</p>
+      <p id="oc-msg">Thank you. We have received your order and will be in touch at the email you provided. If you chose GCash, please send your proof of payment to t2gcorp2017@yahoo.com.</p>
       <a href="products.html" class="btn btn-green">Continue Shopping</a>
     </div>
   </div>
@@ -660,10 +660,11 @@ function placeOrder() {
   document.getElementById('cb-complete').classList.add('active');
   document.getElementById('oc-msg').textContent =
     `Thank you${email ? ', ' + email : ''}. We have received your order and will be in touch shortly. ` +
-    (currentPayment === 'gcash' ? 'Please send your GCash proof of payment to trunk2gold@gmail.com.' : 'Please have your cash ready on pickup.');
+    (currentPayment === 'gcash' ? 'Please send your GCash proof of payment to t2gcorp2017@yahoo.com.' : 'Please have your cash ready on pickup.');
   window.scrollTo({ top: 0, behavior: 'smooth' });
   updateCartBadge();
 }
 </script>
+<script src="assets/devmode.js"></script>
 </body>
 </html>

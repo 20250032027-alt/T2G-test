@@ -3,14 +3,14 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Products — T2G Coconut Sugar, Syrup, VCO & More | Trunk to Gold</title>
+  <title>Products | T2G Coconut Sugar, Syrup, VCO & More | Trunk to Gold</title>
   <link rel="icon" type="image/png" href="assets/img/logo.png">
   <link rel="stylesheet" href="assets/style.css">
 </head>
 <body>
 
 <div id="topbar">
-  For bulk orders of more than PHP 4,000, contact +63 917 XXX XXXX or email <a href="mailto:trunk2gold@gmail.com">trunk2gold@gmail.com</a>
+  For bulk orders of more than PHP 4,000, contact (0917) 716 4225 or email <a href="mailto:t2gcorp2017@yahoo.com">t2gcorp2017@yahoo.com</a>
 </div>
 <header id="header">
   <div class="container">
@@ -52,7 +52,7 @@
 <section class="product-hero" id="coco-sugar-hero">
   <div class="container">
     <div class="product-hero-inner">
-      <div class="product-hero-img"><span>Coco Sugar product photo placeholder</span></div>
+      <div class="product-hero-img" style="overflow:hidden;"><img src="assets/img/coco-sugar.png" alt="T2G Coco Sugar flagship product" style="width:100%;height:100%;object-fit:contain;padding:12px;" data-ph="coco-sugar.png" class="safe-img"><span style=\"font-size:.58rem;color:rgba(255,255,255,.6);font-weight:700;text-transform:uppercase;letter-spacing:.05em;\">Add image:</span><code style=\"font-size:.68rem;background:rgba(255,255,255,.15);padding:2px 8px;border-radius:3px;color:rgba(255,255,255,.8);\">coco-sugar.png</code><span style=\"font-size:.56rem;color:rgba(255,255,255,.35);\">assets/img/</span></div>'"></div>
       <div class="product-hero-text">
         <span class="kicker">Flagship Product</span>
         <h1>Coco Sugar</h1>
@@ -82,74 +82,19 @@
         </div>
         <div class="pi-text">
           <h4>Shipment</h4>
-          <p>Can't pick up your order? Arrange your own courier — costs covered by you.</p>
+          <p>Can't pick up your order? Arrange your own courier. costs covered by you.</p>
         </div>
       </div>
     </div>
   </div>
 </div>
 
-<!-- PRODUCT GRID -->
+<!-- PRODUCT GRID - rendered dynamically by products-render.js from T2G_PRODUCTS -->
 <section style="background:var(--white);padding-bottom:60px;">
   <div class="container">
-    <div class="products-store-grid">
-
-      <div class="store-card reveal" data-product-id="popcorn">
-        <div class="store-card-ph">Popcorn image</div>
-        <h3>Popcorn</h3>
-        <p class="price">PHP 170.00</p>
-        <button class="btn btn-green store-action-btn">Select Options</button>
-      </div>
-
-      <div class="store-card reveal" data-product-id="coco-balsamic" data-delay="60">
-        <div class="store-card-ph">Coco Balsamic Vinegar image</div>
-        <h3>Coco Balsamic Vinegar</h3>
-        <p class="price">PHP 200.00</p>
-        <button class="btn btn-green store-action-btn">Add to Cart</button>
-      </div>
-
-      <div class="store-card reveal" data-product-id="coco-vinegar" data-delay="120">
-        <div class="store-card-ph">Coco Vinegar image</div>
-        <h3>Coco Vinegar</h3>
-        <p class="price">PHP 165.00</p>
-        <button class="btn btn-green store-action-btn">Add to Cart</button>
-      </div>
-
-      <div class="store-card reveal" data-product-id="coco-seasoning" data-delay="0">
-        <div class="store-card-ph">Coco Seasoning image</div>
-        <h3>Coco Seasoning</h3>
-        <p class="price">PHP 165.00</p>
-        <button class="btn btn-green store-action-btn">Add to Cart</button>
-      </div>
-
-      <div class="store-card reveal" data-product-id="virgin-coco-oil" data-delay="60">
-        <div class="store-card-ph">Virgin Coco Oil image</div>
-        <h3>Virgin Coco Oil</h3>
-        <p class="price">PHP 198.00 – PHP 350.00</p>
-        <button class="btn btn-green store-action-btn">Select Options</button>
-      </div>
-
-      <div class="store-card reveal" data-product-id="coco-syrup" data-delay="120">
-        <div class="store-card-ph">Coco Syrup image</div>
-        <h3>Coco Syrup</h3>
-        <p class="price">PHP 165.00</p>
-        <button class="btn btn-green store-action-btn">Add to Cart</button>
-      </div>
-
-      <div class="store-card reveal" data-product-id="coco-jam" data-delay="0">
-        <div class="store-card-ph">Coco Jam image</div>
-        <h3>Coco Jam</h3>
-        <p class="price">PHP 165.00</p>
-        <button class="btn btn-green store-action-btn">Add to Cart</button>
-      </div>
-
-      <div class="store-card reveal" data-product-id="coco-sugar" data-delay="60">
-        <div class="store-card-ph">Coco Sugar image</div>
-        <h3>Coco Sugar</h3>
-        <p class="price">PHP 120.00 – PHP 400.00</p>
-        <button class="btn btn-green store-action-btn">Select Options</button>
-      </div>
-
+    <div class="products-store-grid" id="dynamic-product-grid">
+      <!-- Cards are injected here by products-render.js on page load -->
+      <!-- Static fallback cards removed: all data lives in assets/cart.js -->
     </div>
   </div>
 </section>
@@ -160,7 +105,7 @@
     <div class="footer-inner">
       <div class="footer-brand"><img src="assets/img/logo.png" alt="T2G"></div>
       <div class="footer-address">San Isidro, Jasaan<br>Misamis Oriental, Philippines</div>
-      <div class="footer-contact">trunk2gold@gmail.com<br>+63 917 XXX XXXX</div>
+      <div class="footer-contact">t2gcorp2017@yahoo.com<br>(0917) 716 4225</div>
       <div class="footer-nav-col"><ul>
         <li><a href="about.html">About</a></li><li><a href="products.html">Products</a></li>
         <li><a href="export.html">Export</a></li><li><a href="faq.html">FAQ</a></li>
@@ -169,7 +114,7 @@
     </div>
     <div class="footer-bottom">
       <span>&copy; T2G Trunk to Gold Copyright 2025</span>
-      <div class="footer-social"><a href="#">f</a><a href="#">ig</a><a href="#">tt</a></div>
+      <div class="footer-social"><a href="https://www.facebook.com/trunk2gold" target="_blank" rel="noopener" aria-label="T2G on Facebook">Facebook</a></div>
     </div>
   </div>
 </footer>
@@ -196,5 +141,7 @@
     buildModal(this.dataset.productIdHero);
   });
 </script>
+<script src="assets/devmode.js"></script>
+<script src="assets/products-render.js"></script>
 </body>
 </html>
