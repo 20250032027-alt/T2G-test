@@ -113,3 +113,22 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
 });
+
+/* ── Safe image placeholder handler ── */
+document.addEventListener('DOMContentLoaded', () => {
+  document.querySelectorAll('img.safe-img').forEach(img => {
+    const fname = img.dataset.ph || 'image';
+    img.addEventListener('error', () => {
+      const wrap = img.parentElement;
+      img.style.display = 'none';
+      // Create placeholder div
+      const ph = document.createElement('div');
+      ph.style.cssText = 'width:100%;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;padding:12px;text-align:center;background:var(--cream-mid,#e8ddd0);';
+      ph.innerHTML =
+        '<span style="font-size:.58rem;color:#999;font-weight:700;text-transform:uppercase;letter-spacing:.05em;">Add image:</span>' +
+        '<code style="font-size:.68rem;background:#e0d8cc;padding:2px 8px;border-radius:3px;color:#888;">' + fname + '</code>' +
+        '<small style="font-size:.55rem;color:#bbb;">assets/img/</small>';
+      if (wrap) wrap.appendChild(ph);
+    }, { once: true });
+  });
+});

@@ -23,8 +23,8 @@ A multi-page static website for **T2G (Trunk to Gold)**, a premium coconut produ
 ## Placeholders to Replace
 
 1. **Images** - All `img-placeholder` divs throughout the site should be replaced with `<img>` tags once product/farm photos are ready.
-2. **Phone numbers** - Replace `+63 917 XXX XXXX` with actual numbers.
-3. **Email** - Replace `trunk2gold@gmail.com` with actual email.
+2. **Phone numbers** - Replace `(0917) 716 4225` with actual numbers.
+3. **Email** - Replace `t2gcorp2017@yahoo.com` with actual email.
 4. **Address** - Update if different from Cagayan de Oro.
 5. **Contact form** - Hook up `handleSubmit()` in `contact.html` to a form backend (Formspree, Netlify Forms, Resend, etc.).
 6. **Blog** - Add actual blog posts when ready.

@@ -48,15 +48,10 @@ These reuse the same files as the product images below.
 
 ---
 
-## Home Page - Certifications
+## Home Page - Certification
 | Filename | Certification |
 |---|---|
-| `cert-usda.png`       | USDA Organic |
-| `cert-usda-fda.png`   | U.S. Food and Drug Administration |
-| `cert-kosher.png`     | Kosher |
-| `cert-halal.png`      | Halal |
-| `cert-fda-ph.png`     | FDA Philippines |
-| `cert-eu-organic.png` | EU Organic |
+| `cert-fda-ph.png` | FDA Philippines (the only active certification shown) |
 
 ---
 

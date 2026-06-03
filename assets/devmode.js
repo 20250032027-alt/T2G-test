@@ -30,9 +30,9 @@ function saveProducts() {
   } catch(e) { console.warn('T2G devmode: could not save products', e); }
 }
 
-/* ── Keybind: Alt+1 ── */
+/* ── Keybind: Alt+2 (Alt+1 conflicts with Chrome tab switching) ── */
 document.addEventListener('keydown', (e) => {
-  if (e.altKey && (e.key === '1' || e.code === 'Digit1')) {
+  if (e.altKey && (e.key === '2' || e.code === 'Digit2')) {
     e.preventDefault();
     toggleDevMode();
   }
@@ -88,7 +88,7 @@ function buildPanelHTML() {
     <div style="display:flex;align-items:center;gap:10px;">
       <span style="background:#43a047;color:#fff;font-size:.65rem;font-weight:800;letter-spacing:.1em;padding:3px 8px;border-radius:3px;text-transform:uppercase;">Dev Mode</span>
       <strong style="font-size:.9rem;">Product Manager</strong>
-      <span style="font-size:.72rem;opacity:.5;letter-spacing:.06em;">Alt+1 to close</span>
+      <span style="font-size:.72rem;opacity:.5;letter-spacing:.06em;">Alt+2 to close</span>
     </div>
     <button id="dev-close" style="background:none;border:none;color:#fff;font-size:1.4rem;cursor:pointer;padding:4px 10px;opacity:.7;line-height:1;">&times;</button>
   </div>
@@ -99,9 +99,14 @@ function buildPanelHTML() {
   <div id="dev-product-list" style="flex:1;overflow-y:auto;">
     ${Object.values(T2G_PRODUCTS).map(p => productRowHTML(p)).join('') || '<p style="padding:20px;color:#aaa;font-size:.85rem;">No products yet. Click Add Product.</p>'}
   </div>
-  <div style="padding:12px 20px;border-top:1px solid #eee;background:#f9f9f9;font-size:.75rem;color:#999;flex-shrink:0;display:flex;justify-content:space-between;align-items:center;gap:12px;">
-    <span>Changes save automatically. <strong style="color:#333;">Reload the products page</strong> to see updates.</span>
-    <button id="dev-reset" style="white-space:nowrap;background:none;border:1px solid #ddd;padding:5px 12px;border-radius:3px;font-size:.72rem;color:#999;cursor:pointer;flex-shrink:0;">Reset to Defaults</button>
+  <div style="padding:10px 20px;border-top:1px solid #eee;background:#f9f9f9;flex-shrink:0;">
+    <div style="background:#fff3cd;border:1px solid #ffc107;border-radius:4px;padding:10px 14px;margin-bottom:10px;font-size:.75rem;color:#856404;line-height:1.55;">
+      <strong>To sync products across devices:</strong> click "Export cart.js" below, download the file, replace <code style="background:rgba(0,0,0,.07);padding:1px 4px;border-radius:2px;">assets/cart.js</code> in your project folder with it, then push to GitHub. Every device will then see the same products.
+    </div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;justify-content:space-between;">
+      <button id="dev-export" style="background:#1a1a1a;color:#fff;border:none;padding:8px 16px;border-radius:3px;font-size:.75rem;font-weight:700;letter-spacing:.06em;cursor:pointer;text-transform:uppercase;">Download cart.js</button>
+      <button id="dev-reset" style="white-space:nowrap;background:none;border:1px solid #ddd;padding:7px 12px;border-radius:3px;font-size:.72rem;color:#999;cursor:pointer;">Reset to Defaults</button>
+    </div>
   </div>`;
 }
 
@@ -321,6 +326,31 @@ function refreshList(panel) {
 function bindDevPanel(panel) {
   panel.querySelector('#dev-close').addEventListener('click', closeDevPanel);
   panel.querySelector('#dev-add-product').addEventListener('click', () => openEditModal(null, true));
+  panel.querySelector('#dev-export')?.addEventListener('click', () => {
+    const data = JSON.stringify(T2G_PRODUCTS, null, 2);
+    const output = `/* ============================================================
+   products-data.js - exported from Dev Mode on ${new Date().toLocaleDateString()}
+   Paste this entire file content into assets/products-data.js
+   then push to GitHub to make changes live on all browsers.
+============================================================ */
+
+window.T2G_PRODUCTS_DEFAULT = ${data};`;
+    // Copy to clipboard
+    navigator.clipboard.writeText(output).then(() => {
+      showToast('Copied! Paste into assets/products-data.js and push to GitHub.');
+    }).catch(() => {
+      // Fallback: show in a textarea
+      const overlay = document.createElement('div');
+      overlay.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:99999;display:flex;align-items:center;justify-content:center;padding:20px;';
+      overlay.innerHTML = `<div style="background:#fff;border-radius:6px;padding:24px;width:100%;max-width:600px;max-height:80vh;display:flex;flex-direction:column;gap:12px;">
+        <strong style="font-size:.9rem;">Copy this into assets/products-data.js</strong>
+        <textarea style="flex:1;min-height:300px;font-family:monospace;font-size:.75rem;border:1px solid #ddd;border-radius:3px;padding:10px;resize:none;" readonly>${output.replace(/</g,'&lt;')}</textarea>
+        <button onclick="this.closest('div').parentElement.remove()" style="background:#1a1a1a;color:#fff;border:none;padding:10px;border-radius:3px;cursor:pointer;font-size:.82rem;">Close</button>
+      </div>`;
+      document.body.appendChild(overlay);
+    });
+  });
+
   panel.querySelector('#dev-reset').addEventListener('click', () => {
     if (!confirm('Reset all products to defaults? Your custom changes will be lost.')) return;
     localStorage.removeItem(STORAGE_KEY);
