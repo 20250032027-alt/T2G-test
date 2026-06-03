@@ -368,12 +368,6 @@ function newProductTemplate() {
 /* ── Init ── */
 document.addEventListener('DOMContentLoaded', loadProducts);
 
-/* ── Hint badge ── */
-document.addEventListener('DOMContentLoaded', () => {
-  const h = document.createElement('div');
-  h.style.cssText = 'position:fixed;bottom:12px;right:12px;background:rgba(0,0,0,.5);color:#fff;font-size:.6rem;padding:4px 8px;border-radius:3px;z-index:500;font-family:Montserrat,sans-serif;letter-spacing:.06em;pointer-events:none;opacity:.45;user-select:none;';
-  h.textContent = 'Alt+1 Dev Mode';
-  document.body.appendChild(h);
-});
+
 
 })();
