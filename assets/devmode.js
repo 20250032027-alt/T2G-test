@@ -1,6 +1,6 @@
 /* ============================================================
    T2G Developer Mode - devmode.js
-   Activate: Alt+1 (or Option+1 on Mac)
+   Activate: Alt+4 (or Option+4 on Mac)
    Products saved to localStorage under 't2g_products_v2'
    ============================================================ */
 'use strict';
@@ -30,9 +30,9 @@ function saveProducts() {
   } catch(e) { console.warn('T2G devmode: could not save products', e); }
 }
 
-/* ── Keybind: Alt+2 (Alt+1 conflicts with Chrome tab switching) ── */
+/* ── Keybind: Alt+4 ── */
 document.addEventListener('keydown', (e) => {
-  if (e.altKey && (e.key === '2' || e.code === 'Digit2')) {
+  if (e.altKey && (e.key === '4' || e.code === 'Digit4')) {
     e.preventDefault();
     toggleDevMode();
   }
@@ -88,7 +88,7 @@ function buildPanelHTML() {
     <div style="display:flex;align-items:center;gap:10px;">
       <span style="background:#43a047;color:#fff;font-size:.65rem;font-weight:800;letter-spacing:.1em;padding:3px 8px;border-radius:3px;text-transform:uppercase;">Dev Mode</span>
       <strong style="font-size:.9rem;">Product Manager</strong>
-      <span style="font-size:.72rem;opacity:.5;letter-spacing:.06em;">Alt+2 to close</span>
+      <span style="font-size:.72rem;opacity:.5;letter-spacing:.06em;">Alt+4 to close</span>
     </div>
     <button id="dev-close" style="background:none;border:none;color:#fff;font-size:1.4rem;cursor:pointer;padding:4px 10px;opacity:.7;line-height:1;">&times;</button>
   </div>

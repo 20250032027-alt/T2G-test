@@ -886,6 +886,7 @@ address { font-style: normal; }
 .blog-card-body h3 { font-size: .9rem; font-weight: 700; color: var(--text); margin-bottom: 4px; line-height: 1.4; }
 .blog-card-body .blog-date { font-size: .75rem; color: var(--text-light); margin-bottom: 10px; display: block; }
 .blog-card-body p  { font-size: .82rem; color: var(--text-mid); line-height: 1.65; }
+.blog-card-body p + p { margin-top: 10px; }
 
 /* ================================================
    CONTACT
