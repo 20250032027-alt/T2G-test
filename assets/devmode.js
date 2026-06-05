@@ -183,6 +183,12 @@ function openEditModal(pid, isNew) {
       <input id="ep-img" value="${imgName}" ${IS} placeholder="e.g. coco-sugar.png">
     </div>
 
+    <div style="margin-bottom:14px;">
+      <label style="${LS}">Shopee Product URL <span style="color:#aaa;font-weight:400;">(optional - specific listing link)</span></label>
+      <input id="ep-shopee" value="${prod.shopeeUrl || ''}" ${IS} placeholder="https://shopee.ph/product/1013182247/xxxxx">
+      <p style="font-size:.72rem;color:#aaa;margin-top:4px;">Leave blank to use the general shop link. Paste the URL of this specific product on Shopee.</p>
+    </div>
+
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px;">
       <div>
         <label style="${LS}">Base Price (PHP number)</label>
@@ -192,6 +198,17 @@ function openEditModal(pid, isNew) {
         <label style="${LS}">Price Display <span style="color:#aaa;font-weight:400;">(shown on card)</span></label>
         <input id="ep-price-display" value="${prod.priceDisplay || ''}" ${IS} placeholder="PHP 165.00">
       </div>
+    </div>
+
+    <div style="margin-bottom:14px;">
+      <label style="${LS}">Weight per unit (kg) <span style="color:#aaa;font-weight:400;">for shipping calculator</span></label>
+      <div style="display:flex;align-items:center;gap:10px;">
+        <input id="ep-weight" type="number" step="0.001" min="0" value="${prod.weightKg !== null && prod.weightKg !== undefined ? prod.weightKg : ''}" ${IS} style="max-width:160px;" placeholder="e.g. 0.350">
+        <span style="font-size:.75rem;color:#aaa;line-height:1.4;">kg per unit.<br>Leave blank if unknown.</span>
+      </div>
+      <p style="font-size:.72rem;color:#43a047;margin-top:5px;line-height:1.5;">
+        Once set, checkout will auto-calculate shipping cost based on quantity ordered.
+      </p>
     </div>
 
     <div style="margin-bottom:14px;">
@@ -282,9 +299,13 @@ function openEditModal(pid, isNew) {
     const basePrice = parseFloat(modal.querySelector('#ep-price').value) || 165;
     const priceDisplay = modal.querySelector('#ep-price-display').value.trim() || `PHP ${basePrice.toFixed(2)}`;
     const imageName = modal.querySelector('#ep-img').value.trim() || id + '.png';
+    const shopeeUrl = modal.querySelector('#ep-shopee').value.trim() || null;
 
     // Remove old key if ID changed
     if (pid && id !== pid) delete T2G_PRODUCTS[pid];
+
+    const weightVal = modal.querySelector('#ep-weight').value.trim();
+    const weightKg = weightVal !== '' && !isNaN(parseFloat(weightVal)) ? parseFloat(weightVal) : null;
 
     T2G_PRODUCTS[id] = {
       id, name, price: basePrice, priceDisplay,
@@ -293,6 +314,8 @@ function openEditModal(pid, isNew) {
       description: modal.querySelector('#ep-desc').value.trim(),
       related,
       imageName,
+      weightKg,
+      shopeeUrl,
     };
 
     saveProducts();

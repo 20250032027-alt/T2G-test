@@ -194,6 +194,11 @@ function buildModal(productId) {
             <button class="pm-qty-btn" id="pm-qty-plus">+</button>
             <button class="btn btn-green pm-atc-btn" id="pm-atc" style="flex:1;">ADD TO CART</button>
           </div>
+          <a href="${prod.shopeeUrl || window.T2G_SHOPEE_URL || 'https://shopee.ph/shop/1013182247'}" target="_blank" rel="noopener"
+            style="display:flex;align-items:center;justify-content:center;gap:8px;margin-top:10px;padding:11px 16px;background:#ee4d2d;color:#fff;border-radius:3px;font-size:.75rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;text-decoration:none;">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M20.5 7.5h-1.7C18.4 4.5 15.5 2 12 2S5.6 4.5 5.2 7.5H3.5C2.1 7.5 1 8.6 1 10v10c0 1.4 1.1 2.5 2.5 2.5h17c1.4 0 2.5-1.1 2.5-2.5V10c0-1.4-1.1-2.5-2.5-2.5zM12 4c2.3 0 4.3 1.5 4.7 3.5H7.3C7.7 5.5 9.7 4 12 4zm0 10c-1.7 0-3-1.3-3-3s1.3-3 3-3 3 1.3 3 3-1.3 3-3 3z"/></svg>
+            Buy on Shopee
+          </a>
         </div>
       </div>
 

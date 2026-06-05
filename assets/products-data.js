@@ -6,6 +6,9 @@
    but this file is the baseline that works on ALL browsers.
    ============================================================ */
 
+/* Shopee shop URL - update individual product shopeeUrl fields when you have direct listing links */
+window.T2G_SHOPEE_URL = "https://shopee.ph/shop/1013182247";
+
 window.T2G_PRODUCTS_DEFAULT = {
   'popcorn': {
     id: 'popcorn',
@@ -14,6 +17,8 @@ window.T2G_PRODUCTS_DEFAULT = {
     priceDisplay: 'PHP 170.00',
     priceRange: null,
     imageName: 'popcorn.png',
+    weightKg: null,  // Set this in Dev Mode (Alt+1) to enable auto shipping calculation
+    shopeeUrl: null,  // Set to specific product URL e.g. 'https://shopee.ph/product/1013182247/xxxxx'
     variants: {
       label: 'Flavor',
       options: [
@@ -31,6 +36,8 @@ window.T2G_PRODUCTS_DEFAULT = {
     priceDisplay: 'PHP 200.00',
     priceRange: null,
     imageName: 'coco-balsamic.png',
+    weightKg: null,  // Set this in Dev Mode (Alt+1) to enable auto shipping calculation
+    shopeeUrl: null,  // Set to specific product URL e.g. 'https://shopee.ph/product/1013182247/xxxxx'
     variants: null,
     description: '<p>Aged coconut sap vinegar with a deep, complex flavor. Dark, tangy, slightly sweet. Great for salad dressings, glazes, and gourmet dishes.</p><ul><li>Naturally fermented</li><li>All-natural</li><li>No additives</li></ul>',
     related: ['coco-vinegar', 'coco-seasoning', 'coco-syrup', 'coco-jam'],
@@ -42,6 +49,8 @@ window.T2G_PRODUCTS_DEFAULT = {
     priceDisplay: 'PHP 165.00',
     priceRange: null,
     imageName: 'coco-vinegar.png',
+    weightKg: null,  // Set this in Dev Mode (Alt+1) to enable auto shipping calculation
+    shopeeUrl: null,  // Set to specific product URL e.g. 'https://shopee.ph/product/1013182247/xxxxx'
     variants: null,
     description: '<p>Naturally fermented from fresh coconut sap. Milder and smoother than cane vinegar, with beneficial probiotic properties from the fermentation process itself.</p><ul><li>Naturally fermented</li><li>Probiotic</li><li>No additives or preservatives</li></ul>',
     related: ['coco-balsamic', 'coco-seasoning', 'coco-jam', 'coco-syrup'],
@@ -53,6 +62,8 @@ window.T2G_PRODUCTS_DEFAULT = {
     priceDisplay: 'PHP 165.00',
     priceRange: null,
     imageName: 'coco-seasoning.png',
+    weightKg: null,  // Set this in Dev Mode (Alt+1) to enable auto shipping calculation
+    shopeeUrl: null,  // Set to specific product URL e.g. 'https://shopee.ph/product/1013182247/xxxxx'
     variants: null,
     description: '<p>A coconut-based seasoning sauce made from coconut sap. Low in sodium, gluten-free, and allergen-free. A healthy alternative to traditional soy-based seasonings, developed with DOST-ITDI.</p><ul><li>Low sodium</li><li>Gluten-free</li><li>Allergen-free</li><li>No MSG</li></ul>',
     related: ['coco-balsamic', 'coco-vinegar', 'coco-syrup', 'coco-sugar'],
@@ -64,6 +75,8 @@ window.T2G_PRODUCTS_DEFAULT = {
     priceDisplay: 'PHP 198.00 - PHP 350.00',
     priceRange: { min: 198, max: 350 },
     imageName: 'virgin-coco-oil.png',
+    weightKg: null,  // Set this in Dev Mode (Alt+1) to enable auto shipping calculation
+    shopeeUrl: null,  // Set to specific product URL e.g. 'https://shopee.ph/product/1013182247/xxxxx'
     variants: {
       label: 'Size',
       options: [
@@ -81,6 +94,8 @@ window.T2G_PRODUCTS_DEFAULT = {
     priceDisplay: 'PHP 165.00',
     priceRange: null,
     imageName: 'coco-syrup.png',
+    weightKg: null,  // Set this in Dev Mode (Alt+1) to enable auto shipping calculation
+    shopeeUrl: null,  // Set to specific product URL e.g. 'https://shopee.ph/product/1013182247/xxxxx'
     variants: null,
     description: '<p>Amber liquid sweetener from fresh coconut sap. Low glycemic index, mild caramel flavor, and richer in nutrients than refined syrups. Great for pancakes, beverages, and baking.</p><ul><li>Low GI</li><li>All-natural</li><li>No artificial additives</li></ul>',
     related: ['coco-sugar', 'coco-jam', 'virgin-coco-oil', 'popcorn'],
@@ -92,6 +107,8 @@ window.T2G_PRODUCTS_DEFAULT = {
     priceDisplay: 'PHP 165.00',
     priceRange: null,
     imageName: 'coco-jam.png',
+    weightKg: null,  // Set this in Dev Mode (Alt+1) to enable auto shipping calculation
+    shopeeUrl: null,  // Set to specific product URL e.g. 'https://shopee.ph/product/1013182247/xxxxx'
     variants: null,
     description: '<p>Slow-cooked from fresh coconut milk and coconut sugar until dark and rich. The Filipino pantry classic, made properly. No artificial flavors, no preservatives.</p><ul><li>Traditional recipe</li><li>No preservatives</li><li>All-natural</li></ul>',
     related: ['coco-syrup', 'coco-sugar', 'coco-vinegar', 'popcorn'],
@@ -103,6 +120,8 @@ window.T2G_PRODUCTS_DEFAULT = {
     priceDisplay: 'PHP 120.00 - PHP 400.00',
     priceRange: { min: 120, max: 400 },
     imageName: 'coco-sugar.png',
+    weightKg: null,  // Set this in Dev Mode (Alt+1) to enable auto shipping calculation
+    shopeeUrl: null,  // Set to specific product URL e.g. 'https://shopee.ph/product/1013182247/xxxxx'
     variants: {
       label: 'Size',
       options: [

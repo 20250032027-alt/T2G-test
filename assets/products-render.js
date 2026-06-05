@@ -34,12 +34,19 @@ function renderProductGrid() {
     const hasVariants = p.variants && p.variants.options && p.variants.options.length > 0;
     const btnLabel = hasVariants ? 'Select Options' : 'Add to Cart';
     const img = getProductImage(p, 'store-card-img-el', p.name);
+    const shopeeUrl = p.shopeeUrl || window.T2G_SHOPEE_URL || 'https://shopee.ph/shop/1013182247';
     return `
     <div class="store-card reveal" data-product-id="${p.id}" data-delay="${delay}">
       <div class="store-card-ph" style="overflow:hidden;">${img}</div>
       <h3>${p.name}</h3>
       <p class="price">${p.priceDisplay}</p>
-      <button class="btn btn-green store-action-btn">${btnLabel}</button>
+      <div style="display:flex;flex-direction:column;gap:7px;">
+        <button class="btn btn-green store-action-btn" style="width:100%;justify-content:center;">${btnLabel}</button>
+        <a href="${shopeeUrl}" target="_blank" rel="noopener" class="btn shopee-btn" style="width:100%;justify-content:center;text-align:center;background:#ee4d2d;color:#fff;border:none;display:flex;align-items:center;gap:6px;">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M20.5 7.5h-1.7C18.4 4.5 15.5 2 12 2S5.6 4.5 5.2 7.5H3.5C2.1 7.5 1 8.6 1 10v10c0 1.4 1.1 2.5 2.5 2.5h17c1.4 0 2.5-1.1 2.5-2.5V10c0-1.4-1.1-2.5-2.5-2.5zM12 4c2.3 0 4.3 1.5 4.7 3.5H7.3C7.7 5.5 9.7 4 12 4zm0 10c-1.7 0-3-1.3-3-3s1.3-3 3-3 3 1.3 3 3-1.3 3-3 3z"/></svg>
+          Buy on Shopee
+        </a>
+      </div>
     </div>`;
   }).join('');
 

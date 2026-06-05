@@ -384,39 +384,58 @@
           <h2>Delivery</h2>
           <p class="sub">Select how you would like to receive your order.</p>
           <div class="delivery-btns">
-            <button class="delivery-btn" id="del-ship" onclick="selectDelivery('ship')">
-              <svg viewBox="0 0 24 24"><rect x="1" y="3" width="15" height="13" rx="1"/><path d="M16 8h4a1 1 0 011 1v9a1 1 0 01-1 1H5a1 1 0 01-1-1v-2M16 8l2 5"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
-              Ship
-            </button>
             <button class="delivery-btn active" id="del-pickup" onclick="selectDelivery('pickup')">
               <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
               Pick Up
             </button>
+            <button class="delivery-btn" id="del-ship" onclick="selectDelivery('ship')">
+              <svg viewBox="0 0 24 24"><rect x="1" y="3" width="15" height="13" rx="1"/><path d="M16 8h4a1 1 0 011 1v9a1 1 0 01-1 1H5a1 1 0 01-1-1v-2M16 8l2 5"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+              Ship
+            </button>
           </div>
 
-          <!-- Pickup locations -->
-          <h3 style="font-size:.82rem;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--text);margin-bottom:12px;" id="pickup-label">Pickup locations</h3>
-          <div class="radio-group" id="pickup-options">
-            <div class="radio-opt selected" onclick="selectPickup(this, 'office')">
+          <!-- Pickup info -->
+          <div id="pickup-info">
+            <div class="radio-opt selected" style="cursor:default;">
               <div class="radio-opt-left">
-                <div class="radio-circle"><div class="radio-dot"></div></div>
+                <div class="radio-circle" style="border-color:var(--green);"><div class="radio-dot" style="background:var(--green);display:block;"></div></div>
                 <div>
-                  <div class="radio-label">T2G Office. San Isidro, Jasaan</div>
+                  <div class="radio-label">T2G Office, San Isidro, Jasaan, Misamis Oriental</div>
+                  <div class="radio-sub">We will message you to coordinate pickup time and date.</div>
                 </div>
               </div>
-              <span class="radio-price">FREE</span>
-            </div>
-            <div class="radio-opt" onclick="selectPickup(this, 'courier')">
-              <div class="radio-opt-left">
-                <div class="radio-circle"><div class="radio-dot"></div></div>
-                <div>
-                  <div class="radio-label">Own Delivery Courier</div>
-                  <div class="radio-sub">You arrange and cover the courier cost</div>
-                </div>
-              </div>
-              <span class="radio-price">FREE</span>
+              <span class="radio-price" style="color:var(--green);font-weight:800;">FREE</span>
             </div>
           </div>
+
+          <!-- Shipping fee calculator -->
+          <div id="shipping-calc" style="display:none;">
+            <div style="background:var(--grey-bg);border-radius:4px;padding:18px;margin-bottom:4px;">
+              <label style="display:block;font-size:.78rem;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--text);margin-bottom:8px;">
+                Estimated total weight (kg)
+              </label>
+              <div style="display:flex;align-items:center;gap:12px;">
+                <input
+                  type="number"
+                  id="ship-weight"
+                  min="0.1"
+                  step="0.1"
+                  placeholder="e.g. 1.5"
+                  oninput="calcShipping()"
+                  class="co-input"
+                  style="max-width:140px;"
+                >
+                <div id="ship-fee-display" style="font-size:.9rem;font-weight:700;color:var(--text);">
+                  Enter weight above
+                </div>
+              </div>
+              <div id="ship-fee-breakdown" style="margin-top:8px;font-size:.78rem;color:var(--text-light);line-height:1.6;display:none;"></div>
+            </div>
+            <div style="background:#fff8e1;border:1px solid #ffe082;border-radius:4px;padding:12px 14px;font-size:.78rem;color:#795548;line-height:1.6;">
+              <strong>Note:</strong> T2G will confirm the exact shipping fee with you via GCash message before processing your payment. The fee shown here is an estimate based on the weight you entered.
+            </div>
+          </div>
+
         </div>
 
         <!-- Billing & shipping address -->
@@ -513,8 +532,8 @@
             <strong id="os-subtotal">PHP 0.00</strong>
           </div>
           <div class="os-row">
-            <span>Shipping<small class="os-note" id="os-ship-note">Pick up (T2G Office)</small></span>
-            <span class="os-free">FREE</span>
+            <span>Shipping<small class="os-note" id="os-ship-note">Free pickup</small></span>
+            <span id="os-ship-fee" class="os-free">FREE</span>
           </div>
         </div>
         <div class="os-total">
@@ -557,18 +576,44 @@
 <script src="assets/main.js"></script>
 <script src="assets/cart.js"></script>
 <script>
-/* ── Populate order summary from cart ── */
+'use strict';
+
+/* ── Shipping fee calculator
+   Under 3 kg: PHP 190 flat
+   3 kg and above: PHP 190 + (PHP 80 x kg over 3)
+── */
+const SHIP_BASE      = 190;   // flat fee for under 3 kg
+const SHIP_THRESHOLD = 3;     // kg before extra kicks in
+const SHIP_PER_KG    = 80;    // per kg above threshold
+
+function calcShippingFee(totalKg) {
+  if (totalKg <= 0) return 0;
+  if (totalKg < SHIP_THRESHOLD) return SHIP_BASE;
+  const extra = Math.ceil(totalKg - SHIP_THRESHOLD);
+  return SHIP_BASE + (extra * SHIP_PER_KG);
+}
+
+/* ── State ── */
+let currentDelivery = 'pickup';
+let currentPayment  = 'gcash';
+let shippingFee     = 0;
+let shippingKnown   = true;
+
+/* ── Populate order summary ── */
 function renderSummary() {
   const cart  = getCart();
   const items = document.getElementById('os-items');
   const sub   = document.getElementById('os-subtotal');
-  const tot   = document.getElementById('os-total');
   if (!items) return;
+
   if (cart.length === 0) {
     items.innerHTML = '<p style="font-size:.85rem;color:var(--text-light);padding:4px 0;">Your cart is empty. <a href="products.html" style="color:var(--green);">Browse products</a></p>';
-    sub.textContent = 'PHP 0.00'; tot.textContent = 'PHP 0.00'; return;
+    sub.textContent = 'PHP 0.00';
+    updateTotal();
+    return;
   }
-  const total = cart.reduce((s,i) => s + i.price * i.qty, 0);
+
+  const subtotal = cart.reduce((s, i) => s + i.price * i.qty, 0);
   items.innerHTML = cart.map(item => `
     <div class="os-item">
       <div class="os-item-img-wrap">
@@ -577,48 +622,140 @@ function renderSummary() {
       </div>
       <div class="os-item-info">
         <p class="os-item-name">${item.name}</p>
-        ${item.variantLabel ? `<p class="os-item-variant">Flavor: ${item.variantLabel}</p>` : ''}
+        ${item.variantLabel ? `<p class="os-item-variant">${item.variantLabel}</p>` : ''}
         <p class="os-item-price">PHP ${item.price.toFixed(2)}</p>
       </div>
       <span class="os-item-total">PHP ${(item.price * item.qty).toFixed(2)}</span>
     </div>`).join('');
-  sub.textContent = `PHP ${total.toFixed(2)}`;
-  tot.textContent = `PHP ${total.toFixed(2)}`;
+
+  sub.textContent = `PHP ${subtotal.toFixed(2)}`;
+  updateShippingDisplay();
 }
-document.addEventListener('DOMContentLoaded', renderSummary);
+
+/* ── Calculate shipping from cart weights ── */
+function calcShippingFromCart() {
+  const cart = getCart();
+  let totalKg  = 0;
+  let allKnown = true;
+
+  cart.forEach(item => {
+    const prod = T2G_PRODUCTS[item.productId];
+    const w = prod && prod.weightKg != null ? prod.weightKg : null;
+    if (w === null) {
+      allKnown = false;
+    } else {
+      totalKg += w * item.qty;
+    }
+  });
+
+  shippingKnown = allKnown;
+
+  if (!allKnown) {
+    shippingFee = 0;
+    return { fee: 0, known: false, totalKg: null };
+  }
+
+  const fee = calcShippingFee(totalKg);
+  shippingFee = fee;
+  return { fee, known: true, totalKg };
+}
+
+/* ── Update shipping row and total ── */
+function updateShippingDisplay() {
+  const feeEl  = document.getElementById('os-ship-fee');
+  const noteEl = document.getElementById('os-ship-note');
+
+  if (currentDelivery === 'pickup') {
+    shippingFee = 0;
+    if (feeEl)  feeEl.textContent  = 'FREE';
+    if (feeEl)  feeEl.style.color  = 'var(--green)';
+    if (noteEl) noteEl.textContent  = 'Pickup at T2G Office, Jasaan';
+    updateTotal();
+    return;
+  }
+
+  const { fee, known, totalKg } = calcShippingFromCart();
+
+  if (known) {
+    if (feeEl) {
+      feeEl.textContent = `PHP ${fee.toFixed(2)}`;
+      feeEl.style.color = 'var(--text)';
+    }
+    if (noteEl) {
+      noteEl.textContent = totalKg < SHIP_THRESHOLD
+        ? `${totalKg.toFixed(2)} kg (under ${SHIP_THRESHOLD} kg flat rate)`
+        : `${totalKg.toFixed(2)} kg`;
+    }
+  } else {
+    if (feeEl) {
+      feeEl.textContent = 'TBC';
+      feeEl.style.color = 'var(--text-light)';
+    }
+    if (noteEl) noteEl.textContent = 'T2G will confirm before payment';
+  }
+
+  updateTotal();
+}
+
+function updateTotal() {
+  const cart     = getCart();
+  const subtotal = cart.reduce((s, i) => s + i.price * i.qty, 0);
+  const totEl    = document.getElementById('os-total');
+  if (!totEl) return;
+
+  if (currentDelivery === 'ship' && !shippingKnown) {
+    totEl.textContent = `PHP ${subtotal.toFixed(2)} + shipping TBC`;
+  } else {
+    totEl.textContent = `PHP ${(subtotal + shippingFee).toFixed(2)}`;
+  }
+}
 
 /* ── Delivery toggle ── */
-let currentDelivery = 'pickup';
 function selectDelivery(type) {
   currentDelivery = type;
   document.getElementById('del-ship').classList.toggle('active', type === 'ship');
   document.getElementById('del-pickup').classList.toggle('active', type === 'pickup');
-  const po = document.getElementById('pickup-options');
-  const pl = document.getElementById('pickup-label');
+
+  const pickupInfo  = document.getElementById('pickup-info');
+  const shipCalc    = document.getElementById('shipping-calc');
+
   if (type === 'ship') {
-    po.style.display = 'none'; pl.textContent = '';
-    document.getElementById('os-ship-note').textContent = 'Via own courier';
+    if (pickupInfo) pickupInfo.style.display = 'none';
+    if (shipCalc)  shipCalc.style.display  = 'block';
+    // Auto-calculate from cart weights
+    const { known, totalKg, fee } = calcShippingFromCart();
+    const calcDiv   = document.getElementById('ship-fee-display');
+    const breakdown = document.getElementById('ship-fee-breakdown');
+
+    if (known && totalKg !== null) {
+      if (calcDiv) calcDiv.textContent = `PHP ${fee.toFixed(2)}`;
+      if (breakdown) {
+        breakdown.style.display = 'block';
+        if (totalKg < SHIP_THRESHOLD) {
+          breakdown.innerHTML = `${totalKg.toFixed(3)} kg - flat rate for under ${SHIP_THRESHOLD} kg`;
+        } else {
+          const extra = Math.ceil(totalKg - SHIP_THRESHOLD);
+          breakdown.innerHTML = `${totalKg.toFixed(3)} kg: PHP ${SHIP_BASE} base + PHP ${extra} &times; PHP ${SHIP_PER_KG}/kg extra = <strong>PHP ${fee}</strong>`;
+        }
+      }
+    } else {
+      if (calcDiv) calcDiv.innerHTML = '<span style="color:#cc8800;font-size:.82rem;">Weight not set for some products. T2G will confirm the shipping fee with you before payment.</span>';
+      if (breakdown) breakdown.style.display = 'none';
+    }
   } else {
-    po.style.display = 'flex'; pl.textContent = 'Pickup locations';
-    document.getElementById('os-ship-note').textContent = 'Pick up (T2G Office)';
+    if (pickupInfo) pickupInfo.style.display = 'block';
+    if (shipCalc)  shipCalc.style.display  = 'none';
   }
+
+  updateShippingDisplay();
 }
 
-/* ── Radio helpers ── */
-function selectPickup(el, type) {
-  document.querySelectorAll('#pickup-options .radio-opt').forEach(o => o.classList.remove('selected'));
-  el.classList.add('selected');
-  const note = document.getElementById('os-ship-note');
-  note.textContent = type === 'office' ? 'Pick up (T2G Office)' : 'Own Delivery Courier';
-}
-
-let currentPayment = 'gcash';
+/* ── Payment ── */
 function selectPayment(el, type) {
   currentPayment = type;
   el.closest('.co-section').querySelectorAll('.radio-opt').forEach(o => o.classList.remove('selected'));
   el.classList.add('selected');
-  const gcash = document.getElementById('gcash-info');
-  gcash?.classList.toggle('show', type === 'gcash');
+  document.getElementById('gcash-info')?.classList.toggle('show', type === 'gcash');
 }
 
 /* ── Apt toggle ── */
@@ -628,7 +765,7 @@ function toggleApt() {
 }
 
 /* ── Note toggle ── */
-function toggleNote(label) {
+function toggleNote() {
   const box  = document.getElementById('note-box');
   const note = document.getElementById('order-note');
   box.classList.toggle('checked');
@@ -648,23 +785,44 @@ function toggleSummary() {
 function placeOrder() {
   const email = document.getElementById('co-email').value.trim();
   if (!email || !email.includes('@')) {
-    document.getElementById('co-email').focus();
-    document.getElementById('co-email').style.borderColor = 'red';
+    const el = document.getElementById('co-email');
+    el.focus(); el.style.borderColor = 'red';
     return;
   }
-  // Clear cart
+
+  const cart     = getCart();
+  const subtotal = cart.reduce((s, i) => s + i.price * i.qty, 0);
+  const totalAmt = subtotal + shippingFee;
+
   sessionStorage.removeItem('t2g_cart');
-  // Show complete screen
   document.getElementById('checkout-view').style.display = 'none';
   document.getElementById('complete-view').style.display = 'block';
   document.getElementById('cb-checkout').classList.remove('active');
   document.getElementById('cb-complete').classList.add('active');
-  document.getElementById('oc-msg').textContent =
-    `Thank you${email ? ', ' + email : ''}. We have received your order and will be in touch shortly. ` +
-    (currentPayment === 'gcash' ? 'Please send your GCash proof of payment to t2gcorp2017@yahoo.com.' : 'Please have your cash ready on pickup.');
+
+  let msg = `Thank you! We have received your order.`;
+
+  if (currentDelivery === 'pickup') {
+    msg += ` We will message you at ${email} to coordinate your pickup at the T2G Office in Jasaan.`;
+  } else if (shippingKnown) {
+    msg += ` Shipping fee: PHP ${shippingFee.toFixed(2)}. Total: PHP ${totalAmt.toFixed(2)}.`;
+    msg += ` We will message you at ${email} to confirm your order before payment.`;
+  } else {
+    msg += ` We will message you at ${email} to confirm the exact shipping fee before processing payment.`;
+  }
+
+  if (currentPayment === 'gcash') {
+    msg += ` Once confirmed, send payment via GCash to 09177164225 and send proof to t2gcorp2017@yahoo.com.`;
+  } else {
+    msg += ` Please have your cash ready on pickup.`;
+  }
+
+  document.getElementById('oc-msg').textContent = msg;
   window.scrollTo({ top: 0, behavior: 'smooth' });
   updateCartBadge();
 }
+
+document.addEventListener('DOMContentLoaded', renderSummary);
 </script>
 <script src="assets/devmode.js"></script>
 </body>
