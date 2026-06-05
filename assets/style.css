@@ -887,6 +887,8 @@ address { font-style: normal; }
 .blog-card-body .blog-date { font-size: .75rem; color: var(--text-light); margin-bottom: 10px; display: block; }
 .blog-card-body p  { font-size: .82rem; color: var(--text-mid); line-height: 1.65; }
 .blog-card-body p + p { margin-top: 10px; }
+.blog-read-more { display: inline-block; margin-top: 12px; font-size: .72rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--green); transition: color 200ms; }
+.blog-card:hover .blog-read-more { color: var(--green-dark); }
 
 /* ================================================
    CONTACT

@@ -42,8 +42,8 @@ function renderProductGrid() {
       <p class="price">${p.priceDisplay}</p>
       <div style="display:flex;flex-direction:column;gap:7px;">
         <button class="btn btn-green store-action-btn" style="width:100%;justify-content:center;">${btnLabel}</button>
-        <a href="${shopeeUrl}" target="_blank" rel="noopener" class="btn shopee-btn" style="width:100%;justify-content:center;text-align:center;background:#ee4d2d;color:#fff;border:none;display:flex;align-items:center;gap:6px;">
-          <img src="assets/img/shopee_icon.png" alt="" width="16" height="16" style="display:inline-block;vertical-align:middle;flex-shrink:0;" onerror="this.style.display='none'">
+        <a href="${shopeeUrl}" target="_blank" rel="noopener" class="btn shopee-btn" style="width:100%;justify-content:center;text-align:center;background:#fff;color:#ee4d2d;border:2px solid #ee4d2d;display:flex;align-items:center;gap:8px;transition:background 200ms,color 200ms;" onmouseover="this.style.background='#ee4d2d';this.style.color='#fff'" onmouseout="this.style.background='#fff';this.style.color='#ee4d2d'">
+          <img src="assets/img/shopee_icon.png" alt="" width="20" height="20" style="display:inline-block;vertical-align:middle;flex-shrink:0;" onerror="this.style.display='none'">
           Buy on Shopee
         </a>
       </div>
