@@ -353,6 +353,34 @@ address { font-style: normal; }
 }
 .btn-outline-dark:hover { background: var(--text); color: var(--white); }
 
+.shopee-btn {
+  background: #fff !important;
+  color: #ee4d2d !important;
+  border: 2px solid #ee4d2d !important;
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+.shopee-btn:hover {
+  background: #ee4d2d !important;
+  color: #fff !important;
+}
+.shopee-icon-wrap {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: #fff;
+  border-radius: 4px;
+  padding: 2px;
+  flex-shrink: 0;
+  width: 24px;
+  height: 24px;
+}
+.shopee-btn:hover .shopee-icon-wrap {
+  background: #fff;
+}
+
 /* ================================================
    HOME: TAGLINE SECTION
    ================================================ */

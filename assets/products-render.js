@@ -42,10 +42,12 @@ function renderProductGrid() {
       <p class="price">${p.priceDisplay}</p>
       <div style="display:flex;flex-direction:column;gap:7px;">
         <button class="btn btn-green store-action-btn" style="width:100%;justify-content:center;">${btnLabel}</button>
-        <a href="${shopeeUrl}" target="_blank" rel="noopener" class="btn shopee-btn" style="width:100%;justify-content:center;text-align:center;background:#fff;color:#ee4d2d;border:2px solid #ee4d2d;display:flex;align-items:center;gap:8px;transition:background 200ms,color 200ms;" onmouseover="this.style.background='#ee4d2d';this.style.color='#fff'" onmouseout="this.style.background='#fff';this.style.color='#ee4d2d'">
-          <span style="display:inline-flex;align-items:center;justify-content:center;background:#fff;border-radius:4px;padding:2px;flex-shrink:0;width:24px;height:24px;">
+        <a href="${shopeeUrl}" target="_blank" rel="noopener" class="btn shopee-btn" style="width:100%;">
+          <span class="shopee-icon-wrap">
             <img src="assets/img/shopee_icon.png" alt="" width="18" height="18" style="display:block;" onerror="this.style.display='none'">
           </span>
+          Buy on Shopee
+        </a>
           Buy on Shopee
         </a>
       </div>

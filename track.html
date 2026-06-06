@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Track Your Order | Trunk to Gold</title>
+  <meta name="description" content="Track your T2G order status. Enter your Order ID to see where your order is.">
+  <link rel="icon" type="image/png" href="assets/img/logo.png">
+  <link rel="stylesheet" href="assets/style.css?v=5">
+  <style>
+    .track-page { padding: 60px 0 80px; min-height: 60vh; }
+    .track-wrap { max-width: 560px; margin-inline: auto; }
+
+    .track-header { text-align: center; margin-bottom: 36px; }
+    .track-header h1 { font-size: clamp(1.4rem, 4vw, 2rem); font-weight: 800; margin-bottom: 8px; }
+    .track-header p { font-size: .88rem; color: var(--text-mid); line-height: 1.6; }
+
+    .track-input-row { display: flex; gap: 10px; margin-bottom: 10px; }
+    .track-input-row input {
+      flex: 1; padding: 12px 16px; border: 1.5px solid var(--border);
+      border-radius: 3px; font-family: inherit; font-size: .88rem;
+      letter-spacing: .04em; outline: none; transition: border-color 200ms;
+    }
+    .track-input-row input:focus { border-color: var(--green); }
+    .track-input-row input.error { border-color: #cc3333; background: #fff5f5; }
+    .track-input-row button { flex-shrink: 0; }
+    .track-hint { font-size: .72rem; color: var(--text-light); margin-bottom: 28px; }
+
+    /* Result card */
+    .track-result { display: none; border: 1.5px solid var(--border); border-radius: 6px; overflow: hidden; }
+    .track-result.show { display: block; }
+    .track-result-header {
+      background: var(--green); color: #fff; padding: 16px 22px;
+      display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;
+    }
+    .track-result-header .order-id-label { font-size: .7rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; opacity: .85; }
+    .track-result-header .order-id-val { font-size: 1rem; font-weight: 800; letter-spacing: .04em; margin-top: 2px; }
+    .track-result-header .order-date { font-size: .75rem; opacity: .8; }
+
+    /* Progress bar */
+    .track-progress { padding: 28px 22px 8px; }
+    .track-steps { display: flex; align-items: flex-start; position: relative; margin-bottom: 28px; }
+    .track-steps::before {
+      content: ''; position: absolute; top: 16px; left: 16px;
+      right: 16px; height: 2px; background: var(--border); z-index: 0;
+    }
+    .track-steps-fill {
+      position: absolute; top: 16px; left: 16px; height: 2px;
+      background: var(--green); z-index: 1; transition: width 600ms ease;
+    }
+    .track-step { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 8px; position: relative; z-index: 2; }
+    .step-dot {
+      width: 32px; height: 32px; border-radius: 50%; border: 2px solid var(--border);
+      background: #fff; display: flex; align-items: center; justify-content: center;
+      transition: all 300ms; flex-shrink: 0;
+    }
+    .step-dot svg { width: 14px; height: 14px; stroke: #bbb; fill: none; stroke-width: 2.5; stroke-linecap: round; }
+    .step-dot.done { background: var(--green); border-color: var(--green); }
+    .step-dot.done svg { stroke: #fff; }
+    .step-dot.active { background: #fff; border-color: var(--green); box-shadow: 0 0 0 4px #43a04722; }
+    .step-dot.active svg { stroke: var(--green); }
+    .step-label { font-size: .68rem; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; text-align: center; color: var(--text-light); line-height: 1.3; max-width: 68px; }
+    .step-label.active { color: var(--green); }
+    .step-label.done { color: var(--text); }
+
+    /* Status detail */
+    .track-status-detail { background: var(--grey-bg); border-radius: 4px; padding: 16px 18px; margin-bottom: 22px; }
+    .track-status-detail .status-badge {
+      display: inline-flex; align-items: center; gap: 6px;
+      font-size: .72rem; font-weight: 800; letter-spacing: .08em; text-transform: uppercase;
+      padding: 4px 12px; border-radius: 20px; margin-bottom: 10px;
+    }
+    .status-badge.received  { background: #e3f2fd; color: #1565c0; }
+    .status-badge.confirmed { background: #fff8e1; color: #f57f17; }
+    .status-badge.packing   { background: #f3e5f5; color: #6a1b9a; }
+    .status-badge.shipped   { background: #e8f5e9; color: #2e7d32; }
+    .status-badge.delivered { background: #e8f5e9; color: #1b5e20; }
+    .status-badge .dot { width: 7px; height: 7px; border-radius: 50%; background: currentColor; }
+    .track-status-detail .status-msg { font-size: .82rem; color: var(--text); line-height: 1.65; }
+    .track-status-detail .courier-row { display: flex; justify-content: space-between; align-items: center; margin-top: 10px; padding-top: 10px; border-top: 1px solid var(--border); flex-wrap: wrap; gap: 6px; }
+    .track-status-detail .courier-label { font-size: .72rem; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; color: var(--text-light); }
+    .track-status-detail .courier-val { font-size: .82rem; font-weight: 700; color: var(--text); }
+
+    /* Items */
+    .track-items { padding: 0 22px 22px; }
+    .track-items h3 { font-size: .72rem; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; color: var(--text-light); margin-bottom: 12px; }
+    .track-item-row { display: flex; justify-content: space-between; align-items: center; font-size: .82rem; padding: 8px 0; border-bottom: 1px solid var(--border); gap: 12px; }
+    .track-item-row:last-child { border-bottom: none; }
+    .track-item-name { color: var(--text); }
+    .track-item-qty { font-size: .72rem; color: var(--text-light); margin-left: 4px; }
+    .track-item-price { font-weight: 700; color: var(--text); flex-shrink: 0; }
+
+    /* Error / not found */
+    .track-not-found { display: none; text-align: center; padding: 40px 20px; }
+    .track-not-found.show { display: block; }
+    .track-not-found svg { width: 48px; height: 48px; stroke: #ddd; fill: none; stroke-width: 1.5; margin-bottom: 16px; }
+    .track-not-found h3 { font-size: 1rem; font-weight: 800; margin-bottom: 8px; color: var(--text); }
+    .track-not-found p { font-size: .82rem; color: var(--text-mid); line-height: 1.65; }
+
+    .track-loading { display: none; text-align: center; padding: 40px 20px; color: var(--text-light); font-size: .85rem; }
+    .track-loading.show { display: block; }
+    .spinner { width: 28px; height: 28px; border: 3px solid var(--border); border-top-color: var(--green); border-radius: 50%; animation: spin 700ms linear infinite; margin: 0 auto 14px; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* Setup guide (hidden in production, shown in devmode) */
+    .track-setup-notice { background: #fff8e1; border: 1px solid #ffe082; border-radius: 6px; padding: 16px 18px; margin-bottom: 28px; font-size: .8rem; color: #795548; line-height: 1.7; display: none; }
+    .track-setup-notice.show { display: block; }
+    .track-setup-notice strong { color: #5d4037; }
+    .track-setup-notice code { background: #ffe082; padding: 1px 5px; border-radius: 3px; font-size: .75rem; }
+
+    .contact-footer { margin-top: 32px; text-align: center; padding: 20px; background: var(--grey-bg); border-radius: 4px; }
+    .contact-footer p { font-size: .8rem; color: var(--text-mid); margin: 0; line-height: 1.7; }
+    .contact-footer a { color: var(--green); font-weight: 700; }
+  </style>
+</head>
+<body>
+
+<div id="topbar">
+  For bulk orders of more than PHP 4,000, contact (0917) 716 4225 or email <a href="mailto:t2gcorp2017@yahoo.com">t2gcorp2017@yahoo.com</a>
+</div>
+
+<header id="header">
+  <div class="container">
+    <div class="header-row">
+      <a id="logo" href="index.html"><img src="assets/img/logo.png" alt="Trunk to Gold"></a>
+      <div class="nav-spacer"></div>
+      <nav class="nav-links">
+        <a href="about.html">About</a>
+        <a href="products.html">Products</a>
+        <a href="export.html">Export</a>
+        <a href="faq.html">FAQ</a>
+        <a href="blog.html">Blog</a>
+        <a href="contact.html">Contact</a>
+        <a href="track.html" style="color:var(--green);font-weight:700;">Track Order</a>
+      </nav>
+      <button class="nav-cart" id="cart-btn" aria-label="Open cart">
+        <svg viewBox="0 0 24 24"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 002 1.61h9.72a2 2 0 002-1.61L23 6H6"/></svg>
+        <span class="cart-badge">0</span>
+      </button>
+      <button class="nav-toggle" aria-label="Open menu"><span></span><span></span><span></span></button>
+    </div>
+  </div>
+</header>
+
+<div class="mobile-menu" id="mobile-menu">
+  <div class="mobile-backdrop" id="mobile-backdrop"></div>
+  <div class="mobile-panel">
+    <button class="mobile-close" id="mobile-close" aria-label="Close menu">&#x2715;</button>
+    <nav>
+      <a href="about.html">About</a>
+      <a href="products.html">Products</a>
+      <a href="export.html">Export</a>
+      <a href="faq.html">FAQ</a>
+      <a href="blog.html">Blog</a>
+      <a href="contact.html">Contact</a>
+      <a href="track.html" style="color:var(--green);font-weight:700;">Track Order</a>
+    </nav>
+  </div>
+</div>
+
+<main>
+  <section class="track-page">
+    <div class="container">
+      <div class="track-wrap">
+
+        <div class="track-header">
+          <h1>Track Your Order</h1>
+          <p>Enter your Order ID below to see the current status of your T2G order. Your Order ID was shown on the confirmation screen after checkout and starts with <strong>T2G-</strong>.</p>
+        </div>
+
+        <!-- Setup notice shown when sheet is not yet configured -->
+        <div class="track-setup-notice" id="setup-notice">
+          <strong>T2G Setup Required:</strong> Connect a Google Sheet to enable live tracking.
+          See <code>TRACKING-SETUP.md</code> in the project root for step-by-step instructions.
+          Until connected, test orders will show a demo result.
+        </div>
+
+        <div class="track-input-row">
+          <input type="text" id="track-input" placeholder="e.g. T2G-M0ABC123-XY9Z" autocomplete="off" spellcheck="false"
+            onkeydown="if(event.key==='Enter') doTrack()">
+          <button class="btn btn-green" onclick="doTrack()">Track Order</button>
+        </div>
+        <p class="track-hint">Order IDs are case-insensitive. Check your email or the confirmation screen for yours.</p>
+
+        <div class="track-loading" id="track-loading">
+          <div class="spinner"></div>
+          Looking up your order...
+        </div>
+
+        <div class="track-result" id="track-result">
+          <div class="track-result-header">
+            <div>
+              <div class="order-id-label">Order ID</div>
+              <div class="order-id-val" id="res-order-id"></div>
+            </div>
+            <div class="order-date" id="res-date"></div>
+          </div>
+          <div class="track-progress">
+            <div class="track-steps" id="track-steps">
+              <!-- Steps injected by JS -->
+            </div>
+            <div class="track-steps-fill" id="steps-fill" style="width:0%"></div>
+            <div class="track-status-detail" id="status-detail">
+              <div class="status-badge" id="status-badge"><span class="dot"></span><span id="status-badge-text"></span></div>
+              <div class="status-msg" id="status-msg"></div>
+              <div class="courier-row" id="courier-row" style="display:none;">
+                <span class="courier-label">Tracking No.</span>
+                <span class="courier-val" id="courier-val"></span>
+              </div>
+            </div>
+          </div>
+          <div class="track-items" id="track-items"></div>
+        </div>
+
+        <div class="track-not-found" id="track-not-found">
+          <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+          <h3>Order not found</h3>
+          <p>We could not find an order with that ID. Double-check your Order ID and try again. If you placed your order recently, it may take a few minutes to appear.</p>
+          <p style="margin-top:10px;">Need help? Contact T2G at <a href="mailto:t2gcorp2017@yahoo.com" style="color:var(--green);font-weight:700;">t2gcorp2017@yahoo.com</a> or (0917) 716 4225.</p>
+        </div>
+
+        <div class="contact-footer">
+          <p>Questions about your order? Reach us at <a href="mailto:t2gcorp2017@yahoo.com">t2gcorp2017@yahoo.com</a> or <a href="tel:+639177164225">(0917) 716 4225</a>.<br>Include your Order ID in your message for faster service.</p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="footer">
+  <div class="container">
+    <div class="footer-inner">
+      <div class="footer-brand"><img src="assets/img/logo.png" alt="T2G"></div>
+      <div class="footer-address">San Isidro, Jasaan<br>Misamis Oriental, Philippines</div>
+      <div class="footer-contact"><a href="mailto:t2gcorp2017@yahoo.com">t2gcorp2017@yahoo.com</a><br>(0917) 716 4225</div>
+      <div class="footer-nav-col"><ul>
+        <li><a href="about.html">About</a></li>
+        <li><a href="products.html">Products</a></li>
+        <li><a href="export.html">Export</a></li>
+        <li><a href="faq.html">FAQ</a></li>
+        <li><a href="blog.html">Blog</a></li>
+        <li><a href="contact.html">Contact</a></li>
+        <li><a href="track.html" style="color:var(--green);font-weight:700;">Track Order</a></li>
+      </ul></div>
+    </div>
+    <div class="footer-bottom">
+      <span>&copy; T2G Trunk to Gold Copyright 2025</span>
+      <div class="footer-social"><a href="https://www.facebook.com/trunk2gold" target="_blank" rel="noopener">Facebook</a></div>
+    </div>
+  </div>
+</footer>
+
+<div class="cart-overlay" id="cart-overlay">
+  <div class="cart-backdrop" id="cart-backdrop"></div>
+  <div class="cart-drawer">
+    <div class="cart-drawer-header">
+      <h2>Cart</h2>
+      <button class="cart-close-btn" id="cart-close-btn" aria-label="Close cart">&#x2715;</button>
+    </div>
+    <div class="cart-drawer-body"><p class="cart-empty-msg">No products in the cart.</p></div>
+  </div>
+</div>
+
+<script src="assets/products-data.js?v=5"></script>
+<script src="assets/main.js?v=5"></script>
+<script src="assets/cart.js?v=5"></script>
+<script src="assets/devmode.js?v=5"></script>
+
+<script>
+'use strict';
+
+/* ─────────────────────────────────────────────────────────────
+   CONFIGURATION
+   Replace SHEET_CSV_URL with your published Google Sheet CSV URL.
+   See TRACKING-SETUP.md for how to get this URL.
+   ───────────────────────────────────────────────────────────── */
+const SHEET_CSV_URL = ''; // paste your Google Sheet CSV URL here
+
+/* ── Step definitions ── */
+const STEPS = [
+  { key: 'received',  label: 'Order\nReceived',  icon: '<polyline points="20 6 9 17 4 12"/>' },
+  { key: 'confirmed', label: 'Payment\nConfirmed', icon: '<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>' },
+  { key: 'packing',   label: 'Being\nPacked',    icon: '<path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/>' },
+  { key: 'shipped',   label: 'Out for\nDelivery', icon: '<rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/>' },
+  { key: 'delivered', label: 'Delivered', icon: '<path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/>' },
+];
+
+const STATUS_STEP = { received: 0, confirmed: 1, packing: 2, shipped: 3, delivered: 4 };
+const STATUS_CLASS = { received: 'received', confirmed: 'confirmed', packing: 'packing', shipped: 'shipped', delivered: 'delivered' };
+const STATUS_MSG = {
+  received:  'Your order has been received by T2G and is being reviewed. You will be contacted at the email and phone number you provided within 24 hours.',
+  confirmed: 'T2G has verified your payment and your order is being prepared for packing.',
+  packing:   'Your items are being carefully packed and inspected at the T2G facility in San Isidro, Jasaan.',
+  shipped:   'Your order is on its way. T2G has handed your package to the courier.',
+  delivered: 'Your order has been delivered. Thank you for choosing T2G!',
+};
+
+/* ── Render steps UI ── */
+function renderSteps(activeKey) {
+  const activeIdx = STATUS_STEP[activeKey] ?? 0;
+  const container = document.getElementById('track-steps');
+  container.innerHTML = STEPS.map((s, i) => {
+    const state = i < activeIdx ? 'done' : i === activeIdx ? 'active' : '';
+    return `<div class="track-step">
+      <div class="step-dot ${state}">
+        <svg viewBox="0 0 24 24">${s.icon}</svg>
+      </div>
+      <div class="step-label ${state}">${s.label.replace('\n', '<br>')}</div>
+    </div>`;
+  }).join('');
+
+  // Animate progress line
+  const pct = activeIdx === 0 ? 0 : (activeIdx / (STEPS.length - 1)) * 100;
+  setTimeout(() => { document.getElementById('steps-fill').style.width = pct + '%'; }, 80);
+}
+
+/* ── Parse CSV rows into order objects ── */
+function parseCsv(text) {
+  const lines = text.trim().split('\n').map(l => l.split(',').map(c => c.trim().replace(/^"|"$/g, '')));
+  if (lines.length < 2) return [];
+  const headers = lines[0].map(h => h.toLowerCase().replace(/\s+/g, '_'));
+  return lines.slice(1).map(row => {
+    const obj = {};
+    headers.forEach((h, i) => { obj[h] = row[i] || ''; });
+    return obj;
+  });
+}
+
+/* ── Main lookup ── */
+async function doTrack() {
+  const input = document.getElementById('track-input');
+  const rawId = input.value.trim().toUpperCase();
+
+  input.classList.remove('error');
+  document.getElementById('track-result').classList.remove('show');
+  document.getElementById('track-not-found').classList.remove('show');
+  document.getElementById('track-loading').classList.remove('show');
+
+  if (!rawId) { input.classList.add('error'); input.focus(); return; }
+
+  document.getElementById('track-loading').classList.add('show');
+
+  // Demo mode when sheet not configured
+  if (!SHEET_CSV_URL) {
+    setTimeout(() => showDemo(rawId), 800);
+    return;
+  }
+
+  try {
+    const res = await fetch(SHEET_CSV_URL + '&t=' + Date.now());
+    if (!res.ok) throw new Error('fetch failed');
+    const text = await res.text();
+    const orders = parseCsv(text);
+    const order  = orders.find(o => (o.order_id || '').toUpperCase() === rawId);
+    document.getElementById('track-loading').classList.remove('show');
+    if (order) {
+      showResult(order);
+    } else {
+      document.getElementById('track-not-found').classList.add('show');
+    }
+  } catch {
+    document.getElementById('track-loading').classList.remove('show');
+    document.getElementById('track-not-found').classList.add('show');
+  }
+}
+
+/* ── Render a real order ── */
+function showResult(order) {
+  const status = (order.status || 'received').toLowerCase();
+  document.getElementById('res-order-id').textContent = order.order_id || '';
+  document.getElementById('res-date').textContent      = order.date ? 'Placed ' + order.date : '';
+
+  renderSteps(status);
+
+  const badge = document.getElementById('status-badge');
+  badge.className = 'status-badge ' + (STATUS_CLASS[status] || 'received');
+  document.getElementById('status-badge-text').textContent = status.charAt(0).toUpperCase() + status.slice(1);
+  document.getElementById('status-msg').textContent = STATUS_MSG[status] || '';
+
+  const courierRow = document.getElementById('courier-row');
+  if (order.tracking_number && order.tracking_number.trim()) {
+    courierRow.style.display = 'flex';
+    document.getElementById('courier-val').textContent = order.tracking_number;
+  } else {
+    courierRow.style.display = 'none';
+  }
+
+  // Items
+  const itemsWrap = document.getElementById('track-items');
+  if (order.items) {
+    const rows = order.items.split('|').map(i => i.trim()).filter(Boolean);
+    itemsWrap.innerHTML = `<h3>Items Ordered</h3>` + rows.map(r => {
+      return `<div class="track-item-row"><span class="track-item-name">${r}</span></div>`;
+    }).join('') + (order.total ? `<div class="track-item-row" style="margin-top:4px;"><span style="font-size:.72rem;font-weight:800;text-transform:uppercase;letter-spacing:.06em;color:var(--text-light);">Total</span><span class="track-item-price">${order.total}</span></div>` : '');
+  } else {
+    itemsWrap.innerHTML = '';
+  }
+
+  document.getElementById('track-result').classList.add('show');
+  document.getElementById('track-result').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+
+/* ── Demo result when sheet not yet set up ── */
+function showDemo(orderId) {
+  document.getElementById('setup-notice').classList.add('show');
+  document.getElementById('track-loading').classList.remove('show');
+  showResult({
+    order_id: orderId,
+    date: new Date().toLocaleDateString('en-PH', { year: 'numeric', month: 'long', day: 'numeric' }),
+    status: 'packing',
+    items: 'Coco Rush 500g x2 | Coco Vinegar 250ml x1',
+    total: 'PHP 595.00',
+    tracking_number: '',
+  });
+}
+
+// Pre-fill from URL param e.g. track.html?id=T2G-XXX
+window.addEventListener('DOMContentLoaded', () => {
+  const params = new URLSearchParams(location.search);
+  const id = params.get('id') || params.get('order_id');
+  if (id) {
+    document.getElementById('track-input').value = id.toUpperCase();
+    doTrack();
+  }
+});
+</script>
+</body>
+</html>
