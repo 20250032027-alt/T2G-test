@@ -201,13 +201,13 @@ function openEditModal(pid, isNew) {
     </div>
 
     <div style="margin-bottom:14px;">
-      <label style="${LS}">Weight per unit (kg) <span style="color:#aaa;font-weight:400;">for shipping calculator</span></label>
+      <label style="${LS}">Weight per unit (kg) <span style="color:#cc3333;font-weight:700;">*required</span></label>
       <div style="display:flex;align-items:center;gap:10px;">
-        <input id="ep-weight" type="number" step="0.001" min="0" value="${prod.weightKg !== null && prod.weightKg !== undefined ? prod.weightKg : ''}" ${IS} style="max-width:160px;" placeholder="e.g. 0.350">
-        <span style="font-size:.75rem;color:#aaa;line-height:1.4;">kg per unit.<br>Leave blank if unknown.</span>
+        <input id="ep-weight" type="number" step="0.001" min="0.001" value="${prod.weightKg !== null && prod.weightKg !== undefined ? prod.weightKg : ''}" ${IS} style="max-width:160px;" placeholder="e.g. 0.350">
+        <span style="font-size:.75rem;color:#888;line-height:1.4;">kg per unit.<br>e.g. 500g = 0.500</span>
       </div>
       <p style="font-size:.72rem;color:#43a047;margin-top:5px;line-height:1.5;">
-        Once set, checkout will auto-calculate shipping cost based on quantity ordered.
+        Checkout uses this to auto-calculate shipping. Must be set before a product can be saved.
       </p>
     </div>
 
@@ -277,41 +277,144 @@ function openEditModal(pid, isNew) {
     refreshList(panel);
   });
 
+  /* ── Field error helpers ── */
+  function fieldError(inputEl, msg) {
+    inputEl.style.borderColor = '#cc3333';
+    inputEl.style.background = '#fff5f5';
+    let err = inputEl.parentElement.querySelector('.field-err');
+    if (!err) {
+      err = document.createElement('p');
+      err.className = 'field-err';
+      err.style.cssText = 'font-size:.7rem;color:#cc3333;margin:4px 0 0;line-height:1.4;';
+      inputEl.parentElement.appendChild(err);
+    }
+    err.textContent = msg;
+    inputEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }
+  function clearError(inputEl) {
+    inputEl.style.borderColor = '#ddd';
+    inputEl.style.background = '';
+    inputEl.parentElement.querySelector('.field-err')?.remove();
+  }
+  function clearAllErrors() {
+    modal.querySelectorAll('.field-err').forEach(e => e.remove());
+    modal.querySelectorAll('input, textarea').forEach(el => {
+      el.style.borderColor = '#ddd';
+      el.style.background = '';
+    });
+  }
+  /* Clear error on input */
+  modal.querySelectorAll('input, textarea').forEach(el => {
+    el.addEventListener('input', () => clearError(el));
+  });
+
   /* Save */
   modal.querySelector('#ep-save').addEventListener('click', () => {
-    const id = modal.querySelector('#ep-id').value.trim().replace(/\s+/g, '-');
-    const name = modal.querySelector('#ep-name').value.trim();
-    if (!id || !name) { alert('ID and Name are required.'); return; }
+    clearAllErrors();
+    let valid = true;
 
+    const idEl   = modal.querySelector('#ep-id');
+    const nameEl = modal.querySelector('#ep-name');
+    const priceEl = modal.querySelector('#ep-price');
+    const priceDEl = modal.querySelector('#ep-price-display');
+    const weightEl = modal.querySelector('#ep-weight');
+    const imgEl  = modal.querySelector('#ep-img');
+    const descEl = modal.querySelector('#ep-desc');
+
+    const id   = idEl.value.trim().replace(/\s+/g, '-');
+    const name = nameEl.value.trim();
+    const priceRaw = priceEl.value.trim();
+    const basePrice = parseFloat(priceRaw);
+    const weightRaw = weightEl.value.trim();
+
+    /* Required: ID */
+    if (!id) {
+      fieldError(idEl, 'Product ID is required. Use letters, numbers, or hyphens (e.g. coco-sugar).');
+      valid = false;
+    } else if (!/^[a-z0-9\-_]+$/i.test(id)) {
+      fieldError(idEl, 'ID can only contain letters, numbers, hyphens, or underscores.');
+      valid = false;
+    } else if (isNew && T2G_PRODUCTS[id]) {
+      fieldError(idEl, 'A product with this ID already exists. Choose a different ID.');
+      valid = false;
+    }
+
+    /* Required: Name */
+    if (!name) {
+      fieldError(nameEl, 'Product name is required.');
+      valid = false;
+    } else if (name.length < 2) {
+      fieldError(nameEl, 'Name must be at least 2 characters.');
+      valid = false;
+    }
+
+    /* Required: Price */
+    if (!priceRaw) {
+      fieldError(priceEl, 'Base price is required.');
+      valid = false;
+    } else if (isNaN(basePrice) || basePrice <= 0) {
+      fieldError(priceEl, 'Price must be a number greater than 0.');
+      valid = false;
+    }
+
+    /* Required: Weight */
+    if (!weightRaw) {
+      fieldError(weightEl, 'Weight is required for the shipping calculator. Enter the weight per unit in kg (e.g. 0.350).');
+      valid = false;
+    } else if (isNaN(parseFloat(weightRaw)) || parseFloat(weightRaw) <= 0) {
+      fieldError(weightEl, 'Weight must be a positive number (e.g. 0.350 for 350g).');
+      valid = false;
+    }
+
+    /* Required: Description */
+    if (!descEl.value.trim()) {
+      fieldError(descEl, 'Description is required.');
+      valid = false;
+    }
+
+    /* Required: Image filename */
+    const imageName = imgEl.value.trim();
+    if (!imageName) {
+      fieldError(imgEl, 'Image filename is required (e.g. coco-sugar.png).');
+      valid = false;
+    } else if (!imageName.match(/\.(png|jpg|jpeg|webp|gif)$/i)) {
+      fieldError(imgEl, 'Filename must end in .png, .jpg, .jpeg, .webp, or .gif.');
+      valid = false;
+    }
+
+    /* Variants validation */
     const hasVar = modal.querySelector('input[name="ep-vt"]:checked').value === 'has';
     let variants = null;
     if (hasVar) {
+      const varJsonEl = modal.querySelector('#ep-var-json');
       try {
-        const opts = JSON.parse(modal.querySelector('#ep-var-json').value);
-        if (!Array.isArray(opts) || opts.length === 0) throw new Error();
+        const opts = JSON.parse(varJsonEl.value);
+        if (!Array.isArray(opts) || opts.length === 0) throw new Error('empty');
+        const badOpt = opts.find(o => !o.value || !o.label || typeof o.price !== 'number' || o.price <= 0);
+        if (badOpt) throw new Error('Each option needs a value, label, and price greater than 0.');
         variants = { label: modal.querySelector('#ep-var-label').value.trim() || 'Option', options: opts };
-      } catch(e) { alert('Variants JSON is invalid. Check the format and try again.'); return; }
+      } catch(e) {
+        fieldError(varJsonEl, 'Variants JSON is invalid. ' + (e.message || 'Check the format and try again.'));
+        valid = false;
+      }
     }
 
+    if (!valid) return;
+
+    /* ── All valid, save ── */
+    const priceDisplay = priceDEl.value.trim() || `PHP ${basePrice.toFixed(2)}`;
+    const shopeeUrl = modal.querySelector('#ep-shopee').value.trim() || null;
+    const weightKg = parseFloat(weightRaw);
     const related = [];
     modal.querySelectorAll('#dev-edit-modal input[type="checkbox"]:checked').forEach(cb => related.push(cb.value));
 
-    const basePrice = parseFloat(modal.querySelector('#ep-price').value) || 165;
-    const priceDisplay = modal.querySelector('#ep-price-display').value.trim() || `PHP ${basePrice.toFixed(2)}`;
-    const imageName = modal.querySelector('#ep-img').value.trim() || id + '.png';
-    const shopeeUrl = modal.querySelector('#ep-shopee').value.trim() || null;
-
-    // Remove old key if ID changed
     if (pid && id !== pid) delete T2G_PRODUCTS[pid];
-
-    const weightVal = modal.querySelector('#ep-weight').value.trim();
-    const weightKg = weightVal !== '' && !isNaN(parseFloat(weightVal)) ? parseFloat(weightVal) : null;
 
     T2G_PRODUCTS[id] = {
       id, name, price: basePrice, priceDisplay,
       priceRange: variants ? { min: Math.min(...variants.options.map(o => o.price)), max: Math.max(...variants.options.map(o => o.price)) } : null,
       variants,
-      description: modal.querySelector('#ep-desc').value.trim(),
+      description: descEl.value.trim(),
       related,
       imageName,
       weightKg,

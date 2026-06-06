@@ -408,31 +408,21 @@
             </div>
           </div>
 
-          <!-- Shipping fee calculator -->
+          <!-- Shipping fee calculator (auto from product weights) -->
           <div id="shipping-calc" style="display:none;">
             <div style="background:var(--grey-bg);border-radius:4px;padding:18px;margin-bottom:4px;">
-              <label style="display:block;font-size:.78rem;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--text);margin-bottom:8px;">
-                Estimated total weight (kg)
-              </label>
-              <div style="display:flex;align-items:center;gap:12px;">
-                <input
-                  type="number"
-                  id="ship-weight"
-                  min="0.1"
-                  step="0.1"
-                  placeholder="e.g. 1.5"
-                  oninput="calcShipping()"
-                  class="co-input"
-                  style="max-width:140px;"
-                >
-                <div id="ship-fee-display" style="font-size:.9rem;font-weight:700;color:var(--text);">
-                  Enter weight above
+              <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;">
+                <div>
+                  <div style="font-size:.78rem;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--text);margin-bottom:4px;">Estimated shipping fee</div>
+                  <div id="ship-fee-breakdown" style="font-size:.78rem;color:var(--text-light);line-height:1.6;"></div>
+                </div>
+                <div id="ship-fee-display" style="font-size:1rem;font-weight:800;color:var(--text);flex-shrink:0;">
+                  Calculating...
                 </div>
               </div>
-              <div id="ship-fee-breakdown" style="margin-top:8px;font-size:.78rem;color:var(--text-light);line-height:1.6;display:none;"></div>
             </div>
-            <div style="background:#fff8e1;border:1px solid #ffe082;border-radius:4px;padding:12px 14px;font-size:.78rem;color:#795548;line-height:1.6;">
-              <strong>Note:</strong> T2G will confirm the exact shipping fee with you via GCash message before processing your payment. The fee shown here is an estimate based on the weight you entered.
+            <div id="ship-tbc-note" style="display:none;background:#fff8e1;border:1px solid #ffe082;border-radius:4px;padding:12px 14px;font-size:.78rem;color:#795548;line-height:1.6;">
+              <strong>Note:</strong> T2G will confirm the exact shipping fee with you via GCash message before processing your payment.
             </div>
           </div>
 
@@ -726,21 +716,23 @@ function selectDelivery(type) {
     const { known, totalKg, fee } = calcShippingFromCart();
     const calcDiv   = document.getElementById('ship-fee-display');
     const breakdown = document.getElementById('ship-fee-breakdown');
+    const tbcNote   = document.getElementById('ship-tbc-note');
 
     if (known && totalKg !== null) {
-      if (calcDiv) calcDiv.textContent = `PHP ${fee.toFixed(2)}`;
+      if (calcDiv) { calcDiv.textContent = `PHP ${fee.toFixed(2)}`; calcDiv.style.color = 'var(--text)'; }
       if (breakdown) {
-        breakdown.style.display = 'block';
         if (totalKg < SHIP_THRESHOLD) {
-          breakdown.innerHTML = `${totalKg.toFixed(3)} kg - flat rate for under ${SHIP_THRESHOLD} kg`;
+          breakdown.textContent = `${totalKg.toFixed(3)} kg - flat rate under ${SHIP_THRESHOLD} kg`;
         } else {
           const extra = Math.ceil(totalKg - SHIP_THRESHOLD);
-          breakdown.innerHTML = `${totalKg.toFixed(3)} kg: PHP ${SHIP_BASE} base + PHP ${extra} &times; PHP ${SHIP_PER_KG}/kg extra = <strong>PHP ${fee}</strong>`;
+          breakdown.innerHTML = `${totalKg.toFixed(3)} kg: PHP ${SHIP_BASE} base + ${extra} kg &times; PHP ${SHIP_PER_KG}`;
         }
       }
+      if (tbcNote) tbcNote.style.display = 'none';
     } else {
-      if (calcDiv) calcDiv.innerHTML = '<span style="color:#cc8800;font-size:.82rem;">Weight not set for some products. T2G will confirm the shipping fee with you before payment.</span>';
-      if (breakdown) breakdown.style.display = 'none';
+      if (calcDiv) { calcDiv.textContent = 'TBC'; calcDiv.style.color = 'var(--text-light)'; }
+      if (breakdown) breakdown.textContent = 'T2G will confirm before payment';
+      if (tbcNote) tbcNote.style.display = 'block';
     }
   } else {
     if (pickupInfo) pickupInfo.style.display = 'block';
