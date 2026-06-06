@@ -433,20 +433,20 @@
           <h2>Billing and shipping address</h2>
           <p class="sub">Enter the billing and shipping address that matches your payment method.</p>
           <div class="co-row" style="margin-bottom:12px;">
-            <input class="co-input" type="text" placeholder="First name" autocomplete="given-name">
-            <input class="co-input" type="text" placeholder="Last name" autocomplete="family-name">
+            <input class="co-input" id="co-fname" type="text" placeholder="First name" autocomplete="given-name">
+            <input class="co-input" id="co-lname" type="text" placeholder="Last name" autocomplete="family-name">
           </div>
           <div style="margin-bottom:12px;">
             <select class="co-input" style="appearance:none;background-image:url('data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%2212%22 height=%228%22 viewBox=%220 0 12 8%22%3E%3Cpath d=%22M1 1l5 5 5-5%22 stroke=%22%23555%22 stroke-width=%221.5%22 fill=%22none%22 stroke-linecap=%22round%22/%3E%3C/svg%3E');background-repeat:no-repeat;background-position:right 12px center;padding-right:32px;">
               <option value="PH">Philippines</option>
             </select>
           </div>
-          <input class="co-input" type="text" placeholder="Street address" autocomplete="street-address" style="margin-bottom:8px;">
+          <input class="co-input" id="co-addr" type="text" placeholder="Street address" autocomplete="street-address" style="margin-bottom:8px;">
           <button class="apt-toggle" onclick="toggleApt()">+ ADD APARTMENT, SUITE, UNIT, ETC.</button>
           <input class="co-input" type="text" placeholder="Apartment, suite, unit, etc." id="apt-field" style="margin-bottom:12px;">
           <div class="co-row" style="margin-bottom:12px;">
-            <input class="co-input" type="text" placeholder="Town / City" autocomplete="address-level2">
-            <select class="co-input" style="appearance:none;background-image:url('data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%2212%22 height=%228%22 viewBox=%220 0 12 8%22%3E%3Cpath d=%22M1 1l5 5 5-5%22 stroke=%22%23555%22 stroke-width=%221.5%22 fill=%22none%22 stroke-linecap=%22round%22/%3E%3C/svg%3E');background-repeat:no-repeat;background-position:right 12px center;padding-right:32px;">
+            <input class="co-input" id="co-city" type="text" placeholder="Town / City" autocomplete="address-level2">
+            <select class="co-input" id="co-region" style="appearance:none;background-image:url('data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%2212%22 height=%228%22 viewBox=%220 0 12 8%22%3E%3Cpath d=%22M1 1l5 5 5-5%22 stroke=%22%23555%22 stroke-width=%221.5%22 fill=%22none%22 stroke-linecap=%22round%22/%3E%3C/svg%3E');background-repeat:no-repeat;background-position:right 12px center;padding-right:32px;">
               <option>Metro Manila</option><option>Region I</option><option>Region II</option>
               <option>Region III</option><option>Region IV-A</option><option>Region V</option>
               <option>Region VI</option><option>Region VII</option><option>Region VIII</option>
@@ -456,8 +456,8 @@
             </select>
           </div>
           <div class="co-row">
-            <input class="co-input" type="text" placeholder="Postcode / ZIP" autocomplete="postal-code">
-            <input class="co-input" type="tel" placeholder="Phone" autocomplete="tel">
+            <input class="co-input" id="co-zip" type="text" placeholder="Postcode / ZIP" autocomplete="postal-code">
+            <input class="co-input" id="co-phone" type="tel" placeholder="Phone" autocomplete="tel">
           </div>
         </div>
 
@@ -774,11 +774,64 @@ function toggleSummary() {
 }
 
 /* ── Place order ── */
+function coFieldError(el, msg) {
+  el.style.borderColor = '#cc3333';
+  el.style.background  = '#fff5f5';
+  let err = el.nextElementSibling;
+  if (!err || !err.classList.contains('co-field-err')) {
+    err = document.createElement('p');
+    err.className = 'co-field-err';
+    err.style.cssText = 'font-size:.72rem;color:#cc3333;margin:4px 0 8px;line-height:1.4;';
+    el.parentNode.insertBefore(err, el.nextSibling);
+  }
+  err.textContent = msg;
+}
+function coClearErrors() {
+  document.querySelectorAll('.co-field-err').forEach(e => e.remove());
+  document.querySelectorAll('.co-input').forEach(el => {
+    el.style.borderColor = '';
+    el.style.background  = '';
+  });
+}
+function coVal(id) { return (document.getElementById(id)?.value || '').trim(); }
+
 function placeOrder() {
-  const email = document.getElementById('co-email').value.trim();
-  if (!email || !email.includes('@')) {
-    const el = document.getElementById('co-email');
-    el.focus(); el.style.borderColor = 'red';
+  coClearErrors();
+  let valid = true;
+  let firstBad = null;
+
+  const required = [
+    { id: 'co-email', label: 'Email address', type: 'email' },
+    { id: 'co-fname', label: 'First name' },
+    { id: 'co-lname', label: 'Last name' },
+    { id: 'co-addr',  label: 'Street address' },
+    { id: 'co-city',  label: 'Town / City' },
+    { id: 'co-zip',   label: 'Postcode / ZIP' },
+    { id: 'co-phone', label: 'Phone number' },
+  ];
+
+  required.forEach(({ id, label, type }) => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    const val = el.value.trim();
+    if (!val) {
+      coFieldError(el, `${label} is required.`);
+      if (!firstBad) firstBad = el;
+      valid = false;
+    } else if (type === 'email' && !val.includes('@')) {
+      coFieldError(el, 'Please enter a valid email address.');
+      if (!firstBad) firstBad = el;
+      valid = false;
+    } else if (id === 'co-phone' && !/^[\d\s\+\-\(\)]{7,}$/.test(val)) {
+      coFieldError(el, 'Please enter a valid phone number.');
+      if (!firstBad) firstBad = el;
+      valid = false;
+    }
+  });
+
+  if (!valid) {
+    firstBad?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    firstBad?.focus();
     return;
   }
 
@@ -786,35 +839,64 @@ function placeOrder() {
   const subtotal = cart.reduce((s, i) => s + i.price * i.qty, 0);
   const totalAmt = subtotal + shippingFee;
 
+  const fname  = coVal('co-fname');
+  const lname  = coVal('co-lname');
+  const email  = coVal('co-email');
+  const phone  = coVal('co-phone');
+  const addr   = coVal('co-addr');
+  const apt    = coVal('apt-field');
+  const city   = coVal('co-city');
+  const zip    = coVal('co-zip');
+  const region = document.getElementById('co-region')?.value || '';
+  const note   = coVal('order-note');
+
   sessionStorage.removeItem('t2g_cart');
   document.getElementById('checkout-view').style.display = 'none';
   document.getElementById('complete-view').style.display = 'block';
   document.getElementById('cb-checkout').classList.remove('active');
   document.getElementById('cb-complete').classList.add('active');
 
-  let msg = `Thank you! We have received your order.`;
+  // Build confirmation message
+  let msg = `Thank you, ${fname}! Your order has been received.`;
 
   if (currentDelivery === 'pickup') {
-    msg += ` We will message you at ${email} to coordinate your pickup at the T2G Office in Jasaan.`;
-  } else if (shippingKnown) {
-    msg += ` Shipping fee: PHP ${shippingFee.toFixed(2)}. Total: PHP ${totalAmt.toFixed(2)}.`;
-    msg += ` We will message you at ${email} to confirm your order before payment.`;
+    msg += ` We will contact you at ${email} to coordinate pickup at the T2G Office in Jasaan.`;
   } else {
-    msg += ` We will message you at ${email} to confirm the exact shipping fee before processing payment.`;
+    const addrFull = [addr, apt, city, zip, region, 'Philippines'].filter(Boolean).join(', ');
+    msg += ` Your order will be shipped to: ${addrFull}.`;
+    if (shippingKnown) {
+      msg += ` Shipping fee: PHP ${shippingFee.toFixed(2)}. Total: PHP ${totalAmt.toFixed(2)}.`;
+    } else {
+      msg += ` T2G will confirm the exact shipping fee with you before processing payment.`;
+    }
+    msg += ` We will reach out at ${email} or ${phone} to confirm your order.`;
   }
 
   if (currentPayment === 'gcash') {
-    msg += ` Once confirmed, send payment via GCash to 09177164225 and send proof to t2gcorp2017@yahoo.com.`;
+    msg += ` Once confirmed, send payment via GCash to 09177164225 and email proof to t2gcorp2017@yahoo.com.`;
   } else {
     msg += ` Please have your cash ready on pickup.`;
   }
+
+  if (note) msg += ` Your note: "${note}"`;
 
   document.getElementById('oc-msg').textContent = msg;
   window.scrollTo({ top: 0, behavior: 'smooth' });
   updateCartBadge();
 }
 
-document.addEventListener('DOMContentLoaded', renderSummary);
+document.addEventListener('DOMContentLoaded', () => {
+  renderSummary();
+  // Clear field errors as the user corrects them
+  document.querySelectorAll('.co-input').forEach(el => {
+    el.addEventListener('input', () => {
+      el.style.borderColor = '';
+      el.style.background  = '';
+      const err = el.nextElementSibling;
+      if (err && err.classList.contains('co-field-err')) err.remove();
+    });
+  });
+});
 </script>
 <script src="assets/devmode.js"></script>
 </body>
