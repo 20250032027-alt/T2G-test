@@ -36,21 +36,7 @@ function renderProductGrid() {
     const img = getProductImage(p, 'store-card-img-el', p.name);
     const shopeeUrl = p.shopeeUrl || window.T2G_SHOPEE_URL || 'https://shopee.ph/shop/1013182247';
     const detailUrl = `/product/${p.id}`;
-    return `
-    <div class="store-card reveal" data-product-id="${p.id}" data-delay="${delay}">
-      <a href="${detailUrl}" style="display:block;overflow:hidden;text-decoration:none;">${img}</a>
-      <a href="${detailUrl}" style="text-decoration:none;color:inherit;"><h3>${p.name}</h3></a>
-      <p class="price">${p.priceDisplay}</p>
-      <div style="display:flex;flex-direction:column;gap:7px;">
-        <button class="btn btn-green store-action-btn" style="width:100%;justify-content:center;">${btnLabel}</button>
-        <a href="${shopeeUrl}" target="_blank" rel="noopener" class="btn shopee-btn" style="width:100%;">
-          <span class="shopee-icon-wrap">
-            <img src="assets/img/shopee_icon.png" alt="" width="18" height="18" style="display:block;" onerror="this.style.display='none'">
-          </span>
-          Buy on Shopee
-        </a>
-      </div>
-    </div>`;
+    return `<div class="store-card reveal" data-product-id="${p.id}" data-delay="${delay}"><a href="${detailUrl}" style="display:block;overflow:hidden;text-decoration:none;margin-bottom:14px;">${img}</a><a href="${detailUrl}" style="text-decoration:none;color:inherit;"><h3>${p.name}</h3></a><p class="price">${p.priceDisplay}</p><div style="display:flex;flex-direction:column;gap:7px;"><button class="btn btn-green store-action-btn" style="width:100%;justify-content:center;">${btnLabel}</button><a href="${shopeeUrl}" target="_blank" rel="noopener" class="btn shopee-btn" style="width:100%;"><span class="shopee-icon-wrap"><img src="assets/img/shopee_icon.png" alt="" width="18" height="18" style="display:block;" onerror="this.style.display='none'"></span>Buy on Shopee</a></div></div>`;
   }).join('');
 
   // Scroll reveal

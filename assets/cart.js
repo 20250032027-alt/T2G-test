@@ -445,5 +445,4 @@ function initProductCards() {
 document.addEventListener('DOMContentLoaded', () => {
   updateCartBadge();
   renderCartDrawer();
-  initProductCards();
 });
