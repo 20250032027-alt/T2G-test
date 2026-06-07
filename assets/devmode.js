@@ -101,10 +101,10 @@ function buildPanelHTML() {
   </div>
   <div style="padding:10px 20px;border-top:1px solid #eee;background:#f9f9f9;flex-shrink:0;">
     <div style="background:#fff3cd;border:1px solid #ffc107;border-radius:4px;padding:10px 14px;margin-bottom:10px;font-size:.75rem;color:#856404;line-height:1.55;">
-      <strong>To sync products across devices:</strong> click "Export cart.js" below, download the file, replace <code style="background:rgba(0,0,0,.07);padding:1px 4px;border-radius:2px;">assets/cart.js</code> in your project folder with it, then push to GitHub. Every device will then see the same products.
+      <strong>To sync products across all devices and browsers:</strong> click "Export products-data.js" below, copy the output, replace <code style="background:rgba(0,0,0,.07);padding:1px 4px;border-radius:2px;">assets/products-data.js</code> in your project with it, then push to GitHub.
     </div>
     <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;justify-content:space-between;">
-      <button id="dev-export" style="background:#1a1a1a;color:#fff;border:none;padding:8px 16px;border-radius:3px;font-size:.75rem;font-weight:700;letter-spacing:.06em;cursor:pointer;text-transform:uppercase;">Download cart.js</button>
+      <button id="dev-export" style="background:#1a1a1a;color:#fff;border:none;padding:8px 16px;border-radius:3px;font-size:.75rem;font-weight:700;letter-spacing:.06em;cursor:pointer;text-transform:uppercase;">Export products-data.js</button>
       <button id="dev-reset" style="white-space:nowrap;background:none;border:1px solid #ddd;padding:7px 12px;border-radius:3px;font-size:.72rem;color:#999;cursor:pointer;">Reset to Defaults</button>
     </div>
   </div>`;
@@ -459,11 +459,16 @@ function bindDevPanel(panel) {
     const data = JSON.stringify(T2G_PRODUCTS, null, 2);
     const output = `/* ============================================================
    products-data.js - exported from Dev Mode on ${new Date().toLocaleDateString()}
-   Paste this entire file content into assets/products-data.js
-   then push to GitHub to make changes live on all browsers.
+   REPLACE the entire contents of assets/products-data.js with this.
+   Then push to GitHub to make changes live on all browsers.
 ============================================================ */
 
-window.T2G_PRODUCTS_DEFAULT = ${data};`;
+window.T2G_SHOPEE_URL = "${window.T2G_SHOPEE_URL || 'https://shopee.ph/shop/1013182247'}";
+
+window.T2G_PRODUCTS_DEFAULT = ${data};
+
+/* Live working copy - devmode.js will merge localStorage overrides on top */
+window.T2G_PRODUCTS = Object.assign({}, window.T2G_PRODUCTS_DEFAULT);`;
     // Copy to clipboard
     navigator.clipboard.writeText(output).then(() => {
       showToast('Copied! Paste into assets/products-data.js and push to GitHub.');
