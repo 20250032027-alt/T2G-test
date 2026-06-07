@@ -122,7 +122,10 @@ function productRowHTML(p) {
       <div style="font-weight:700;font-size:.88rem;color:#1a1a1a;margin-bottom:2px;">${p.name}</div>
       <div style="font-size:.74rem;color:#888;">${p.priceDisplay}${varCount ? ' &nbsp;&middot;&nbsp; ' + varCount + ' variant' + (varCount > 1 ? 's' : '') : ''} &nbsp;&middot;&nbsp; img: <code style="background:#f0f0f0;padding:1px 4px;border-radius:2px;font-size:.7rem;">${imgName}</code></div>
     </div>
-    <div style="display:flex;gap:6px;flex-shrink:0;">
+    <div style="display:flex;gap:6px;flex-shrink:0;align-items:center;">
+      <a href="/product/${p.id}" target="_blank" title="View product page" style="display:inline-flex;align-items:center;justify-content:center;width:30px;height:30px;border:1px solid #e0e0e0;border-radius:3px;color:#888;text-decoration:none;font-size:.9rem;transition:color 200ms,border-color 200ms;" onmouseover="this.style.color='#43a047';this.style.borderColor='#43a047'" onmouseout="this.style.color='#888';this.style.borderColor='#e0e0e0'">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+      </a>
       <button class="dev-edit-btn" data-pid="${p.id}" style="background:#1a1a1a;color:#fff;border:none;padding:6px 13px;border-radius:3px;font-size:.72rem;font-weight:700;cursor:pointer;">EDIT</button>
       <button class="dev-delete-btn" data-pid="${p.id}" style="background:#fff;border:1px solid #e0e0e0;color:#cc3333;padding:6px 10px;border-radius:3px;font-size:.72rem;cursor:pointer;font-weight:700;">DEL</button>
     </div>
@@ -424,7 +427,7 @@ function openEditModal(pid, isNew) {
     saveProducts();
     modal.remove();
     refreshList(panel);
-    showToast('"' + name + '" saved. Reload products page to see it live.');
+    showToast(`"${name}" saved. <a href="/product/${id}" target="_blank" style="color:#fff;text-decoration:underline;">View product page &rarr;</a>`);
   });
 
   /* Delete from edit modal */
@@ -511,9 +514,9 @@ function bindProductRows(panel) {
 function showToast(msg) {
   const t = document.createElement('div');
   t.style.cssText = 'position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#1a1a1a;color:#fff;padding:10px 20px;border-radius:4px;font-size:.82rem;z-index:99999;font-family:Montserrat,sans-serif;white-space:nowrap;';
-  t.textContent = msg;
+  t.innerHTML = msg;
   document.body.appendChild(t);
-  setTimeout(() => t.remove(), 3000);
+  setTimeout(() => t.remove(), 4000);
 }
 
 /* ── New product template ── */

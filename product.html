@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title id="page-title">Product | Trunk to Gold (T2G)</title>
+  <meta name="description" id="page-desc" content="All-natural coconut products from Jasaan, Misamis Oriental. Made by T2G.">
+  <meta property="og:type" content="product">
+  <meta property="og:site_name" content="Trunk to Gold (T2G)">
+  <meta property="og:title" id="og-title" content="Product | T2G">
+  <meta property="og:description" id="og-desc" content="">
+  <meta property="og:image" id="og-image" content="">
+  <link rel="canonical" id="page-canonical" href="https://trunktogold.com/product">
+  <link rel="icon" type="image/png" href="assets/img/logo.png">
+  <link rel="stylesheet" href="assets/style.css?v=5">
+  <style>
+    .product-page { padding: 48px 0 72px; }
+    .product-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 56px; align-items: start; }
+    @media (max-width: 760px) { .product-layout { grid-template-columns: 1fr; gap: 28px; } }
+
+    .product-img-wrap {
+      position: relative; aspect-ratio: 1/1; border-radius: 4px;
+      overflow: hidden; background: var(--grey-bg);
+    }
+    .product-img-wrap img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .product-img-ph {
+      position: absolute; inset: 0; display: flex; flex-direction: column;
+      align-items: center; justify-content: center; gap: 5px;
+      text-align: center; background: var(--grey-bg); padding: 16px;
+    }
+    .product-img-ph span { font-size: .58rem; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; color: #aaa; }
+    .product-img-ph code { font-size: .68rem; background: #e8e8e8; padding: 2px 8px; border-radius: 3px; color: #888; }
+
+    .product-breadcrumb { font-size: .72rem; color: var(--text-light); margin-bottom: 14px; }
+    .product-breadcrumb a { color: var(--text-light); transition: color 200ms; }
+    .product-breadcrumb a:hover { color: var(--green); }
+    .product-breadcrumb span { color: var(--text-mid); }
+
+    .product-name { font-size: clamp(1.4rem, 3vw, 1.9rem); font-weight: 800; line-height: 1.2; margin-bottom: 6px; color: var(--text); }
+    .product-tagline { font-size: .88rem; color: var(--text-mid); margin-bottom: 16px; line-height: 1.6; }
+    .product-price { font-size: 1.3rem; font-weight: 800; color: var(--text); margin-bottom: 20px; }
+
+    .trust-row { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 20px; }
+    .trust-chip {
+      display: inline-flex; align-items: center; gap: 5px;
+      background: var(--grey-bg); border-radius: 20px; padding: 4px 10px;
+      font-size: .68rem; font-weight: 700; letter-spacing: .05em;
+      text-transform: uppercase; color: var(--text-mid);
+    }
+    .trust-chip svg { flex-shrink: 0; }
+
+    .product-bullets { list-style: none; padding: 0; margin: 0 0 22px; display: flex; flex-direction: column; gap: 7px; }
+    .product-bullets li { display: flex; align-items: center; gap: 8px; font-size: .82rem; color: var(--text-mid); }
+    .product-bullets li::before { content: ''; width: 7px; height: 7px; border-radius: 50%; background: var(--green); flex-shrink: 0; }
+
+    .variant-select-wrap { margin-bottom: 16px; }
+    .variant-select-wrap label { display: block; font-size: .72rem; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--text-light); margin-bottom: 6px; }
+    .variant-select-wrap select { max-width: 260px; }
+
+    .product-desc { font-size: .88rem; color: var(--text); line-height: 1.8; margin-bottom: 24px; border-top: 1px solid var(--border); padding-top: 20px; }
+    .product-actions { display: flex; flex-direction: column; gap: 10px; }
+    .product-ship-note { margin-top: 14px; font-size: .72rem; color: var(--text-light); line-height: 1.6; }
+
+    .product-divider { border: none; border-top: 1px solid var(--border); margin: 56px 0 40px; }
+    .product-nav { display: flex; justify-content: space-between; align-items: center; gap: 16px; flex-wrap: wrap; }
+    .prod-nav-link { font-size: .72rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--text-light); transition: color 200ms; }
+    .prod-nav-link:hover { color: var(--green); }
+
+    .related-section { margin-top: 56px; }
+    .related-section h2 { font-size: .8rem; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; color: var(--text-light); margin-bottom: 20px; }
+    .related-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; }
+    @media (max-width: 760px) { .related-grid { grid-template-columns: repeat(2, 1fr); } }
+    .rel-card { display: block; color: inherit; text-decoration: none; }
+    .rel-card-img { aspect-ratio: 1/1; border-radius: 3px; overflow: hidden; background: var(--grey-bg); position: relative; }
+    .rel-card-img img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 350ms; }
+    .rel-card:hover .rel-card-img img { transform: scale(1.04); }
+    .rel-card-img .img-ph-label {
+      position: absolute; inset: 0; display: none; flex-direction: column;
+      align-items: center; justify-content: center; gap: 5px;
+      padding: 8px; text-align: center; background: var(--grey-bg);
+    }
+    .rel-card-img .img-ph-label span { font-size: .55rem; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; color: #aaa; }
+    .rel-card-img .img-ph-label code { font-size: .65rem; background: #e8e8e8; padding: 2px 6px; border-radius: 3px; color: #888; }
+
+    /* Not-found state */
+    .product-not-found { text-align: center; padding: 80px 20px; }
+    .product-not-found h1 { font-size: 1.4rem; font-weight: 800; margin-bottom: 12px; }
+    .product-not-found p { font-size: .9rem; color: var(--text-mid); margin-bottom: 24px; line-height: 1.7; }
+  </style>
+</head>
+<body>
+
+<div id="topbar">
+  For bulk orders of more than PHP 4,000, contact (0917) 716 4225 or email <a href="mailto:t2gcorp2017@yahoo.com">t2gcorp2017@yahoo.com</a>
+</div>
+
+<header id="header">
+  <div class="container">
+    <div class="header-row">
+      <a id="logo" href="index.html"><img src="assets/img/logo.png" alt="Trunk to Gold"></a>
+      <div class="nav-spacer"></div>
+      <nav class="nav-links">
+        <a href="about.html">About</a>
+        <a href="products.html" class="active">Products</a>
+        <a href="export.html">Export</a>
+        <a href="faq.html">FAQ</a>
+        <a href="blog.html">Blog</a>
+        <a href="contact.html">Contact</a>
+        <a href="track.html" style="color:var(--green);font-weight:700;">Track Order</a>
+      </nav>
+      <button class="nav-cart" id="cart-btn" aria-label="Open cart">
+        <svg viewBox="0 0 24 24"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 002 1.61h9.72a2 2 0 002-1.61L23 6H6"/></svg>
+        <span class="cart-badge">0</span>
+      </button>
+      <button class="nav-toggle" aria-label="Open menu"><span></span><span></span><span></span></button>
+    </div>
+  </div>
+</header>
+
+<div class="mobile-menu" id="mobile-menu">
+  <div class="mobile-backdrop" id="mobile-backdrop"></div>
+  <div class="mobile-panel">
+    <button class="mobile-close" id="mobile-close" aria-label="Close menu">&#x2715;</button>
+    <nav>
+      <a href="about.html">About</a>
+      <a href="products.html">Products</a>
+      <a href="export.html">Export</a>
+      <a href="faq.html">FAQ</a>
+      <a href="blog.html">Blog</a>
+      <a href="contact.html">Contact</a>
+      <a href="track.html" style="color:var(--green);font-weight:700;">Track Order</a>
+    </nav>
+  </div>
+</div>
+
+<main id="product-main">
+  <!-- Rendered by JS below -->
+</main>
+
+<footer class="footer">
+  <div class="container">
+    <div class="footer-inner">
+      <div class="footer-brand"><img src="assets/img/logo.png" alt="T2G"></div>
+      <div class="footer-address">San Isidro, Jasaan<br>Misamis Oriental, Philippines</div>
+      <div class="footer-contact"><a href="mailto:t2gcorp2017@yahoo.com">t2gcorp2017@yahoo.com</a><br>(0917) 716 4225</div>
+      <div class="footer-nav-col"><ul>
+        <li><a href="about.html">About</a></li>
+        <li><a href="products.html">Products</a></li>
+        <li><a href="export.html">Export</a></li>
+        <li><a href="faq.html">FAQ</a></li>
+        <li><a href="blog.html">Blog</a></li>
+        <li><a href="contact.html">Contact</a></li>
+        <li><a href="track.html" style="color:var(--green);font-weight:700;">Track Order</a></li>
+      </ul></div>
+    </div>
+    <div class="footer-bottom">
+      <span>&copy; T2G Trunk to Gold Copyright 2025</span>
+      <div class="footer-social"><a href="https://www.facebook.com/trunk2gold" target="_blank" rel="noopener">Facebook</a></div>
+    </div>
+  </div>
+</footer>
+
+<div class="cart-overlay" id="cart-overlay">
+  <div class="cart-backdrop" id="cart-backdrop"></div>
+  <div class="cart-drawer">
+    <div class="cart-drawer-header">
+      <h2>Cart</h2>
+      <button class="cart-close-btn" id="cart-close-btn" aria-label="Close cart">&#x2715;</button>
+    </div>
+    <div class="cart-drawer-body"><p class="cart-empty-msg">No products in the cart.</p></div>
+  </div>
+</div>
+
+<script src="assets/products-data.js?v=5"></script>
+<script src="assets/main.js?v=5"></script>
+<script src="assets/cart.js?v=5"></script>
+<script src="assets/devmode.js?v=5"></script>
+
+<script>
+'use strict';
+
+/* ── Read product ID from URL path /product/[id] or ?id=[id] fallback ── */
+function getProductId() {
+  // Clean URL: /product/coco-sugar  -> pathname ends with the id
+  const parts = location.pathname.replace(/\/$/, '').split('/');
+  const last  = parts[parts.length - 1];
+  // If we're at /product or /product.html, fall back to ?id=
+  if (last && last !== 'product' && last !== 'product.html') return last;
+  return new URLSearchParams(location.search).get('id') || '';
+}
+
+/* ── Icon SVGs ── */
+const ICONS = {
+  shield: '<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>',
+  check:  '<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>',
+  home:   '<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>',
+};
+
+/* ── Render not-found ── */
+function renderNotFound(id) {
+  document.getElementById('product-main').innerHTML = `
+    <section class="product-page">
+      <div class="container">
+        <div class="product-not-found">
+          <h1>Product not found</h1>
+          <p>We could not find a product with the ID <strong>${id || '(none)'}</strong>.<br>
+          It may have been removed or the link might be incorrect.</p>
+          <a href="products.html" class="btn btn-green">View All Products</a>
+        </div>
+      </div>
+    </section>`;
+}
+
+/* ── Render product ── */
+function renderProduct(p) {
+  const products    = Object.values(T2G_PRODUCTS);
+  const idx         = products.findIndex(x => x.id === p.id);
+  const prev        = idx > 0 ? products[idx - 1] : null;
+  const next        = idx < products.length - 1 ? products[idx + 1] : null;
+  const imgName     = p.imageName || (p.id + '.png');
+  const shopeeUrl   = p.shopeeUrl || window.T2G_SHOPEE_URL || 'https://shopee.ph/shop/1013182247';
+  const hasVariants = p.variants && p.variants.options && p.variants.options.length > 0;
+
+  /* Update <head> meta dynamically */
+  document.title = p.name + ' | Trunk to Gold (T2G)';
+  document.getElementById('page-desc').content      = p.description || p.name;
+  document.getElementById('og-title').content       = p.name + ' | T2G';
+  document.getElementById('og-desc').content        = p.description || '';
+  document.getElementById('og-image').content       = 'https://trunktogold.com/assets/img/' + imgName;
+  document.getElementById('page-canonical').href    = 'https://trunktogold.com/product/' + p.id;
+  document.getElementById('page-title').textContent = p.name + ' | Trunk to Gold (T2G)';
+
+  /* Breadcrumb name */
+  const breadcrumbName = document.createElement('span');
+
+  /* Variants selector */
+  let variantHTML = '';
+  if (hasVariants) {
+    const opts = p.variants.options.map(o =>
+      `<option value="${o.value}" data-price="${o.price}">${o.label} - PHP ${o.price.toFixed(2)}</option>`
+    ).join('');
+    variantHTML = `
+      <div class="variant-select-wrap">
+        <label>${p.variants.label || 'Option'}</label>
+        <select class="co-input" id="variant-select">${opts}</select>
+      </div>`;
+  }
+
+  /* Bullets */
+  const bulletsHTML = p.bullets
+    ? p.bullets.map(b => `<li>${b}</li>`).join('')
+    : (p.description ? `<li>${p.description.split('.')[0]}</li>` : '');
+
+  /* Related products */
+  const relatedIds = p.related || [];
+  const relatedHTML = relatedIds.slice(0, 4).map(rid => {
+    const rp = T2G_PRODUCTS[rid];
+    if (!rp) return '';
+    const rimg = rp.imageName || (rp.id + '.png');
+    return `
+    <a href="/product/${rp.id}" class="rel-card">
+      <div class="rel-card-img">
+        <img src="assets/img/${rimg}" alt="${rp.name}" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+        <div class="img-ph-label"><span>Add image:</span><code>${rimg}</code></div>
+      </div>
+      <div style="padding:10px 0 0;">
+        <div style="font-size:.8rem;font-weight:700;color:var(--text);">${rp.name}</div>
+        <div style="font-size:.75rem;color:var(--text-light);margin-top:2px;">${rp.priceDisplay || ''}</div>
+      </div>
+    </a>`;
+  }).join('');
+
+  /* Prev/next nav */
+  const prevLink = prev
+    ? `<a href="/product/${prev.id}" class="prod-nav-link">&larr; ${prev.name}</a>`
+    : '<span></span>';
+  const nextLink = next
+    ? `<a href="/product/${next.id}" class="prod-nav-link">${next.name} &rarr;</a>`
+    : '<span></span>';
+
+  document.getElementById('product-main').innerHTML = `
+    <section class="product-page">
+      <div class="container">
+
+        <p class="product-breadcrumb">
+          <a href="index.html">Home</a> &rsaquo;
+          <a href="products.html">Products</a> &rsaquo;
+          <span>${p.name}</span>
+        </p>
+
+        <div class="product-layout">
+
+          <!-- Image -->
+          <div>
+            <div class="product-img-wrap">
+              <img src="assets/img/${imgName}" alt="${p.name}" id="product-main-img"
+                onerror="this.style.display='none';document.getElementById('product-img-ph').style.display='flex'">
+              <div class="product-img-ph" id="product-img-ph" style="display:none;">
+                <span>Add image:</span>
+                <code>${imgName}</code>
+                <span style="font-size:.55rem;color:#ccc;">assets/img/</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Details -->
+          <div>
+            <h1 class="product-name">${p.name}</h1>
+            <p class="product-tagline">${p.tagline || ''}</p>
+            <div class="product-price" id="product-price-display">${p.priceDisplay || 'PHP ' + (p.price || 0).toFixed(2)}</div>
+
+            <div class="trust-row">
+              <span class="trust-chip" style="color:#43a047;">${ICONS.shield} FDA Registered</span>
+              <span class="trust-chip" style="color:#43a047;">${ICONS.check} All Natural</span>
+              <span class="trust-chip" style="color:#43a047;">${ICONS.home} Made in Jasaan, MisOr</span>
+            </div>
+
+            <ul class="product-bullets">${bulletsHTML}</ul>
+
+            ${variantHTML}
+
+            <div class="product-desc">${p.description || ''}</div>
+
+            <div class="product-actions">
+              <button class="btn btn-green" id="add-to-cart-btn" style="width:100%;justify-content:center;">
+                ${hasVariants ? 'Select Options' : 'Add to Cart'}
+              </button>
+              <a href="${shopeeUrl}" target="_blank" rel="noopener" class="btn shopee-btn" style="width:100%;">
+                <span class="shopee-icon-wrap">
+                  <img src="assets/img/shopee_icon.png" alt="" width="18" height="18" style="display:block;" onerror="this.style.display='none'">
+                </span>
+                Buy on Shopee
+              </a>
+            </div>
+
+            <p class="product-ship-note">
+              Shipping: PHP 190 flat under 3 kg. PHP 190 + PHP 80/kg above 3 kg.<br>
+              Ships from Jasaan, Misamis Oriental. Pickup available.
+            </p>
+          </div>
+
+        </div>
+
+        ${relatedHTML ? `
+        <div class="related-section">
+          <h2>You might also like</h2>
+          <div class="related-grid">${relatedHTML}</div>
+        </div>` : ''}
+
+        <hr class="product-divider">
+        <div class="product-nav">
+          ${prevLink}
+          <a href="products.html" class="prod-nav-link" style="color:var(--text-light);">All Products</a>
+          ${nextLink}
+        </div>
+
+      </div>
+    </section>`;
+
+  /* ── Wire up Add to Cart ── */
+  const cartBtn = document.getElementById('add-to-cart-btn');
+  const varSel  = document.getElementById('variant-select');
+
+  /* Update price display when variant changes */
+  if (varSel) {
+    varSel.addEventListener('change', () => {
+      const selected = varSel.options[varSel.selectedIndex];
+      const price = parseFloat(selected.dataset.price);
+      if (!isNaN(price)) {
+        document.getElementById('product-price-display').textContent = 'PHP ' + price.toFixed(2);
+      }
+    });
+  }
+
+  cartBtn.addEventListener('click', () => {
+    let cartId    = p.id;
+    let cartName  = p.name;
+    let cartPrice = p.price;
+
+    if (hasVariants && varSel) {
+      const selected = varSel.options[varSel.selectedIndex];
+      const variantValue = selected.value;
+      const variantLabel = selected.text.split(' - ')[0];
+      cartPrice = parseFloat(selected.dataset.price) || p.price;
+      cartId    = p.id + '-' + variantValue;
+      cartName  = p.name + ' - ' + variantLabel;
+    }
+
+    if (typeof addToCart === 'function') {
+      addToCart({ id: cartId, name: cartName, price: cartPrice, imageName: imgName });
+      if (typeof openCart === 'function') openCart();
+    }
+  });
+}
+
+/* ── Init ── */
+document.addEventListener('DOMContentLoaded', () => {
+  const id = getProductId();
+  if (!id) { renderNotFound(''); return; }
+
+  const p = T2G_PRODUCTS[id];
+  if (!p) { renderNotFound(id); return; }
+
+  renderProduct(p);
+});
+</script>
+
+</body>
+</html>
