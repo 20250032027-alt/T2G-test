@@ -11,8 +11,8 @@
   <meta property="og:description" id="og-desc" content="">
   <meta property="og:image" id="og-image" content="">
   <link rel="canonical" id="page-canonical" href="https://trunktogold.com/product">
-  <link rel="icon" type="image/png" href="assets/img/logo.png">
-  <link rel="stylesheet" href="assets/style.css?v=7">
+  <link rel="icon" type="image/png" href="/assets/img/logo.png">
+  <link rel="stylesheet" href="/assets/style.css?v=7">
   <style>
     .product-page { padding: 48px 0 72px; }
     .product-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 56px; align-items: start; }
@@ -97,16 +97,16 @@
 <header id="header">
   <div class="container">
     <div class="header-row">
-      <a id="logo" href="index.html"><img src="assets/img/logo.png" alt="Trunk to Gold"></a>
+      <a id="logo" href="/"><img src="/assets/img/logo.png" alt="Trunk to Gold"></a>
       <div class="nav-spacer"></div>
       <nav class="nav-links">
-        <a href="about.html">About</a>
-        <a href="products.html" class="active">Products</a>
-        <a href="export.html">Export</a>
-        <a href="faq.html">FAQ</a>
-        <a href="blog.html">Blog</a>
-        <a href="contact.html">Contact</a>
-        <a href="track.html" style="color:var(--green);font-weight:700;">Track Order</a>
+        <a href="/about">About</a>
+        <a href="/products" class="active">Products</a>
+        <a href="/export">Export</a>
+        <a href="/faq">FAQ</a>
+        <a href="/blog">Blog</a>
+        <a href="/contact">Contact</a>
+        <a href="/track" style="color:var(--green);font-weight:700;">Track Order</a>
       </nav>
       <button class="nav-cart" id="cart-btn" aria-label="Open cart">
         <svg viewBox="0 0 24 24"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 002 1.61h9.72a2 2 0 002-1.61L23 6H6"/></svg>
@@ -122,13 +122,13 @@
   <div class="mobile-panel">
     <button class="mobile-close" id="mobile-close" aria-label="Close menu">&#x2715;</button>
     <nav>
-      <a href="about.html">About</a>
-      <a href="products.html">Products</a>
-      <a href="export.html">Export</a>
-      <a href="faq.html">FAQ</a>
-      <a href="blog.html">Blog</a>
-      <a href="contact.html">Contact</a>
-      <a href="track.html" style="color:var(--green);font-weight:700;">Track Order</a>
+      <a href="/about">About</a>
+      <a href="/products">Products</a>
+      <a href="/export">Export</a>
+      <a href="/faq">FAQ</a>
+      <a href="/blog">Blog</a>
+      <a href="/contact">Contact</a>
+      <a href="/track" style="color:var(--green);font-weight:700;">Track Order</a>
     </nav>
   </div>
 </div>
@@ -140,17 +140,17 @@
 <footer class="footer">
   <div class="container">
     <div class="footer-inner">
-      <div class="footer-brand"><img src="assets/img/logo.png" alt="T2G"></div>
+      <div class="footer-brand"><img src="/assets/img/logo.png" alt="T2G"></div>
       <div class="footer-address">San Isidro, Jasaan<br>Misamis Oriental, Philippines</div>
       <div class="footer-contact"><a href="mailto:t2gcorp2017@yahoo.com">t2gcorp2017@yahoo.com</a><br>(0917) 716 4225</div>
       <div class="footer-nav-col"><ul>
-        <li><a href="about.html">About</a></li>
-        <li><a href="products.html">Products</a></li>
-        <li><a href="export.html">Export</a></li>
-        <li><a href="faq.html">FAQ</a></li>
-        <li><a href="blog.html">Blog</a></li>
-        <li><a href="contact.html">Contact</a></li>
-        <li><a href="track.html" style="color:var(--green);font-weight:700;">Track Order</a></li>
+        <li><a href="/about">About</a></li>
+        <li><a href="/products">Products</a></li>
+        <li><a href="/export">Export</a></li>
+        <li><a href="/faq">FAQ</a></li>
+        <li><a href="/blog">Blog</a></li>
+        <li><a href="/contact">Contact</a></li>
+        <li><a href="/track" style="color:var(--green);font-weight:700;">Track Order</a></li>
       </ul></div>
     </div>
     <div class="footer-bottom">
@@ -171,10 +171,10 @@
   </div>
 </div>
 
-<script src="assets/products-data.js?v=7"></script>
-<script src="assets/main.js?v=7"></script>
-<script src="assets/cart.js?v=7"></script>
-<script src="assets/devmode.js?v=7"></script>
+<script src="/assets/products-data.js?v=7"></script>
+<script src="/assets/main.js?v=7"></script>
+<script src="/assets/cart.js?v=7"></script>
+<script src="/assets/devmode.js?v=7"></script>
 
 <script>
 'use strict';
@@ -207,7 +207,7 @@ function renderNotFound(id) {
           <h1>Product not found</h1>
           <p>We could not find a product with the ID <strong>${id || '(none)'}</strong>.<br>
           It may have been removed or the link might be incorrect.</p>
-          <a href="products.html" class="btn btn-green">View All Products</a>
+          <a href="/products" class="btn btn-green">View All Products</a>
         </div>
       </div>
     </section>`;
@@ -261,7 +261,7 @@ function renderProduct(p) {
     return `
     <a href="/product/${rp.id}" class="rel-card">
       <div class="rel-card-img">
-        <img src="assets/img/${rimg}" alt="${rp.name}" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+        <img src="/assets/img/${rimg}" alt="${rp.name}" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
         <div class="img-ph-label"><span>Add image:</span><code>${rimg}</code></div>
       </div>
       <div style="padding:10px 0 0;">
@@ -284,8 +284,8 @@ function renderProduct(p) {
       <div class="container">
 
         <p class="product-breadcrumb">
-          <a href="index.html">Home</a> &rsaquo;
-          <a href="products.html">Products</a> &rsaquo;
+          <a href="/">Home</a> &rsaquo;
+          <a href="/products">Products</a> &rsaquo;
           <span>${p.name}</span>
         </p>
 
@@ -294,7 +294,7 @@ function renderProduct(p) {
           <!-- Image -->
           <div>
             <div class="product-img-wrap">
-              <img src="assets/img/${imgName}" alt="${p.name}" id="product-main-img"
+              <img src="/assets/img/${imgName}" alt="${p.name}" id="product-main-img"
                 onerror="this.style.display='none';document.getElementById('product-img-ph').style.display='flex'">
               <div class="product-img-ph" id="product-img-ph" style="display:none;">
                 <span>Add image:</span>
@@ -328,7 +328,7 @@ function renderProduct(p) {
               </button>
               <a href="${shopeeUrl}" target="_blank" rel="noopener" class="btn shopee-btn" style="width:100%;">
                 <span class="shopee-icon-wrap">
-                  <img src="assets/img/shopee_icon.png" alt="" width="18" height="18" style="display:block;" onerror="this.style.display='none'">
+                  <img src="/assets/img/shopee_icon.png" alt="" width="18" height="18" style="display:block;" onerror="this.style.display='none'">
                 </span>
                 Buy on Shopee
               </a>
@@ -351,7 +351,7 @@ function renderProduct(p) {
         <hr class="product-divider">
         <div class="product-nav">
           ${prevLink}
-          <a href="products.html" class="prod-nav-link" style="color:var(--text-light);">All Products</a>
+          <a href="/products" class="prod-nav-link" style="color:var(--text-light);">All Products</a>
           ${nextLink}
         </div>
 
