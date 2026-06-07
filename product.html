@@ -12,7 +12,7 @@
   <meta property="og:image" id="og-image" content="">
   <link rel="canonical" id="page-canonical" href="https://trunktogold.com/product">
   <link rel="icon" type="image/png" href="assets/img/logo.png">
-  <link rel="stylesheet" href="assets/style.css?v=5">
+  <link rel="stylesheet" href="assets/style.css?v=7">
   <style>
     .product-page { padding: 48px 0 72px; }
     .product-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 56px; align-items: start; }
@@ -171,22 +171,24 @@
   </div>
 </div>
 
-<script src="assets/products-data.js?v=5"></script>
-<script src="assets/main.js?v=5"></script>
-<script src="assets/cart.js?v=6"></script>
-<script src="assets/devmode.js?v=5"></script>
+<script src="assets/products-data.js?v=7"></script>
+<script src="assets/main.js?v=7"></script>
+<script src="assets/cart.js?v=7"></script>
+<script src="assets/devmode.js?v=7"></script>
 
 <script>
 'use strict';
 
 /* ── Read product ID from URL path /product/[id] or ?id=[id] fallback ── */
 function getProductId() {
-  // Clean URL: /product/coco-sugar  -> pathname ends with the id
+  // Vercel rewrite passes id as ?id= query param -- check that first
+  const qid = new URLSearchParams(location.search).get('id');
+  if (qid) return qid;
+  // Fallback: read from clean URL path /product/coco-sugar
   const parts = location.pathname.replace(/\/$/, '').split('/');
   const last  = parts[parts.length - 1];
-  // If we're at /product or /product.html, fall back to ?id=
   if (last && last !== 'product' && last !== 'product.html') return last;
-  return new URLSearchParams(location.search).get('id') || '';
+  return '';
 }
 
 /* ── Icon SVGs ── */
@@ -213,7 +215,7 @@ function renderNotFound(id) {
 
 /* ── Render product ── */
 function renderProduct(p) {
-  const products    = Object.values(T2G_PRODUCTS);
+  const products    = Object.values(getProducts());
   const idx         = products.findIndex(x => x.id === p.id);
   const prev        = idx > 0 ? products[idx - 1] : null;
   const next        = idx < products.length - 1 ? products[idx + 1] : null;
@@ -227,8 +229,7 @@ function renderProduct(p) {
   document.getElementById('og-title').content       = p.name + ' | T2G';
   document.getElementById('og-desc').content        = p.description || '';
   document.getElementById('og-image').content       = 'https://trunktogold.com/assets/img/' + imgName;
-  document.getElementById('page-canonical').href    = 'https://trunktogold.com/product/' + p.id;
-  document.getElementById('page-title').textContent = p.name + ' | Trunk to Gold (T2G)';
+  document.getElementById('page-canonical').href    = 'https://trunktogold.com/product/' + p.id;  document.getElementById('page-title').textContent = p.name + ' | Trunk to Gold (T2G)';
 
   /* Breadcrumb name */
   const breadcrumbName = document.createElement('span');
@@ -254,7 +255,7 @@ function renderProduct(p) {
   /* Related products */
   const relatedIds = p.related || [];
   const relatedHTML = relatedIds.slice(0, 4).map(rid => {
-    const rp = T2G_PRODUCTS[rid];
+    const rp = getProducts()[rid];
     if (!rp) return '';
     const rimg = rp.imageName || (rp.id + '.png');
     return `
@@ -393,14 +394,17 @@ function renderProduct(p) {
   });
 }
 
-/* ── Init ── */
-document.addEventListener('DOMContentLoaded', () => {
+/* ── Safe products accessor -- works with or without devmode ── */
+function getProducts() {
+  return window.T2G_PRODUCTS || window.T2G_PRODUCTS_DEFAULT || {};
+}
+
+/* ── Init -- deferred to after all scripts including devmode have run ── */
+window.addEventListener('load', () => {
   const id = getProductId();
   if (!id) { renderNotFound(''); return; }
-
-  const p = T2G_PRODUCTS[id];
+  const p = getProducts()[id];
   if (!p) { renderNotFound(id); return; }
-
   renderProduct(p);
 });
 </script>
