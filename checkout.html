@@ -1093,12 +1093,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
   /* ── Restore complete view if returning to page after order ── */
   const lastOrder = sessionStorage.getItem('t2g_last_order');
-  if (lastOrder) {
+  const cartNow   = getCart();
+  if (lastOrder && cartNow.length === 0) {
     try {
       const data = JSON.parse(lastOrder);
       showCompleteView(data);
     } catch(e) {}
     return;
+  } else if (lastOrder) {
+    // Cart has items again — user started a new order, clear the old complete state
+    sessionStorage.removeItem('t2g_last_order');
   }
 
   renderSummary();
