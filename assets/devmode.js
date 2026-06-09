@@ -141,6 +141,7 @@ function openEditModal(pid, isNew) {
 
   const variantsJSON = prod.variants ? JSON.stringify(prod.variants.options, null, 2) : '[]';
   const imgName = prod.imageName || (prod.id ? prod.id + '.png' : 'product.png');
+  const imgList = prod.images && prod.images.length > 0 ? prod.images : [imgName];
 
   const relatedChecks = allIds.filter(id => id !== prod.id).map(id => {
     const p = T2G_PRODUCTS[id];
@@ -182,8 +183,23 @@ function openEditModal(pid, isNew) {
     </div>
 
     <div style="margin-bottom:14px;">
-      <label style="${LS}">Image Filename <span style="color:#aaa;font-weight:400;">(file to look for in assets/img/)</span></label>
-      <input id="ep-img" value="${imgName}" ${IS} placeholder="e.g. coco-sugar.png">
+      <label style="${LS}">Product Images <span style="color:#cc3333;font-weight:700;">*required</span></label>
+      <p style="font-size:.72rem;color:#888;margin-bottom:8px;line-height:1.5;">First image is the primary shown on the product card. Add more for the image gallery on the product page.</p>
+      <div id="ep-img-list" style="display:flex;flex-direction:column;gap:6px;margin-bottom:8px;">
+        ${imgList.map((img, i) => `
+        <div class="img-row" style="display:flex;align-items:center;gap:6px;">
+          <input class="ep-img-input" type="text" value="${img}" placeholder="filename.png" style="flex:1;padding:8px 10px;border:1px solid #ddd;border-radius:3px;font-size:.82rem;font-family:inherit;outline:none;" onfocus="this.style.borderColor='#43a047'" onblur="this.style.borderColor='#ddd'">
+          ${i === 0 ? '<span style="font-size:.62rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#43a047;white-space:nowrap;">Primary</span>' : `<button onclick="this.closest('.img-row').remove()" style="background:none;border:1px solid #ddd;color:#cc3333;border-radius:3px;padding:4px 8px;font-size:.7rem;cursor:pointer;white-space:nowrap;">Remove</button>`}
+        </div>`).join('')}
+      </div>
+      <button onclick="
+        const row = document.createElement('div');
+        row.className = 'img-row';
+        row.style.cssText = 'display:flex;align-items:center;gap:6px;';
+        row.innerHTML = '<input class=\"ep-img-input\" type=\"text\" placeholder=\"e.g. coco-sugar-2.png\" style=\"flex:1;padding:8px 10px;border:1px solid #ddd;border-radius:3px;font-size:.82rem;font-family:inherit;outline:none;\" onfocus=\"this.style.borderColor=\\\"#43a047\\\"\" onblur=\"this.style.borderColor=\\\"#ddd\\\"\"><button onclick=\"this.closest(&quot;.img-row&quot;).remove()\" style=\"background:none;border:1px solid #ddd;color:#cc3333;border-radius:3px;padding:4px 8px;font-size:.7rem;cursor:pointer;white-space:nowrap;\">Remove</button>';
+        document.getElementById('ep-img-list').appendChild(row);
+        row.querySelector('input').focus();
+      " style="background:#f5f5f5;border:1px dashed #bbb;padding:7px 14px;border-radius:3px;font-size:.75rem;font-weight:700;cursor:pointer;color:#555;width:100%;">+ Add another image</button>
     </div>
 
     <div style="margin-bottom:14px;">
@@ -321,7 +337,6 @@ function openEditModal(pid, isNew) {
     const priceEl = modal.querySelector('#ep-price');
     const priceDEl = modal.querySelector('#ep-price-display');
     const weightEl = modal.querySelector('#ep-weight');
-    const imgEl  = modal.querySelector('#ep-img');
     const descEl = modal.querySelector('#ep-desc');
 
     const id   = idEl.value.trim().replace(/\s+/g, '-');
@@ -375,13 +390,19 @@ function openEditModal(pid, isNew) {
       valid = false;
     }
 
-    /* Required: Image filename */
-    const imageName = imgEl.value.trim();
+    /* Collect images array */
+    const imgInputs = modal.querySelectorAll('.ep-img-input');
+    const images = Array.from(imgInputs).map(i => i.value.trim()).filter(v => v.length > 0);
+    const imageName = images[0] || '';
+
+    /* Validate: at least one image */
     if (!imageName) {
-      fieldError(imgEl, 'Image filename is required (e.g. coco-sugar.png).');
+      const firstInput = modal.querySelector('.ep-img-input');
+      fieldError(firstInput, 'At least one image filename is required (e.g. coco-sugar.png).');
       valid = false;
     } else if (!imageName.match(/\.(png|jpg|jpeg|webp|gif)$/i)) {
-      fieldError(imgEl, 'Filename must end in .png, .jpg, .jpeg, .webp, or .gif.');
+      const firstInput = modal.querySelector('.ep-img-input');
+      fieldError(firstInput, 'Filename must end in .png, .jpg, .jpeg, .webp, or .gif.');
       valid = false;
     }
 
@@ -420,6 +441,7 @@ function openEditModal(pid, isNew) {
       description: descEl.value.trim(),
       related,
       imageName,
+      images: images.length > 1 ? images : [imageName],
       weightKg,
       shopeeUrl,
     };
@@ -526,7 +548,7 @@ function showToast(msg) {
 
 /* ── New product template ── */
 function newProductTemplate() {
-  return { id: '', name: '', price: 165, priceDisplay: 'PHP 165.00', priceRange: null, variants: null, description: '<p>Product description goes here.</p><ul><li>Feature one</li><li>Feature two</li></ul>', related: [], imageName: 'product.png' };
+  return { id: '', name: '', price: 165, priceDisplay: 'PHP 165.00', priceRange: null, variants: null, description: '<p>Product description goes here.</p><ul><li>Feature one</li><li>Feature two</li></ul>', related: [], imageName: 'product.png', images: ['product.png'], weightKg: null, shopeeUrl: null };
 }
 
 /* ── Init ── */
