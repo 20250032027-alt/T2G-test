@@ -15,12 +15,18 @@
   <link rel="stylesheet" href="/assets/style.css?v=8">
   <style>
     .product-page { padding: 48px 0 72px; }
-    .product-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 56px; align-items: start; }
+    .product-layout {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 56px;
+      align-items: start;
+    }
     @media (max-width: 760px) { .product-layout { grid-template-columns: 1fr; gap: 28px; } }
 
     .product-img-wrap {
       position: relative; aspect-ratio: 1/1; border-radius: 4px;
       overflow: hidden; background: var(--grey-bg);
+      display: block; width: 100%;
     }
     .product-img-wrap img { width: 100%; height: 100%; object-fit: cover; display: block; }
     .product-img-ph {
@@ -31,35 +37,64 @@
     .product-img-ph span { font-size: .58rem; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; color: #aaa; }
     .product-img-ph code { font-size: .68rem; background: #e8e8e8; padding: 2px 8px; border-radius: 3px; color: #888; }
 
-    .product-breadcrumb { font-size: .72rem; color: var(--text-light); margin-bottom: 14px; }
+    /* RIGHT COLUMN -- force block so nothing makes it flex */
+    .product-detail-col {
+      display: block !important;
+      flex-direction: unset !important;
+    }
+    .product-detail-col > * { display: block; }
+
+    .product-breadcrumb { font-size: .72rem; color: var(--text-light); margin-bottom: 20px; }
     .product-breadcrumb a { color: var(--text-light); transition: color 200ms; }
     .product-breadcrumb a:hover { color: var(--green); }
     .product-breadcrumb span { color: var(--text-mid); }
 
-    .product-name { font-size: clamp(1.4rem, 3vw, 1.9rem); font-weight: 800; line-height: 1.2; margin-bottom: 6px; color: var(--text); }
-    .product-tagline { font-size: .88rem; color: var(--text-mid); margin-bottom: 16px; line-height: 1.6; }
-    .product-price { font-size: 1.3rem; font-weight: 800; color: var(--text); margin-bottom: 20px; }
+    .product-name { font-size: clamp(1.4rem, 3vw, 1.9rem); font-weight: 800; line-height: 1.2; margin-bottom: 8px; color: var(--text); }
+    .product-tagline { font-size: .88rem; color: var(--text-mid); margin-bottom: 14px; line-height: 1.6; }
+    .product-price { font-size: 1.4rem; font-weight: 800; color: var(--text); margin-bottom: 18px; }
 
-    .trust-row { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 20px; }
+    .trust-row { display: flex !important; flex-wrap: wrap; gap: 8px; margin-bottom: 20px; }
     .trust-chip {
-      display: inline-flex; align-items: center; gap: 5px;
+      display: inline-flex !important; align-items: center; gap: 5px;
       background: var(--grey-bg); border-radius: 20px; padding: 4px 10px;
       font-size: .68rem; font-weight: 700; letter-spacing: .05em;
       text-transform: uppercase; color: var(--text-mid);
     }
     .trust-chip svg { flex-shrink: 0; }
 
-    .product-bullets { list-style: none; padding: 0; margin: 0 0 22px; display: flex; flex-direction: column; gap: 7px; }
-    .product-bullets li { display: flex; align-items: center; gap: 8px; font-size: .82rem; color: var(--text-mid); }
-    .product-bullets li::before { content: ''; width: 7px; height: 7px; border-radius: 50%; background: var(--green); flex-shrink: 0; }
+    .product-bullets { list-style: none; padding: 0; margin: 0 0 20px; }
+    .product-bullets li {
+      display: flex !important; align-items: flex-start; gap: 8px;
+      font-size: .85rem; color: var(--text-mid); line-height: 1.5;
+      padding: 5px 0; border-bottom: 1px solid var(--grey-bg);
+    }
+    .product-bullets li:last-child { border-bottom: none; }
+    .product-bullets li::before {
+      content: ''; width: 7px; height: 7px; border-radius: 50%;
+      background: var(--green); flex-shrink: 0; margin-top: 6px;
+    }
 
-    .variant-select-wrap { margin-bottom: 16px; }
-    .variant-select-wrap label { display: block; font-size: .72rem; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--text-light); margin-bottom: 6px; }
-    .variant-select-wrap select { max-width: 260px; }
+    .variant-select-wrap { margin-bottom: 18px; }
+    .variant-select-wrap label {
+      display: block; font-size: .72rem; font-weight: 700;
+      letter-spacing: .06em; text-transform: uppercase;
+      color: var(--text-light); margin-bottom: 6px;
+    }
+    .variant-select-wrap select { max-width: 260px; width: 100%; }
 
-    .product-desc { font-size: .88rem; color: var(--text); line-height: 1.8; margin-bottom: 24px; border-top: 1px solid var(--border); padding-top: 20px; }
-    .product-actions { display: flex; flex-direction: column; gap: 10px; }
-    .product-ship-note { margin-top: 14px; font-size: .72rem; color: var(--text-light); line-height: 1.6; }
+    .product-desc {
+      font-size: .88rem; color: var(--text); line-height: 1.8;
+      margin-bottom: 22px; padding-top: 18px;
+      border-top: 1px solid var(--border);
+    }
+    .product-desc p { margin-bottom: 10px; }
+    .product-desc ul { padding-left: 18px; margin-bottom: 10px; }
+    .product-desc li { margin-bottom: 4px; }
+
+    .product-actions { display: flex !important; flex-direction: column; gap: 10px; margin-bottom: 16px; }
+    .product-actions .btn { width: 100%; justify-content: center; box-sizing: border-box; }
+
+    .product-ship-note { font-size: .72rem; color: var(--text-light); line-height: 1.7; }
 
     .product-divider { border: none; border-top: 1px solid var(--border); margin: 56px 0 40px; }
     .product-nav { display: flex; justify-content: space-between; align-items: center; gap: 16px; flex-wrap: wrap; }
@@ -313,7 +348,7 @@ function renderProduct(p) {
           </div>
 
           <!-- Details -->
-          <div>
+          <div class="product-detail-col">
             <h1 class="product-name">${p.name}</h1>
             <p class="product-tagline">${p.tagline || ''}</p>
             <div class="product-price" id="product-price-display">${p.priceDisplay || 'PHP ' + (p.price || 0).toFixed(2)}</div>
