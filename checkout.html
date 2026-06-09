@@ -622,12 +622,11 @@
       </div>
 
       <a href="/products" class="btn btn-green" style="margin-top:8px;">Continue Shopping</a>
-      <a id="track-order-link" href="track.html" class="btn btn-outline-dark" style="margin-top:10px;display:inline-block;">Track Your Order</a>
+      <a id="track-order-link" href="/track" class="btn btn-outline-dark" style="margin-top:10px;display:inline-block;">Track Your Order</a>
       <script>
-        // Will be set by placeOrder() with the real order ID
         window._setTrackLink = function(id) {
           const el = document.getElementById('track-order-link');
-          if (el) el.href = 'track.html?id=' + encodeURIComponent(id);
+          if (el) el.href = '/track?id=' + encodeURIComponent(id);
         };
       </script>
     </div>
@@ -648,7 +647,7 @@
   </div>
 </div>
 
-<script src="/assets/products-data.js?v=8"></script>
+<script src="/assets/products-data.js" no-cache></script>
 <script src="/assets/main.js?v=8"></script>
 <script src="/assets/cart.js?v=8"></script>
 <script>
@@ -1036,6 +1035,7 @@ function placeOrder() {
 
   /* ── Clear cart and show complete view ── */
   sessionStorage.removeItem('t2g_cart');
+  sessionStorage.setItem('t2g_last_order', JSON.stringify({ orderId, fname, phone, addrFull, delivery: currentDelivery, payment: currentPayment }));
   document.getElementById('checkout-view').style.display = 'none';
   document.getElementById('complete-view').style.display = 'block';
   document.getElementById('cb-checkout').classList.remove('active');
@@ -1086,6 +1086,38 @@ function placeOrder() {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
+
+  /* ── Restore complete view if returning to page after order ── */
+  const lastOrder = sessionStorage.getItem('t2g_last_order');
+  if (lastOrder) {
+    try {
+      const { orderId, fname, phone, addrFull, delivery, payment } = JSON.parse(lastOrder);
+      document.getElementById('checkout-view').style.display  = 'none';
+      document.getElementById('complete-view').style.display  = 'block';
+      document.getElementById('cb-checkout').classList.remove('active');
+      document.getElementById('cb-complete').classList.add('active');
+      document.getElementById('oc-order-id-val').textContent = orderId;
+      if (window._setTrackLink) window._setTrackLink(orderId);
+      let msg = `Thank you, ${fname}! Your order (${orderId}) has been received and sent to T2G. `;
+      if (delivery === 'pickup') {
+        msg += `T2G will contact you at ${phone} to arrange your pickup in Jasaan.`;
+      } else {
+        msg += `Your order will be shipped to: ${addrFull}.`;
+      }
+      document.getElementById('oc-msg').textContent = msg;
+      const gcashSection = document.getElementById('gcash-proof-section');
+      const pickupNote   = document.getElementById('pickup-payment-note');
+      if (payment === 'gcash') {
+        if (gcashSection) gcashSection.style.display = 'block';
+        if (pickupNote)   pickupNote.style.display   = 'none';
+      } else {
+        if (gcashSection) gcashSection.style.display = 'none';
+        if (pickupNote)   pickupNote.style.display   = 'block';
+      }
+    } catch(e) {}
+    return; // don't init checkout form
+  }
+
   renderSummary();
 
   // Clear field errors as the user corrects them
