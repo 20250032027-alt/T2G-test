@@ -284,9 +284,9 @@ function renderProduct(p) {
   }
 
   /* Bullets */
-  const bulletsHTML = p.bullets
+  const bulletsHTML = (p.bullets && p.bullets.length > 0)
     ? p.bullets.map(b => `<li>${b}</li>`).join('')
-    : (p.description ? `<li>${p.description.split('.')[0]}</li>` : '');
+    : '';
 
   /* Related products */
   const relatedIds = p.related || [];
@@ -359,7 +359,7 @@ function renderProduct(p) {
               <span class="trust-chip" style="color:#43a047;">${ICONS.home} Made in Jasaan, MisOr</span>
             </div>
 
-            <ul class="product-bullets">${bulletsHTML}</ul>
+            ${bulletsHTML ? `<ul class="product-bullets">${bulletsHTML}</ul>` : ''}
 
             ${variantHTML}
 
