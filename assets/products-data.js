@@ -22,5 +22,5 @@ window.T2G_PRODUCTS_DEFAULT = {
   }
 };
 
-/* Live working copy - devmode.js will merge localStorage overrides on top */
+/* Live working copy - devmode.js will merge localStorage overrides on top f*/
 window.T2G_PRODUCTS = Object.assign({}, window.T2G_PRODUCTS_DEFAULT);
