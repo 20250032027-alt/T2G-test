@@ -108,7 +108,7 @@ function renderCartDrawer() {
     <strong>PHP ${total.toFixed(2)}</strong>
   </div>
   <div class="cart-actions">
-    <a href="/checkout" class="btn btn-green cart-view-btn">View Cart</a>
+    <a href="/cart" class="btn btn-green cart-view-btn">View Cart</a>
     <a href="/checkout" class="btn btn-green cart-checkout-btn">Checkout</a>
   </div>`;
 

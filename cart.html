@@ -3,86 +3,375 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Cart | Trunk to Gold (T2G)</title>
-  <link rel="icon" type="image/png" href="assets/img/logo.png">
-  <link rel="stylesheet" href="assets/style.css?v=8">
+  <title>Shopping Cart | Trunk to Gold (T2G)</title>
+  <meta name="description" content="Your T2G shopping cart.">
+  <meta name="robots" content="noindex">
+  <link rel="icon" type="image/png" href="/assets/img/logo.png">
+  <link rel="stylesheet" href="/assets/style.css?v=8">
+  <style>
+    .checkout-breadcrumb {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 16px 0;
+      font-size: .78rem;
+      font-weight: 700;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+    }
+    .checkout-breadcrumb .cb-step { color: var(--text-light); }
+    .checkout-breadcrumb .cb-step.active { color: var(--text); }
+    .checkout-breadcrumb .cb-arrow { opacity: .4; font-size: .85rem; }
+
+    .cart-page { padding: 40px 0 72px; }
+    .cart-page h1 {
+      font-size: clamp(1.3rem, 3vw, 1.7rem);
+      font-weight: 800;
+      color: var(--text);
+      margin-bottom: 28px;
+    }
+
+    .cart-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 32px;
+    }
+    .cart-table thead th {
+      font-size: .68rem;
+      font-weight: 700;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      color: var(--text-light);
+      border-bottom: 1px solid var(--border);
+      padding: 0 0 12px;
+      text-align: left;
+    }
+    .cart-table thead th:last-child { text-align: right; }
+    .cart-table tbody tr { border-bottom: 1px solid var(--border); }
+    .cart-table tbody td { padding: 20px 0; vertical-align: middle; }
+
+    .ct-product { display: flex; align-items: center; gap: 16px; }
+    .ct-img {
+      flex-shrink: 0;
+      width: 72px; height: 72px;
+      border-radius: 4px;
+      overflow: hidden;
+      background: var(--grey-bg);
+    }
+    .ct-img img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .ct-img-ph {
+      width: 100%; height: 100%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: .55rem; color: #aaa; text-align: center; padding: 4px;
+    }
+    .ct-name { font-size: .88rem; font-weight: 600; color: var(--text); }
+    .ct-variant { font-size: .78rem; color: var(--text-light); margin-top: 3px; }
+
+    .ct-price { font-size: .88rem; color: var(--text-mid); }
+
+    .ct-qty {
+      display: flex; align-items: center; gap: 6px;
+    }
+    .ct-qty-btn {
+      width: 28px; height: 28px;
+      border: 1px solid var(--border); border-radius: 3px;
+      background: #fff; color: var(--text);
+      font-size: .9rem; font-weight: 700;
+      cursor: pointer; display: flex; align-items: center; justify-content: center;
+      transition: border-color 150ms;
+    }
+    .ct-qty-btn:hover { border-color: var(--green); color: var(--green); }
+    .ct-qty-val { font-size: .88rem; font-weight: 600; color: var(--text); min-width: 24px; text-align: center; }
+
+    .ct-remove {
+      background: none; border: none; cursor: pointer;
+      color: var(--text-light); font-size: .75rem;
+      text-decoration: underline; padding: 0; margin-left: 8px;
+      transition: color 150ms;
+    }
+    .ct-remove:hover { color: #cc3333; }
+
+    .ct-total { font-size: .88rem; font-weight: 700; color: var(--text); text-align: right; }
+
+    /* Summary panel */
+    .cart-layout {
+      display: grid;
+      grid-template-columns: 1fr 320px;
+      gap: 40px;
+      align-items: start;
+    }
+    @media (max-width: 760px) { .cart-layout { grid-template-columns: 1fr; } }
+
+    .cart-summary-box {
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      overflow: hidden;
+      position: sticky;
+      top: 80px;
+    }
+    .csb-title {
+      padding: 16px 20px;
+      font-size: .72rem;
+      font-weight: 800;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: var(--text-light);
+      border-bottom: 1px solid var(--border);
+    }
+    .csb-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 14px 20px;
+      font-size: .85rem;
+      border-bottom: 1px solid var(--border);
+    }
+    .csb-row span { color: var(--text-light); }
+    .csb-row strong { color: var(--text); font-weight: 700; }
+    .csb-total {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 16px 20px;
+      font-size: .95rem;
+      font-weight: 800;
+      color: var(--text);
+      border-bottom: 1px solid var(--border);
+    }
+    .csb-actions { padding: 16px 20px; display: flex; flex-direction: column; gap: 10px; }
+    .csb-actions .btn { width: 100%; justify-content: center; box-sizing: border-box; }
+
+    .cart-empty {
+      text-align: center;
+      padding: 80px 20px;
+    }
+    .cart-empty p { font-size: .9rem; color: var(--text-mid); margin-bottom: 24px; line-height: 1.7; }
+
+    /* Mobile: hide price col, stack nicely */
+    @media (max-width: 560px) {
+      .ct-hide-mobile { display: none; }
+      .cart-table thead th:nth-child(2),
+      .cart-table tbody td:nth-child(2) { display: none; }
+    }
+  </style>
 </head>
 <body>
 
 <div id="topbar">
   For bulk orders of more than PHP 4,000, contact (0917) 716 4225 or email <a href="mailto:t2gcorp2017@yahoo.com">t2gcorp2017@yahoo.com</a>
 </div>
+
 <header id="header">
   <div class="container">
     <div class="header-row">
-      <a id="logo" href="index.html"><img src="assets/img/logo.png" alt="Trunk to Gold"></a>
+      <a id="logo" href="/"><img src="/assets/img/logo.png" alt="Trunk to Gold"></a>
       <div class="nav-spacer"></div>
       <nav class="nav-links">
-        <a href="about.html">About</a>
-        <a href="products.html">Products</a>
-        <a href="export.html">Export</a>
-        <a href="faq.html">FAQ</a>
-        <a href="blog.html">Blog</a>
-        <a href="contact.html">Contact</a>
-        <a href="track.html" style="color:var(--green);font-weight:700;">Track Order</a>
+        <a href="/about">About</a>
+        <a href="/products">Products</a>
+        <a href="/export">Export</a>
+        <a href="/faq">FAQ</a>
+        <a href="/blog">Blog</a>
+        <a href="/contact">Contact</a>
+        <a href="/track" style="color:var(--green);font-weight:700;">Track Order</a>
       </nav>
-      <a href="cart.html" class="nav-cart active" aria-label="Cart">
+      <button class="nav-cart" id="cart-btn" aria-label="Open cart">
         <svg viewBox="0 0 24 24"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 002 1.61h9.72a2 2 0 002-1.61L23 6H6"/></svg>
-      </a>
+        <span class="cart-badge">0</span>
+      </button>
       <button class="nav-toggle" aria-label="Open menu"><span></span><span></span><span></span></button>
     </div>
   </div>
 </header>
-<div class="mobile-menu">
-  <button class="mobile-close">&#x2715;</button>
-  <nav>
-    <a href="about.html">About</a><a href="products.html">Products</a><a href="export.html">Export</a>
-    <a href="faq.html">FAQ</a><a href="blog.html">Blog</a><a href="contact.html">Contact</a>
-  </nav>
+
+<div class="mobile-menu" id="mobile-menu">
+  <div class="mobile-backdrop" id="mobile-backdrop"></div>
+  <div class="mobile-panel">
+    <button class="mobile-close" id="mobile-close" aria-label="Close menu">&#x2715;</button>
+    <nav>
+      <a href="/about">About</a>
+      <a href="/products">Products</a>
+      <a href="/export">Export</a>
+      <a href="/faq">FAQ</a>
+      <a href="/blog">Blog</a>
+      <a href="/contact">Contact</a>
+      <a href="/track" style="color:var(--green);font-weight:700;">Track Order</a>
+    </nav>
+  </div>
 </div>
 
-<section class="section" style="background:var(--grey-bg);min-height:60vh;">
-  <div class="container" style="max-width:700px;">
-    <h1 style="font-size:1.5rem;font-weight:700;color:var(--text);margin-bottom:32px;">Your Cart</h1>
-
-    <div id="cart-empty" style="text-align:center;padding:60px 0;">
-      <p style="font-size:1rem;color:var(--text-light);margin-bottom:24px;">Your cart is empty.</p>
-      <a href="products.html" class="btn btn-green">Browse Products</a>
-    </div>
-
-    <div id="cart-items" style="display:none;">
-      <!-- Cart items rendered by JS -->
-      <div style="background:var(--white);border:1px solid var(--border);border-radius:3px;padding:24px;margin-bottom:16px;">
-        <p style="font-size:.88rem;color:var(--text-light);">Cart functionality connects to your checkout backend. For now, orders can be placed via the <a href="contact.html" style="color:var(--green);">contact page</a>.</p>
-      </div>
-      <div style="text-align:right;margin-top:20px;">
-        <a href="contact.html" class="btn btn-green">Place Order via Contact</a>
-      </div>
+<!-- Breadcrumb -->
+<div style="border-bottom:1px solid var(--border);">
+  <div class="container">
+    <div class="checkout-breadcrumb">
+      <span class="cb-step active">Shopping Cart</span>
+      <span class="cb-arrow">›</span>
+      <span class="cb-step">Checkout Details</span>
+      <span class="cb-arrow">›</span>
+      <span class="cb-step">Order Complete</span>
     </div>
   </div>
-</section>
+</div>
 
-<!-- FOOTER -->
+<main>
+  <section class="cart-page">
+    <div class="container">
+      <h1>Shopping Cart</h1>
+      <div id="cart-content"><!-- rendered by JS --></div>
+    </div>
+  </section>
+</main>
+
 <footer class="footer">
   <div class="container">
     <div class="footer-inner">
-      <div class="footer-brand"><img src="assets/img/logo.png" alt="T2G"></div>
+      <div class="footer-brand"><img src="/assets/img/logo.png" alt="T2G"></div>
       <div class="footer-address">San Isidro, Jasaan<br>Misamis Oriental, Philippines</div>
-      <div class="footer-contact">t2gcorp2017@yahoo.com<br>(0917) 716 4225</div>
+      <div class="footer-contact"><a href="mailto:t2gcorp2017@yahoo.com">t2gcorp2017@yahoo.com</a><br>(0917) 716 4225</div>
       <div class="footer-nav-col"><ul>
-        <li><a href="about.html">About</a></li><li><a href="products.html">Products</a></li>
-        <li><a href="export.html">Export</a></li><li><a href="faq.html">FAQ</a></li>
-        <li><a href="blog.html">Blog</a></li><li><a href="contact.html">Contact</a></li>
-        <li><a href="track.html" style="color:var(--green);font-weight:700;">Track Order</a></li>
+        <li><a href="/about">About</a></li>
+        <li><a href="/products">Products</a></li>
+        <li><a href="/export">Export</a></li>
+        <li><a href="/faq">FAQ</a></li>
+        <li><a href="/blog">Blog</a></li>
+        <li><a href="/contact">Contact</a></li>
+        <li><a href="/track" style="color:var(--green);font-weight:700;">Track Order</a></li>
       </ul></div>
     </div>
     <div class="footer-bottom">
       <span>&copy; T2G Trunk to Gold Copyright 2025</span>
-      <div class="footer-social"><a href="#">f</a><a href="#">ig</a><a href="#">tt</a></div>
+      <div class="footer-social"><a href="https://www.facebook.com/trunk2gold" target="_blank" rel="noopener">Facebook</a></div>
     </div>
   </div>
 </footer>
 
-<script src="assets/main.js?v=8"></script>
+<div class="cart-overlay" id="cart-overlay">
+  <div class="cart-backdrop" id="cart-backdrop"></div>
+  <div class="cart-drawer">
+    <div class="cart-drawer-header">
+      <h2>Cart</h2>
+      <button class="cart-close-btn" id="cart-close-btn" aria-label="Close cart">&#x2715;</button>
+    </div>
+    <div class="cart-drawer-body"><p class="cart-empty-msg">No products in the cart.</p></div>
+  </div>
+</div>
+
+<script src="/assets/products-data.js?v=8"></script>
+<script src="/assets/main.js?v=8"></script>
+<script src="/assets/cart.js?v=8"></script>
+<script src="/assets/devmode.js?v=8"></script>
+
+<script>
+'use strict';
+
+function renderCartPage() {
+  const cart    = getCart();
+  const content = document.getElementById('cart-content');
+
+  if (cart.length === 0) {
+    content.innerHTML = `
+      <div class="cart-empty">
+        <p>Your cart is empty.</p>
+        <a href="/products" class="btn btn-green">Browse Products</a>
+      </div>`;
+    return;
+  }
+
+  const subtotal = cart.reduce((s, i) => s + i.price * i.qty, 0);
+
+  const rows = cart.map(item => {
+    const prod    = (window.T2G_PRODUCTS || {})[item.productId];
+    const imgName = prod && prod.imageName ? prod.imageName : (item.productId + '.png');
+    const imgSrc  = '/assets/img/' + imgName;
+    const lineTotal = (item.price * item.qty).toFixed(2);
+    return `
+    <tr data-key="${item.key}">
+      <td>
+        <div class="ct-product">
+          <div class="ct-img">
+            <img src="${imgSrc}" alt="${item.name}"
+              onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+            <div class="ct-img-ph" style="display:none;">${item.name}</div>
+          </div>
+          <div>
+            <div class="ct-name">${item.name}</div>
+            ${item.variantLabel ? `<div class="ct-variant">${item.variantLabel}</div>` : ''}
+            <button class="ct-remove" data-key="${item.key}">Remove</button>
+          </div>
+        </div>
+      </td>
+      <td class="ct-hide-mobile"><span class="ct-price">PHP ${item.price.toFixed(2)}</span></td>
+      <td>
+        <div class="ct-qty">
+          <button class="ct-qty-btn" data-key="${item.key}" data-action="minus">−</button>
+          <span class="ct-qty-val">${item.qty}</span>
+          <button class="ct-qty-btn" data-key="${item.key}" data-action="plus">+</button>
+        </div>
+      </td>
+      <td class="ct-total">PHP ${lineTotal}</td>
+    </tr>`;
+  }).join('');
+
+  content.innerHTML = `
+    <div class="cart-layout">
+      <div>
+        <table class="cart-table">
+          <thead>
+            <tr>
+              <th>Product</th>
+              <th class="ct-hide-mobile">Price</th>
+              <th>Quantity</th>
+              <th style="text-align:right;">Total</th>
+            </tr>
+          </thead>
+          <tbody id="cart-rows">${rows}</tbody>
+        </table>
+        <a href="/products" style="font-size:.78rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--text-light);text-decoration:none;transition:color 200ms;" onmouseover="this.style.color='var(--green)'" onmouseout="this.style.color='var(--text-light)'">← Continue Shopping</a>
+      </div>
+      <div class="cart-summary-box">
+        <div class="csb-title">Cart Total</div>
+        <div class="csb-row"><span>Subtotal</span><strong id="cart-subtotal">PHP ${subtotal.toFixed(2)}</strong></div>
+        <div class="csb-row" style="font-size:.78rem;color:var(--text-light);display:block;padding:12px 20px;">
+          Shipping calculated at checkout
+        </div>
+        <div class="csb-total"><span>Total</span><strong id="cart-total-amt">PHP ${subtotal.toFixed(2)}</strong></div>
+        <div class="csb-actions">
+          <a href="/checkout" class="btn btn-green">Proceed to Checkout</a>
+        </div>
+      </div>
+    </div>`;
+
+  // Qty and remove handlers
+  document.getElementById('cart-rows').addEventListener('click', e => {
+    const btn = e.target.closest('[data-key]');
+    if (!btn) return;
+    const key = btn.dataset.key;
+
+    if (btn.classList.contains('ct-remove')) {
+      removeFromCart(key);
+      renderCartPage();
+      return;
+    }
+
+    if (btn.classList.contains('ct-qty-btn')) {
+      const action = btn.dataset.action;
+      const cartNow = getCart();
+      const item = cartNow.find(i => i.key === key);
+      if (!item) return;
+      if (action === 'minus') {
+        if (item.qty <= 1) { removeFromCart(key); renderCartPage(); return; }
+        item.qty--;
+      } else {
+        item.qty++;
+      }
+      saveCart(cartNow);
+      renderCartPage();
+    }
+  });
+}
+
+window.addEventListener('load', renderCartPage);
+</script>
+
 </body>
 </html>
