@@ -685,7 +685,7 @@ function showCompleteView({ orderId, fname, phone, addrFull, delivery, payment }
   }
 }
 
-
+function calcShippingFee(totalKg) {
   if (totalKg <= 0) return 0;
   if (totalKg < SHIP_THRESHOLD) return SHIP_BASE;
   const extra = Math.ceil(totalKg - SHIP_THRESHOLD);
