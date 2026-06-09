@@ -84,9 +84,16 @@ function renderCartDrawer() {
   const total = cartTotal(cart);
   let html = '<div class="cart-items">';
   cart.forEach(item => {
+    const prod    = T2G_PRODUCTS[item.productId];
+    const imgName = (prod && prod.imageName) ? prod.imageName : (item.productId + '.png');
+    const imgSrc  = '/assets/img/' + imgName;
     html += `
     <div class="cart-item" data-key="${item.key}">
-      <div class="ci-img"><span>${item.name}</span></div>
+      <div class="ci-img">
+        <img src="${imgSrc}" alt="${item.name}" style="width:100%;height:100%;object-fit:cover;display:block;"
+          onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+        <span style="display:none;align-items:center;justify-content:center;width:100%;height:100%;font-size:.6rem;color:#aaa;text-align:center;padding:4px;">${item.name}</span>
+      </div>
       <div class="ci-info">
         <p class="ci-name">${item.name}${item.variantLabel ? ` - ${item.variantLabel}` : ''}</p>
         <p class="ci-meta">${item.qty} &times; PHP ${item.price.toFixed(2)}</p>
@@ -101,8 +108,8 @@ function renderCartDrawer() {
     <strong>PHP ${total.toFixed(2)}</strong>
   </div>
   <div class="cart-actions">
-    <a href="checkout.html" class="btn btn-green cart-view-btn">View Cart</a>
-    <a href="checkout.html" class="btn btn-green cart-checkout-btn">Checkout</a>
+    <a href="/checkout" class="btn btn-green cart-view-btn">View Cart</a>
+    <a href="/checkout" class="btn btn-green cart-checkout-btn">Checkout</a>
   </div>`;
 
   body.innerHTML = html;

@@ -417,22 +417,21 @@ function renderProduct(p) {
   }
 
   cartBtn.addEventListener('click', () => {
-    let cartId    = p.id;
-    let cartName  = p.name;
-    let cartPrice = p.price;
+    let variantValue = null;
+    let variantLabel = null;
+    let cartPrice    = p.price;
 
     if (hasVariants && varSel) {
       const selected = varSel.options[varSel.selectedIndex];
-      const variantValue = selected.value;
-      const variantLabel = selected.text.split(' - ')[0];
-      cartPrice = parseFloat(selected.dataset.price) || p.price;
-      cartId    = p.id + '-' + variantValue;
-      cartName  = p.name + ' - ' + variantLabel;
+      variantValue = selected.value;
+      variantLabel = selected.text.split(' - ')[0];
+      cartPrice    = parseFloat(selected.dataset.price) || p.price;
     }
 
     if (typeof addToCart === 'function') {
-      addToCart({ id: cartId, name: cartName, price: cartPrice, imageName: imgName });
-      if (typeof openCart === 'function') openCart();
+      addToCart(p.id, variantValue, variantLabel, 1, cartPrice);
+      document.getElementById('cart-overlay')?.classList.add('open');
+      document.body.style.overflow = 'hidden';
     }
   });
 }
