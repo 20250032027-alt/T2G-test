@@ -123,7 +123,7 @@ function renderCartDrawer() {
 /* -- Image helper: shows real image or filename placeholder -- */
 function productImgHTML(p, cssClass) {
   const imgName = p.imageName || (p.id + '.png');
-  const src = 'assets/img/' + imgName;
+  const src = '/assets/img/' + imgName;
   return '<div class="' + cssClass + '" style="width:100%;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;padding:10px;text-align:center;background:var(--grey-bg,#f0f0f0);">' +
     '<span style="font-size:.58rem;color:#bbb;font-weight:600;text-transform:uppercase;letter-spacing:.04em;">Add image:</span>' +
     '<code id="img_' + p.id + '" style="font-size:.66rem;background:#eee;padding:2px 6px;border-radius:3px;color:#888;">' + imgName + '</code>' +
@@ -132,7 +132,7 @@ function productImgHTML(p, cssClass) {
 
 function productImgSmart(p, cssClass, style) {
   const imgName = p.imageName || (p.id + '.png');
-  const src = 'assets/img/' + imgName;
+  const src = '/assets/img/' + imgName;
   const phId = 'iph_' + p.id + '_' + Math.random().toString(36).slice(2,6);
   // Render a real img, onerror swaps to placeholder div
   const ph = `<div class="${cssClass}" style="${style || ''}width:100%;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;padding:10px;text-align:center;background:var(--grey-bg,#f0f0f0);"><span style="font-size:.58rem;color:#bbb;font-weight:600;text-transform:uppercase;letter-spacing:.04em;">Add image:</span><code style="font-size:.66rem;background:#eee;padding:2px 6px;border-radius:3px;color:#888;">${imgName}</code><span style="font-size:.58rem;color:#ccc;">assets/img/</span></div>`;
