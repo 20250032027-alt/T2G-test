@@ -478,6 +478,21 @@
                 Transfer the full amount to GCash number <strong>09177164225</strong>. Then send the deposit slip or proof of transfer to <strong>t2gcorp2017@yahoo.com</strong>.
               </div>
             </div>
+            <div>
+              <div class="radio-opt" onclick="selectPayment(this, 'bpi')">
+                <div class="radio-opt-left">
+                  <div class="radio-circle"><div class="radio-dot"></div></div>
+                  <div class="radio-label">BPI Bank Transfer</div>
+                </div>
+              </div>
+              <div class="gcash-instructions" id="bpi-info">
+                Transfer the full amount to:<br>
+                <strong>Dahlia B. Cabarles</strong><br>
+                BPI Velez Branch, CDOC<br>
+                Account No. <strong>2049-1536-89</strong><br>
+                Then email your proof of transfer to <strong>t2gcorp2017@yahoo.com</strong> with your Order ID.
+              </div>
+            </div>
             <div class="radio-opt" onclick="selectPayment(this, 'cash')">
               <div class="radio-opt-left">
                 <div class="radio-circle"><div class="radio-dot"></div></div>
@@ -678,9 +693,20 @@ function showCompleteView({ orderId, fname, phone, addrFull, delivery, payment }
   document.getElementById('oc-msg').textContent = msg;
   const gcashSection = document.getElementById('gcash-proof-section');
   const pickupNote   = document.getElementById('pickup-payment-note');
-  if (payment === 'gcash') {
-    if (gcashSection) gcashSection.style.display = 'block';
-    if (pickupNote)   pickupNote.style.display   = 'none';
+  if (payment === 'gcash' || payment === 'bpi') {
+    if (gcashSection) {
+      gcashSection.style.display = 'block';
+      const title = gcashSection.querySelector('h3');
+      const desc  = gcashSection.querySelector('p');
+      if (payment === 'bpi') {
+        if (title) title.textContent = 'Send your BPI transfer proof';
+        if (desc)  desc.textContent  = 'Email your transfer receipt to t2gcorp2017@yahoo.com with your Order ID in the subject line.';
+      } else {
+        if (title) title.textContent = 'Send your GCash payment proof';
+        if (desc)  desc.textContent  = 'Upload or email your GCash proof of payment to t2gcorp2017@yahoo.com.';
+      }
+    }
+    if (pickupNote) pickupNote.style.display = 'none';
   } else {
     if (gcashSection) gcashSection.style.display = 'none';
     if (pickupNote)   pickupNote.style.display   = 'block';
@@ -868,6 +894,7 @@ function selectPayment(el, type) {
   el.closest('.co-section').querySelectorAll('.radio-opt').forEach(o => o.classList.remove('selected'));
   el.classList.add('selected');
   document.getElementById('gcash-info')?.classList.toggle('show', type === 'gcash');
+  document.getElementById('bpi-info')?.classList.toggle('show', type === 'bpi');
 }
 
 /* ── Apt toggle ── */
@@ -960,7 +987,7 @@ async function submitProof() {
   fd.append('attachment', proofFile, proofFile.name);
 
   try {
-    const res = await fetch('https://formspree.io/f/mwvjvrra', { method: 'POST', body: fd, headers: { Accept: 'application/json' } });
+    const res = await fetch('https://formspree.io/f/mkoazzoo', { method: 'POST', body: fd, headers: { Accept: 'application/json' } });
     if (res.ok) {
       btn.textContent    = 'Proof Sent!';
       btn.style.background = '#43a047';
@@ -1057,7 +1084,7 @@ function placeOrder() {
   fd.append('total',          `PHP ${totalAmt.toFixed(2)}`);
   if (note) fd.append('note', note);
 
-  fetch('https://formspree.io/f/mwvjvrra', { method: 'POST', body: fd, headers: { Accept: 'application/json' } })
+  fetch('https://formspree.io/f/mkoazzoo', { method: 'POST', body: fd, headers: { Accept: 'application/json' } })
     .catch(() => {}); // silent fail -- order still proceeds locally
 
   /* ── Send customer confirmation via EmailJS ── */
@@ -1067,7 +1094,7 @@ function placeOrder() {
     email:         email,
     items:         itemsList,
     delivery:      currentDelivery === 'ship' ? `Ship to: ${addrFull}` : 'Pickup at T2G Jasaan',
-    payment:       currentPayment === 'gcash' ? 'GCash' : 'Cash on Pickup',
+    payment:       currentPayment === 'gcash' ? 'GCash' : currentPayment === 'bpi' ? 'BPI Bank Transfer' : 'Cash on Pickup',
     total:         `PHP ${totalAmt.toFixed(2)}`,
   }).catch(() => {}); // silent fail
 
