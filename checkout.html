@@ -641,6 +641,8 @@
   </div>
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+<script>emailjs.init('z0F3hrMlGiJyZ1uYn');</script>
 <script src="/assets/products-data.js" no-cache></script>
 <script src="/assets/main.js?v=8"></script>
 <script src="/assets/cart.js?v=8"></script>
@@ -986,14 +988,15 @@ function placeOrder() {
     { id: 'co-email', label: 'Email address', type: 'email' },
     { id: 'co-fname', label: 'First name' },
     { id: 'co-lname', label: 'Last name' },
-    { id: 'co-addr',  label: 'Street address' },
-    { id: 'co-city',  label: 'Town / City' },
-    { id: 'co-zip',   label: 'Postcode / ZIP' },
     { id: 'co-phone', label: 'Phone number' },
   ];
 
   if (currentDelivery === 'ship') {
-    required.push({ id: 'co-addr', label: 'Street address' });
+    required.push(
+      { id: 'co-addr', label: 'Street address' },
+      { id: 'co-city', label: 'Town / City' },
+      { id: 'co-zip',  label: 'Postcode / ZIP' }
+    );
   }
 
   required.forEach(({ id, label, type }) => {
@@ -1056,6 +1059,17 @@ function placeOrder() {
 
   fetch('https://formspree.io/f/mwvjvrra', { method: 'POST', body: fd, headers: { Accept: 'application/json' } })
     .catch(() => {}); // silent fail -- order still proceeds locally
+
+  /* ── Send customer confirmation via EmailJS ── */
+  emailjs.send('service_g1ru818', 'template_q05df77', {
+    order_id:      orderId,
+    customer_name: `${fname} ${lname}`,
+    email:         email,
+    items:         itemsList,
+    delivery:      currentDelivery === 'ship' ? `Ship to: ${addrFull}` : 'Pickup at T2G Jasaan',
+    payment:       currentPayment === 'gcash' ? 'GCash' : 'Cash on Pickup',
+    total:         `PHP ${totalAmt.toFixed(2)}`,
+  }).catch(() => {}); // silent fail
 
   /* ── Clear cart and show complete view ── */
   sessionStorage.removeItem('t2g_cart');
