@@ -1,6 +1,10 @@
 {
   "cleanUrls": true,
   "trailingSlash": false,
+  "redirects": [
+    { "source": "/index.html", "destination": "/", "permanent": true },
+    { "source": "/:page.html", "destination": "/:page", "permanent": true }
+  ],
   "rewrites": [
     { "source": "/product/:id", "destination": "/product?id=:id" }
   ],
