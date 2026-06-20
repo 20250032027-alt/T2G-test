@@ -174,7 +174,7 @@ function openEditModal(pid, isNew) {
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px;">
       <div>
         <label style="${LS}">Product ID <span style="color:#aaa;font-weight:400;">(e.g. 1, 2, or coco-sugar)</span></label>
-        <input id="ep-id" value="${prod.id || ''}" ${pid && !isNew ? 'readonly style="width:100%;padding:9px 12px;border:1px solid #ddd;border-radius:3px;font-size:.85rem;background:#f5f5f5;font-family:inherit;"' : IS}>
+        <input id="ep-id" value="${prod.id || ''}" ${IS}>
       </div>
       <div>
         <label style="${LS}">Product Name</label>
