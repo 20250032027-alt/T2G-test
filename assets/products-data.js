@@ -14,7 +14,7 @@ window.T2G_PRODUCTS_DEFAULT = {
     "priceDisplay": "PHP 260.00",
     "priceRange": null,
     "variants": null,
-    "description": "<p>Product description goes here.</p><ul><li>Feature one</li><li>Feature two</li></ul>",
+    "description": "<p>Healthy Rice Substitute</p><ul><li></li><li></li></ul>",
     "related": [],
     "imageName": "adlai 1.png",
     "images": [
@@ -27,12 +27,12 @@ window.T2G_PRODUCTS_DEFAULT = {
   },
   "aminos": {
     "id": "aminos",
-    "name": "Aminos",
+    "name": "Coco Aminos",
     "price": 160,
     "priceDisplay": "PHP 160.00",
     "priceRange": null,
     "variants": null,
-    "description": "<p>Product description goes here.</p><ul><li>Feature one</li><li>Feature two</li></ul>",
+    "description": "<p>Soy free seasoning</p><ul><li></li><li></li></ul>",
     "related": [],
     "imageName": "aminos 1.png",
     "images": [
@@ -55,10 +55,10 @@ window.T2G_PRODUCTS_DEFAULT = {
     "variants": null,
     "description": "<p>Product description goes here.</p><ul><li>Feature one</li><li>Feature two</li></ul>",
     "related": [],
-    "imageName": "balsami 1.png",
+    "imageName": "balsamic 1.png",
     "images": [
-      "balsami 1.png",
-      "balsamic 3.png",
+      "balsamic 1.png",
+      "balsami 3.png",
       "balsamic 2. png"
     ],
     "weightKg": 0.38,
@@ -109,11 +109,11 @@ window.T2G_PRODUCTS_DEFAULT = {
     "variants": null,
     "description": "<p>Product description goes here.</p><ul><li>Feature one</li><li>Feature two</li></ul>",
     "related": [],
-    "imageName": "Cocoregano 3.png",
+    "imageName": "cocoregano 3.png",
     "images": [
-      "Cocoregano 3.png",
+      "cocoregano 3.png",
       "cocoregano 2.png",
-      "cocoregano 1.png"
+      "Cocoregano 1.png"
     ],
     "weightKg": 0.8,
     "shopeeUrl": null
@@ -253,7 +253,7 @@ window.T2G_PRODUCTS_DEFAULT = {
     "priceDisplay": "PHP 160.00",
     "priceRange": null,
     "variants": null,
-    "description": "<p>Product description goes here.</p><ul><li>Feature one</li><li>Feature two</li></ul>",
+    "description": "<p>Cold pressed virgin coconut oil.</p><ul><li>Virgin coconut oil (VCO)\n</li><li>Cold-pressed</li></ul>",
     "related": [],
     "imageName": "VCO 2.png",
     "images": [
