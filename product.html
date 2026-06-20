@@ -340,7 +340,7 @@ function renderProduct(p) {
             ${images.length > 1 ? `
             <div id="thumbnail-strip" style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap;">
               ${images.map((img, i) => `
-              <button onclick="switchImage('/assets/img/${img}', this)" style="width:64px;height:64px;border-radius:4px;overflow:hidden;border:2px solid ${i === 0 ? 'var(--green)' : 'var(--border)'};padding:0;background:var(--grey-bg);cursor:pointer;flex-shrink:0;transition:border-color 200ms;">
+              <button onclick="switchImage('/assets/img/${img}', this, ${i})" style="width:64px;height:64px;border-radius:4px;overflow:hidden;border:2px solid ${i === 0 ? 'var(--green)' : 'var(--border)'};padding:0;background:var(--grey-bg);cursor:pointer;flex-shrink:0;transition:border-color 200ms;">
                 <img loading="lazy" src="/assets/img/${img}" alt="" style="width:100%;height:100%;object-fit:cover;display:block;" onerror="this.parentElement.style.display='none'">
               </button>`).join('')}
             </div>` : ''}
@@ -415,6 +415,9 @@ function renderProduct(p) {
     });
   }
 
+  /* Start auto-cycling gallery images on a loop */
+  startGalleryAutoplay(images);
+
   cartBtn.addEventListener('click', () => {
     let variantValue = null;
     let variantLabel = null;
@@ -436,7 +439,11 @@ function renderProduct(p) {
 }
 
 /* ── Thumbnail switcher ── */
-function switchImage(src, btn) {
+let galleryTimer = null;
+let galleryImages = [];
+let galleryIndex = 0;
+
+function switchImage(src, btn, index) {
   const mainImg = document.getElementById('product-main-img');
   const ph      = document.getElementById('product-img-ph');
   if (mainImg) {
@@ -449,6 +456,44 @@ function switchImage(src, btn) {
     b.style.borderColor = 'var(--border)';
   });
   if (btn) btn.style.borderColor = 'var(--green)';
+  if (typeof index === 'number') galleryIndex = index;
+}
+
+/* ── Auto-cycle gallery images on a loop, pausing on manual interaction/hover ── */
+function startGalleryAutoplay(images) {
+  if (galleryTimer) clearInterval(galleryTimer);
+  galleryImages = images || [];
+  galleryIndex = 0;
+  if (galleryImages.length <= 1) return; // nothing to cycle through
+
+  function advance() {
+    galleryIndex = (galleryIndex + 1) % galleryImages.length;
+    const nextSrc = '/assets/img/' + galleryImages[galleryIndex];
+    const nextBtn = document.querySelectorAll('#thumbnail-strip button')[galleryIndex];
+    switchImage(nextSrc, nextBtn, galleryIndex);
+  }
+
+  function restartTimer() {
+    if (galleryTimer) clearInterval(galleryTimer);
+    galleryTimer = setInterval(advance, 3000);
+  }
+
+  restartTimer();
+
+  // Manual thumbnail click: sync index and restart the loop from there
+  document.querySelectorAll('#thumbnail-strip button').forEach((b, i) => {
+    b.addEventListener('click', () => {
+      galleryIndex = i;
+      restartTimer();
+    });
+  });
+
+  // Pause while hovered (desktop), resume on mouse leave
+  const wrap = document.getElementById('main-img-wrap');
+  if (wrap) {
+    wrap.addEventListener('mouseenter', () => { if (galleryTimer) clearInterval(galleryTimer); });
+    wrap.addEventListener('mouseleave', restartTimer);
+  }
 }
 
 /* ── Safe products accessor -- works with or without devmode ── */

@@ -14,7 +14,7 @@ window.T2G_PRODUCTS_DEFAULT = {
     "priceDisplay": "PHP 260.00",
     "priceRange": null,
     "variants": null,
-    "description": "<p>Healthy Rice Substitute</p><ul><li></li><li></li></ul>",
+    "description": "<p>Gluten-Free, nutrient packed rice alternative.</p><ul><li></li><li></li></ul>",
     "related": [],
     "imageName": "adlai 1.png",
     "images": [
@@ -32,7 +32,7 @@ window.T2G_PRODUCTS_DEFAULT = {
     "priceDisplay": "PHP 160.00",
     "priceRange": null,
     "variants": null,
-    "description": "<p>Soy free seasoning</p><ul><li></li><li></li></ul>",
+    "description": "<p>Vegan, soy-free, gluten-free alternative seasoning.</p><ul><li></li><li></li></ul>",
     "related": [],
     "imageName": "aminos 1.png",
     "images": [
@@ -53,7 +53,7 @@ window.T2G_PRODUCTS_DEFAULT = {
     "priceDisplay": "PHP 210.00",
     "priceRange": null,
     "variants": null,
-    "description": "<p>Product description goes here.</p><ul><li>Feature one</li><li>Feature two</li></ul>",
+    "description": "<p>Salad dressing made by Coconut SAP that can be combine with oil , plus can be use also as seasonings. It’s light, tangy, and very versatile flavour/</p><ul><li></li><li></li></ul>",
     "related": [],
     "imageName": "balsamic 1.png",
     "images": [
@@ -71,7 +71,7 @@ window.T2G_PRODUCTS_DEFAULT = {
     "priceDisplay": "PHP 160.00",
     "priceRange": null,
     "variants": null,
-    "description": "<p>Product description goes here.</p><ul><li>Feature one</li><li>Feature two</li></ul>",
+    "description": "<p>Natural skin nourishment for a radiant skin, natural moisturizer</p><ul><li></li><li></li></ul>",
     "related": [],
     "imageName": "coco glow 1.png",
     "images": [
@@ -89,7 +89,7 @@ window.T2G_PRODUCTS_DEFAULT = {
     "priceDisplay": "PHP 130.00",
     "priceRange": null,
     "variants": null,
-    "description": "<p>Product description goes here.</p><ul><li>Feature one</li><li>Feature two</li></ul>",
+    "description": "<p>A natural sweetener made from the sap of coconut blossoms. It offers a rich caramel-like flavor and is minimally processed, making it an excellent alternative to refined sugar</p><ul><li></li><li></li></ul>",
     "related": [],
     "imageName": "sachet 1.png",
     "images": [
@@ -107,7 +107,7 @@ window.T2G_PRODUCTS_DEFAULT = {
     "priceDisplay": "PHP 165.00",
     "priceRange": null,
     "variants": null,
-    "description": "<p>Product description goes here.</p><ul><li>Feature one</li><li>Feature two</li></ul>",
+    "description": "<p>Best for massage naturally made by Oregano and VCO, for muscle pain, insect bites, fungal infections and minor wounds.</p><ul><li></li><li></li></ul>",
     "related": [],
     "imageName": "cocoregano 3.png",
     "images": [
@@ -125,7 +125,7 @@ window.T2G_PRODUCTS_DEFAULT = {
     "priceDisplay": "PHP 150.00",
     "priceRange": null,
     "variants": null,
-    "description": "<p>Product description goes here.</p><ul><li>Feature one</li><li>Feature two</li></ul>",
+    "description": "<p>Convenient, natural sweetness in every cube.</p><ul><li></li><li></li></ul>",
     "related": [],
     "imageName": "CUBES 4.png",
     "images": [
@@ -144,7 +144,7 @@ window.T2G_PRODUCTS_DEFAULT = {
     "priceDisplay": "PHP 125.00",
     "priceRange": null,
     "variants": null,
-    "description": "<p>Product description goes here.</p><ul><li>Feature one</li><li>Feature two</li></ul>",
+    "description": "<p>A gluten-free flour made from finely ground dried coconut meat. Rich in dietary fiber and naturally low in carbohydrates, it is an excellent alternative to traditional flour for baking, cooking, and healthy recipes. Its mild coconut flavor adds a delicious touch to a variety of dishes.</p><ul><li></li><li></li></ul>",
     "related": [],
     "imageName": "Flour 1.png",
     "images": [
@@ -162,7 +162,7 @@ window.T2G_PRODUCTS_DEFAULT = {
     "priceDisplay": "PHP 80.00",
     "priceRange": null,
     "variants": null,
-    "description": "<p>Product description goes here.</p><ul><li>Feature one</li><li>Feature two</li></ul>",
+    "description": "<p>Coconut-powered deep hydration on your lips\n</p><ul><li></li><li></li></ul>",
     "related": [],
     "imageName": "lip balm 2.png",
     "images": [
@@ -180,7 +180,7 @@ window.T2G_PRODUCTS_DEFAULT = {
     "priceDisplay": "PHP 110.00",
     "priceRange": null,
     "variants": null,
-    "description": "<p>Product description goes here.</p><ul><li>Feature one</li><li>Feature two</li></ul>",
+    "description": "<p>Soothing relief of pain, VCO based liniment</p><ul><li></li><li></li></ul>",
     "related": [],
     "imageName": "mint 3.png",
     "images": [
@@ -198,7 +198,7 @@ window.T2G_PRODUCTS_DEFAULT = {
     "priceDisplay": "PHP 150.00",
     "priceRange": null,
     "variants": null,
-    "description": "<p>Product description goes here.</p><ul><li>Feature one</li><li>Feature two</li></ul>",
+    "description": "<p>Low Sodium, allergen free, an umami flavour seasoning sauce</p><ul><li></li><li></li></ul>",
     "related": [],
     "imageName": "savor 1.png",
     "images": [
@@ -216,7 +216,7 @@ window.T2G_PRODUCTS_DEFAULT = {
     "priceDisplay": "PHP 90.00",
     "priceRange": null,
     "variants": null,
-    "description": "<p>Product description goes here.</p><ul><li>Feature one</li><li>Feature two</li></ul>",
+    "description": "<p>A natural sweetener made from the sap of coconut blossoms. It offers a rich caramel-like flavor and is minimally processed, making it an excellent alternative to refined sugar</p><ul><li></li><li></li></ul>",
     "related": [],
     "imageName": "200 g 1.png",
     "images": [
@@ -234,7 +234,7 @@ window.T2G_PRODUCTS_DEFAULT = {
     "priceDisplay": "PHP 190.00",
     "priceRange": null,
     "variants": null,
-    "description": "<p>Product description goes here.</p><ul><li>Feature one</li><li>Feature two</li></ul>",
+    "description": "<p>A natural sweetener made from the sap of coconut blossoms. It offers a rich caramel-like flavor and is minimally processed, making it an excellent alternative to refined sugar</p><ul><li></li><li></li></ul>",
     "related": [],
     "imageName": "500 g 3.png",
     "images": [
