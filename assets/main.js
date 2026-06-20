@@ -104,12 +104,41 @@ document.addEventListener('DOMContentLoaded', () => {
   }, { threshold: 0.1 });
   document.querySelectorAll('.reveal').forEach(el => io.observe(el));
 
-  /* ── Contact form ── */
-  document.getElementById('contact-form')?.addEventListener('submit', e => {
+  /* ── Contact form (Formspree) ── */
+  const contactForm = document.getElementById('contact-form');
+  const formMsg     = document.getElementById('form-msg');
+  contactForm?.addEventListener('submit', async e => {
     e.preventDefault();
-    e.target.style.opacity = '.5';
-    e.target.style.pointerEvents = 'none';
-    document.getElementById('form-msg').style.display = 'block';
+    const submitBtn = contactForm.querySelector('[type="submit"]');
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Sending…';
+    try {
+      const res = await fetch('https://formspree.io/f/xwvzqkor', {
+        method: 'POST',
+        headers: { 'Accept': 'application/json' },
+        body: new FormData(contactForm),
+      });
+      if (res.ok) {
+        contactForm.reset();
+        formMsg.textContent = 'Message sent. We will be in touch soon.';
+        formMsg.style.color  = '';
+        formMsg.style.display = 'block';
+        submitBtn.style.display = 'none';
+      } else {
+        const data = await res.json().catch(() => ({}));
+        formMsg.textContent = (data.errors && data.errors[0]?.message) || 'Something went wrong. Please try again or email us directly.';
+        formMsg.style.color  = '#cc3333';
+        formMsg.style.display = 'block';
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Submit';
+      }
+    } catch {
+      formMsg.textContent = 'Could not send — please check your connection and try again.';
+      formMsg.style.color  = '#cc3333';
+      formMsg.style.display = 'block';
+      submitBtn.disabled = false;
+      submitBtn.textContent = 'Submit';
+    }
   });
 
 });

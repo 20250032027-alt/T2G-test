@@ -192,14 +192,7 @@ function openEditModal(pid, isNew) {
           ${i === 0 ? '<span style="font-size:.62rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#43a047;white-space:nowrap;">Primary</span>' : `<button onclick="this.closest('.img-row').remove()" style="background:none;border:1px solid #ddd;color:#cc3333;border-radius:3px;padding:4px 8px;font-size:.7rem;cursor:pointer;white-space:nowrap;">Remove</button>`}
         </div>`).join('')}
       </div>
-      <button onclick="
-        const row = document.createElement('div');
-        row.className = 'img-row';
-        row.style.cssText = 'display:flex;align-items:center;gap:6px;';
-        row.innerHTML = '<input class=\"ep-img-input\" type=\"text\" placeholder=\"e.g. coco-sugar-2.png\" style=\"flex:1;padding:8px 10px;border:1px solid #ddd;border-radius:3px;font-size:.82rem;font-family:inherit;outline:none;\" onfocus=\"this.style.borderColor=\\\"#43a047\\\"\" onblur=\"this.style.borderColor=\\\"#ddd\\\"\"><button onclick=\"this.closest(&quot;.img-row&quot;).remove()\" style=\"background:none;border:1px solid #ddd;color:#cc3333;border-radius:3px;padding:4px 8px;font-size:.7rem;cursor:pointer;white-space:nowrap;\">Remove</button>';
-        document.getElementById('ep-img-list').appendChild(row);
-        row.querySelector('input').focus();
-      " style="background:#f5f5f5;border:1px dashed #bbb;padding:7px 14px;border-radius:3px;font-size:.75rem;font-weight:700;cursor:pointer;color:#555;width:100%;">+ Add another image</button>
+      <button id="ep-add-img" style="background:#f5f5f5;border:1px dashed #bbb;padding:7px 14px;border-radius:3px;font-size:.75rem;font-weight:700;cursor:pointer;color:#555;width:100%;">+ Add another image</button>
     </div>
 
     <div style="margin-bottom:14px;">
@@ -279,6 +272,32 @@ function openEditModal(pid, isNew) {
       modal.querySelector('#ep-vwrap').style.display = r.value === 'has' ? 'block' : 'none';
     });
   });
+
+  /* Add image row */
+  function addImgRow(value) {
+    const list = modal.querySelector('#ep-img-list');
+    const row = document.createElement('div');
+    row.className = 'img-row';
+    row.style.cssText = 'display:flex;align-items:center;gap:6px;';
+    const input = document.createElement('input');
+    input.className = 'ep-img-input';
+    input.type = 'text';
+    input.placeholder = 'e.g. coco-sugar-2.png';
+    input.value = value || '';
+    input.style.cssText = 'flex:1;padding:8px 10px;border:1px solid #ddd;border-radius:3px;font-size:.82rem;font-family:inherit;outline:none;';
+    input.addEventListener('focus', () => { input.style.borderColor = '#43a047'; });
+    input.addEventListener('blur',  () => { input.style.borderColor = '#ddd'; });
+    const removeBtn = document.createElement('button');
+    removeBtn.type = 'button';
+    removeBtn.textContent = 'Remove';
+    removeBtn.style.cssText = 'background:none;border:1px solid #ddd;color:#cc3333;border-radius:3px;padding:4px 8px;font-size:.7rem;cursor:pointer;white-space:nowrap;';
+    removeBtn.addEventListener('click', () => row.remove());
+    row.appendChild(input);
+    row.appendChild(removeBtn);
+    list.appendChild(row);
+    input.focus();
+  }
+  modal.querySelector('#ep-add-img').addEventListener('click', () => addImgRow());
 
   /* Add variant row */
   modal.querySelector('#ep-add-variant')?.addEventListener('click', () => {
