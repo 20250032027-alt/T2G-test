@@ -64,7 +64,6 @@
         <span class="kicker">Flagship Product</span>
         <h1>Coco Sugar</h1>
         <p>Use as a 1:1 replacement for white or brown sugar in baking, cooking, or to sweeten coffee, tea, cereals, and more. Made from 100% fresh coconut sap. GI of 35.</p>
-        <button class="btn btn-outline-white store-action-btn" data-product-id-hero="coco-sugar">Select Options</button>
       </div>
     </div>
   </div>
@@ -172,12 +171,6 @@
 <script src="/assets/products-data.js?v=11"></script>
 <script src="assets/main.js?v=11"></script>
 <script src="assets/cart.js?v=11"></script>
-<script>
-  // Hero "Select Options" button
-  document.querySelector('[data-product-id-hero]')?.addEventListener('click', function() {
-    buildModal(this.dataset.productIdHero);
-  });
-</script>
 <script src="assets/devmode.js?v=11"></script>
 <script src="assets/products-render.js?v=11"></script>
 </body>

@@ -34,6 +34,8 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
 .img-shimmer-wrap {
   position: relative;
   overflow: hidden;
+}
+.img-shimmer-wrap:not(.img-loaded) {
   background: var(--grey-bg);
 }
 .img-shimmer-wrap::after {
@@ -56,6 +58,7 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
 }
 .img-shimmer-wrap.img-loaded::after { content: none; animation: none; }
 .img-shimmer-wrap.img-loaded img { opacity: 1; }
+.img-shimmer-wrap.img-loaded { background: none; }
 
 @keyframes img-shimmer-sweep {
   0%   { background-position: 150% 0; }
