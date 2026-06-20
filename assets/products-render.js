@@ -13,6 +13,7 @@ function getProductImage(p, cssClass, altText) {
   return `<img
     src="${src}"
     alt="${altText || p.name}"
+    loading="lazy"
     class="${cssClass}"
     style="max-width:100%;max-height:100%;width:auto;height:auto;object-fit:contain;display:block;"
     onerror="this.outerHTML='<div class=\\'${cssClass}\\' style=\\'width:100%;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:12px;text-align:center;gap:6px;\\'><span style=\\'font-size:.62rem;color:#bbb;font-weight:600;text-transform:uppercase;letter-spacing:.05em;\\'>Add image:</span><code style=\\'font-size:.68rem;background:#f0f0f0;padding:2px 6px;border-radius:3px;color:#888;\\'>${imgName}</code><span style=\\'font-size:.6rem;color:#ccc;\\'>assets/img/</span></div>'"
