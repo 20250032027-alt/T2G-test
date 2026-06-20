@@ -1,13 +1,13 @@
 /* ============================================================
    T2G Developer Mode - devmode.js
    Activate: Alt+4 (or Option+4 on Mac)
-   Products saved to localStorage under 't2g_products_v2'
+   Products saved to localStorage under 't2g_products_v3'
    ============================================================ */
 'use strict';
 
 (function() {
 
-const STORAGE_KEY = 't2g_products_v2';
+const STORAGE_KEY = 't2g_products_v3';
 let DEV_ACTIVE = false;
 
 /* ── Load saved products - REPLACES defaults entirely if any saved data exists ── */
