@@ -28,6 +28,43 @@ img { display: block; max-width: 100%; }
 a { color: inherit; text-decoration: none; }
 ul { list-style: none; }
 button { font-family: inherit; cursor: pointer; border: none; background: none; }
+
+/* ── Image loading shimmer ── */
+/* Applied to an image's parent while it loads; removed once loaded (see main.js) */
+.img-shimmer-wrap {
+  position: relative;
+  overflow: hidden;
+  background: var(--grey-bg);
+}
+.img-shimmer-wrap::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    100deg,
+    transparent 30%,
+    rgba(255, 255, 255, 0.55) 50%,
+    transparent 70%
+  );
+  background-size: 200% 100%;
+  animation: img-shimmer-sweep 1.3s ease-in-out infinite;
+  pointer-events: none;
+}
+.img-shimmer-wrap img {
+  opacity: 0;
+  transition: opacity 250ms var(--ease);
+}
+.img-shimmer-wrap.img-loaded::after { content: none; animation: none; }
+.img-shimmer-wrap.img-loaded img { opacity: 1; }
+
+@keyframes img-shimmer-sweep {
+  0%   { background-position: 150% 0; }
+  100% { background-position: -50% 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .img-shimmer-wrap::after { animation: none; }
+}
 input, textarea, select { font-family: inherit; font-size: inherit; }
 address { font-style: normal; }
 

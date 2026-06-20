@@ -161,3 +161,56 @@ document.addEventListener('DOMContentLoaded', () => {
     }, { once: true });
   });
 });
+
+/* ── Image loading shimmer ──
+   Wraps each <img>'s parent with a shimmer background while it loads,
+   removing it once the image has actually painted (or instantly if it
+   was already cached). Covers images present on page load AND images
+   inserted later by JS (product grids, galleries, etc.) via MutationObserver. */
+(function () {
+  const SKIP_SELECTOR = '.nav-cart svg, svg'; // never applies to icons anyway (svg isn't <img>), kept for clarity
+
+  function shimmerify(img) {
+    if (!img || img.dataset.shimmerDone) return;
+    if (img.tagName !== 'IMG') return;
+    // Skip tiny icons (shimmer looks odd on small inline icons like the Shopee badge)
+    const w = img.getAttribute('width');
+    if (w && parseInt(w, 10) <= 24) return;
+
+    img.dataset.shimmerDone = '1';
+    const wrap = img.parentElement;
+    if (!wrap) return;
+
+    wrap.classList.add('img-shimmer-wrap');
+
+    function markLoaded() {
+      wrap.classList.add('img-loaded');
+    }
+
+    if (img.complete && img.naturalWidth > 0) {
+      // Already loaded (cached) — skip the shimmer flash entirely
+      markLoaded();
+    } else {
+      img.addEventListener('load', markLoaded, { once: true });
+      img.addEventListener('error', markLoaded, { once: true }); // don't shimmer forever if it 404s
+    }
+  }
+
+  function scan(root) {
+    (root.querySelectorAll ? root.querySelectorAll('img') : []).forEach(shimmerify);
+  }
+
+  document.addEventListener('DOMContentLoaded', () => scan(document));
+
+  // Catch images rendered after initial load (product cards, galleries, etc.)
+  const observer = new MutationObserver(mutations => {
+    for (const m of mutations) {
+      m.addedNodes.forEach(node => {
+        if (node.nodeType !== 1) return; // element nodes only
+        if (node.tagName === 'IMG') shimmerify(node);
+        else if (node.querySelectorAll) scan(node);
+      });
+    }
+  });
+  observer.observe(document.documentElement, { childList: true, subtree: true });
+})();
