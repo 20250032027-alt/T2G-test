@@ -7,19 +7,6 @@
 window.T2G_SHOPEE_URL = "https://shopee.ph/shop/1013182247";
 
 window.T2G_PRODUCTS_DEFAULT = {
-  "coco-sugar": {
-    "id": "coco-sugar",
-    "name": "Coco Sugar",
-    "price": 90,
-    "priceDisplay": "PHP 90.00",
-    "priceRange": null,
-    "variants": null,
-    "description": "<p>A natural alternative to refined sugar</p><ul><li>Made from 100% fresh coconut sap.</li><li>Low GI of 35</li></ul>",
-    "related": [],
-    "imageName": "product.png",
-    "weightKg": 0.2,
-    "shopeeUrl": null
-  },
   "adlai": {
     "id": "adlai",
     "name": "Adlai",
@@ -68,10 +55,10 @@ window.T2G_PRODUCTS_DEFAULT = {
     "variants": null,
     "description": "<p>Product description goes here.</p><ul><li>Feature one</li><li>Feature two</li></ul>",
     "related": [],
-    "imageName": "balsami 3.png",
+    "imageName": "balsami 1.png",
     "images": [
-      "balsami 3.png",
-      "balsamic 1.png",
+      "balsami 1.png",
+      "balsamic 3.png",
       "balsamic 2. png"
     ],
     "weightKg": 0.38,
@@ -122,11 +109,11 @@ window.T2G_PRODUCTS_DEFAULT = {
     "variants": null,
     "description": "<p>Product description goes here.</p><ul><li>Feature one</li><li>Feature two</li></ul>",
     "related": [],
-    "imageName": "Cocoregano 1.png",
+    "imageName": "Cocoregano 3.png",
     "images": [
-      "Cocoregano 1.png",
+      "Cocoregano 3.png",
       "cocoregano 2.png",
-      "cocoregano 3.png"
+      "cocoregano 1.png"
     ],
     "weightKg": 0.8,
     "shopeeUrl": null
@@ -140,12 +127,12 @@ window.T2G_PRODUCTS_DEFAULT = {
     "variants": null,
     "description": "<p>Product description goes here.</p><ul><li>Feature one</li><li>Feature two</li></ul>",
     "related": [],
-    "imageName": "cubes 2.png",
+    "imageName": "CUBES 4.png",
     "images": [
+      "CUBES 4.png",
       "cubes 2.png",
-      "cubes 1.png",
       "cubes 3.png",
-      "CUBES 4.png"
+      "cubes 1.png"
     ],
     "weightKg": 0.17,
     "shopeeUrl": null
@@ -177,10 +164,10 @@ window.T2G_PRODUCTS_DEFAULT = {
     "variants": null,
     "description": "<p>Product description goes here.</p><ul><li>Feature one</li><li>Feature two</li></ul>",
     "related": [],
-    "imageName": "lip balm 1.png",
+    "imageName": "lip balm 2.png",
     "images": [
-      "lip balm 1.png",
       "lip balm 2.png",
+      "lip balm 1.png",
       "lip balm 3.png"
     ],
     "weightKg": 0.17,
@@ -195,11 +182,11 @@ window.T2G_PRODUCTS_DEFAULT = {
     "variants": null,
     "description": "<p>Product description goes here.</p><ul><li>Feature one</li><li>Feature two</li></ul>",
     "related": [],
-    "imageName": "mint 1.png",
+    "imageName": "mint 3.png",
     "images": [
-      "mint 1.png",
+      "mint 3.png",
       "mint 2.png",
-      "mint 3.png"
+      "mint 1.png"
     ],
     "weightKg": 0.1,
     "shopeeUrl": null
@@ -268,10 +255,10 @@ window.T2G_PRODUCTS_DEFAULT = {
     "variants": null,
     "description": "<p>Product description goes here.</p><ul><li>Feature one</li><li>Feature two</li></ul>",
     "related": [],
-    "imageName": "VCO 1.png",
+    "imageName": "VCO 2.png",
     "images": [
-      "VCO 1.png",
       "VCO 2.png",
+      "VCO 1.png",
       "VCO 3.png"
     ],
     "weightKg": 0.15,
