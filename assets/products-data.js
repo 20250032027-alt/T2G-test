@@ -30,11 +30,7 @@ window.T2G_PRODUCTS_DEFAULT = {
     "description": "<p>Product description goes here.</p><ul><li>Feature one</li><li>Feature two</li></ul>",
     "related": [],
     "imageName": "adlai 1.png",
-    "images": [
-      "adlai 1.png",
-      "adlai 2.png",
-      "adlai 3.png"
-    ],
+    "images": ["adlai 1.png","adlai 2.png","adlai 3.png"],
     "weightKg": 1,
     "shopeeUrl": null
   },
@@ -48,14 +44,7 @@ window.T2G_PRODUCTS_DEFAULT = {
     "description": "<p>Product description goes here.</p><ul><li>Feature one</li><li>Feature two</li></ul>",
     "related": [],
     "imageName": "aminos 1.png",
-    "images": [
-      "aminos 1.png",
-      "aminos 2.png",
-      "aminos 3.png",
-      "aminos 4.png",
-      "aminos 5.png",
-      "amonos 2.png"
-    ],
+    "images": ["aminos 1.png","aminos 2.png","aminos 3.png","aminos 4.png","aminos 5.png","amonos 2.png"],
     "weightKg": 0.32,
     "shopeeUrl": null
   },
@@ -69,11 +58,7 @@ window.T2G_PRODUCTS_DEFAULT = {
     "description": "<p>Product description goes here.</p><ul><li>Feature one</li><li>Feature two</li></ul>",
     "related": [],
     "imageName": "balsami 3.png",
-    "images": [
-      "balsami 3.png",
-      "balsamic 1.png",
-      "balsamic 2. png"
-    ],
+    "images": ["balsami 3.png","balsamic 1.png","balsamic 2. png"],
     "weightKg": 0.38,
     "shopeeUrl": null
   },
@@ -87,11 +72,7 @@ window.T2G_PRODUCTS_DEFAULT = {
     "description": "<p>Product description goes here.</p><ul><li>Feature one</li><li>Feature two</li></ul>",
     "related": [],
     "imageName": "coco glow 1.png",
-    "images": [
-      "coco glow 1.png",
-      "coco glow 2.png",
-      "coco glow 3.png"
-    ],
+    "images": ["coco glow 1.png","coco glow 2.png","coco glow 3.png"],
     "weightKg": 0.1,
     "shopeeUrl": null
   },
@@ -105,11 +86,7 @@ window.T2G_PRODUCTS_DEFAULT = {
     "description": "<p>Product description goes here.</p><ul><li>Feature one</li><li>Feature two</li></ul>",
     "related": [],
     "imageName": "sachet 1.png",
-    "images": [
-      "sachet 1.png",
-      "sachet 2.png",
-      "sachet 3.png"
-    ],
+    "images": ["sachet 1.png","sachet 2.png","sachet 3.png"],
     "weightKg": 0.125,
     "shopeeUrl": null
   },
@@ -123,11 +100,7 @@ window.T2G_PRODUCTS_DEFAULT = {
     "description": "<p>Product description goes here.</p><ul><li>Feature one</li><li>Feature two</li></ul>",
     "related": [],
     "imageName": "Cocoregano 1.png",
-    "images": [
-      "Cocoregano 1.png",
-      "cocoregano 2.png",
-      "cocoregano 3.png"
-    ],
+    "images": ["Cocoregano 1.png","cocoregano 2.png","cocoregano 3.png"],
     "weightKg": 0.8,
     "shopeeUrl": null
   },
@@ -141,12 +114,7 @@ window.T2G_PRODUCTS_DEFAULT = {
     "description": "<p>Product description goes here.</p><ul><li>Feature one</li><li>Feature two</li></ul>",
     "related": [],
     "imageName": "cubes 2.png",
-    "images": [
-      "cubes 2.png",
-      "cubes 1.png",
-      "cubes 3.png",
-      "CUBES 4.png"
-    ],
+    "images": ["cubes 2.png","cubes 1.png","cubes 3.png","CUBES 4.png"],
     "weightKg": 0.17,
     "shopeeUrl": null
   },
@@ -160,11 +128,7 @@ window.T2G_PRODUCTS_DEFAULT = {
     "description": "<p>Product description goes here.</p><ul><li>Feature one</li><li>Feature two</li></ul>",
     "related": [],
     "imageName": "Flour 1.png",
-    "images": [
-      "Flour 1.png",
-      "Flour 2.png",
-      "flour 3.png"
-    ],
+    "images": ["Flour 1.png","Flour 2.png","flour 3.png"],
     "weightKg": 0.5,
     "shopeeUrl": null
   },
@@ -178,11 +142,7 @@ window.T2G_PRODUCTS_DEFAULT = {
     "description": "<p>Product description goes here.</p><ul><li>Feature one</li><li>Feature two</li></ul>",
     "related": [],
     "imageName": "lip balm 1.png",
-    "images": [
-      "lip balm 1.png",
-      "lip balm 2.png",
-      "lip balm 3.png"
-    ],
+    "images": ["lip balm 1.png","lip balm 2.png","lip balm 3.png"],
     "weightKg": 0.17,
     "shopeeUrl": null
   },
@@ -196,11 +156,7 @@ window.T2G_PRODUCTS_DEFAULT = {
     "description": "<p>Product description goes here.</p><ul><li>Feature one</li><li>Feature two</li></ul>",
     "related": [],
     "imageName": "mint 1.png",
-    "images": [
-      "mint 1.png",
-      "mint 2.png",
-      "mint 3.png"
-    ],
+    "images": ["mint 1.png","mint 2.png","mint 3.png"],
     "weightKg": 0.1,
     "shopeeUrl": null
   },
@@ -214,11 +170,7 @@ window.T2G_PRODUCTS_DEFAULT = {
     "description": "<p>Product description goes here.</p><ul><li>Feature one</li><li>Feature two</li></ul>",
     "related": [],
     "imageName": "savor 1.png",
-    "images": [
-      "savor 1.png",
-      "savor 2.png",
-      "savor 3.png"
-    ],
+    "images": ["savor 1.png","savor 2.png","savor 3.png"],
     "weightKg": 0.32,
     "shopeeUrl": null
   },
@@ -232,11 +184,7 @@ window.T2G_PRODUCTS_DEFAULT = {
     "description": "<p>Product description goes here.</p><ul><li>Feature one</li><li>Feature two</li></ul>",
     "related": [],
     "imageName": "200 g 1.png",
-    "images": [
-      "200 g 1.png",
-      "200 G.png",
-      "200G 3.png"
-    ],
+    "images": ["200 g 1.png","200 G.png","200G 3.png"],
     "weightKg": 0.2,
     "shopeeUrl": null
   },
@@ -250,12 +198,7 @@ window.T2G_PRODUCTS_DEFAULT = {
     "description": "<p>Product description goes here.</p><ul><li>Feature one</li><li>Feature two</li></ul>",
     "related": [],
     "imageName": "500 g 3.png",
-    "images": [
-      "500 g 3.png",
-      "500 g 4.png",
-      "500g 1.png",
-      "500g 2.png"
-    ],
+    "images": ["500 g 3.png","500 g 4.png","500g 1.png","500g 2.png"],
     "weightKg": 0.5,
     "shopeeUrl": null
   },
@@ -269,11 +212,7 @@ window.T2G_PRODUCTS_DEFAULT = {
     "description": "<p>Product description goes here.</p><ul><li>Feature one</li><li>Feature two</li></ul>",
     "related": [],
     "imageName": "VCO 1.png",
-    "images": [
-      "VCO 1.png",
-      "VCO 2.png",
-      "VCO 3.png"
-    ],
+    "images": ["VCO 1.png","VCO 2.png","VCO 3.png"],
     "weightKg": 0.15,
     "shopeeUrl": null
   }
