@@ -750,7 +750,7 @@ address { font-style: normal; }
   gap: 32px 24px;
   padding: 48px 0;
 }
-.store-card { text-align: center; }
+.store-card { text-align: center; display: flex; flex-direction: column; }
 .store-card-img {
   width: 100%;
   aspect-ratio: 1;
