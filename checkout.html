@@ -403,12 +403,22 @@
 
           <!-- Pickup info -->
           <div id="pickup-info">
-            <div class="radio-opt selected" style="cursor:default;">
+            <div class="radio-opt selected" id="pickup-opt-jasaan" onclick="selectPickupLocation('jasaan')" style="cursor:pointer;margin-bottom:8px;">
               <div class="radio-opt-left">
-                <div class="radio-circle" style="border-color:var(--green);"><div class="radio-dot" style="background:var(--green);display:block;"></div></div>
+                <div class="radio-circle" id="pickup-circle-jasaan" style="border-color:var(--green);"><div class="radio-dot" id="pickup-dot-jasaan" style="background:var(--green);display:block;"></div></div>
                 <div>
                   <div class="radio-label">T2G Office, San Isidro, Jasaan, Misamis Oriental</div>
                   <div class="radio-sub">We will message you to coordinate pickup time and date.</div>
+                </div>
+              </div>
+              <span class="radio-price" style="color:var(--green);font-weight:800;">FREE</span>
+            </div>
+            <div class="radio-opt" id="pickup-opt-cdo" onclick="selectPickupLocation('cdo')" style="cursor:pointer;">
+              <div class="radio-opt-left">
+                <div class="radio-circle" id="pickup-circle-cdo"><div class="radio-dot" id="pickup-dot-cdo" style="display:none;"></div></div>
+                <div>
+                  <div class="radio-label">T2G Office, Rizal St, Cagayan De Oro City, Misamis Oriental</div>
+                  <div class="radio-sub">Mon–Sat 9AM–5PM. We will message you to coordinate pickup time.</div>
                 </div>
               </div>
               <span class="radio-price" style="color:var(--green);font-weight:800;">FREE</span>
@@ -619,7 +629,7 @@
       <!-- Pickup payment note -->
       <div id="pickup-payment-note" style="display:none;border:1.5px solid #e0e0e0;border-radius:6px;padding:18px;margin:18px 0;text-align:left;background:var(--grey-bg);">
         <h3 style="font-size:.9rem;font-weight:800;margin:0 0 6px;color:var(--text);">Payment on Pickup</h3>
-        <p style="font-size:.8rem;color:var(--text-mid);margin:0;line-height:1.6;">Please have the exact amount ready when you collect your order at the T2G office in Jasaan. T2G will contact you at the phone number you provided to arrange a pickup time.</p>
+        <p style="font-size:.8rem;color:var(--text-mid);margin:0;line-height:1.6;">Please have the exact amount ready when you collect your order at the T2G pickup location. T2G will contact you at the phone number you provided to arrange a pickup time.</p>
       </div>
 
       <!-- What happens next -->
@@ -691,7 +701,8 @@ function showCompleteView({ orderId, fname, phone, addrFull, delivery, payment }
   _setTrackLink(orderId);
   let msg = `Thank you, ${fname}! Your order (${orderId}) has been received and sent to T2G. `;
   if (delivery === 'pickup') {
-    msg += `T2G will contact you at ${phone} to arrange your pickup in Jasaan.`;
+    const locLabel = selectedPickupLocation === 'cdo' ? 'Cagayan De Oro' : 'Jasaan';
+    msg += `T2G will contact you at ${phone} to arrange your pickup in ${locLabel}.`;
   } else {
     msg += `Your order will be shipped to: ${addrFull}.`;
   }
@@ -727,6 +738,26 @@ function calcShippingFee(totalKg) {
 
 /* ── State ── */
 let currentDelivery = 'pickup';
+let selectedPickupLocation = 'jasaan'; // 'jasaan' or 'cdo'
+
+function selectPickupLocation(loc) {
+  selectedPickupLocation = loc;
+  ['jasaan','cdo'].forEach(l => {
+    const opt    = document.getElementById('pickup-opt-' + l);
+    const circle = document.getElementById('pickup-circle-' + l);
+    const dot    = document.getElementById('pickup-dot-' + l);
+    if (l === loc) {
+      opt.classList.add('selected');
+      circle.style.borderColor = 'var(--green)';
+      dot.style.background = 'var(--green)';
+      dot.style.display = 'block';
+    } else {
+      opt.classList.remove('selected');
+      circle.style.borderColor = '';
+      dot.style.display = 'none';
+    }
+  });
+}
 let currentPayment  = 'gcash';
 let shippingFee     = 0;
 let shippingKnown   = true;
@@ -1120,7 +1151,8 @@ function placeOrder() {
     if (step2Desc)  step2Desc.textContent  = 'Once T2G verifies your GCash proof, your order will be packed and prepared.';
   } else {
     if (step2Title) step2Title.textContent = 'Pickup arranged';
-    if (step2Desc)  step2Desc.textContent  = 'T2G will contact you to set a pickup schedule at the Jasaan office.';
+    const locLabel = selectedPickupLocation === 'cdo' ? 'Cagayan De Oro' : 'Jasaan';
+    if (step2Desc)  step2Desc.textContent  = `T2G will contact you to set a pickup schedule at the ${locLabel} office.`;
   }
 
   if (currentDelivery === 'pickup') {
