@@ -321,13 +321,31 @@ function renderSteps(activeKey) {
 }
 
 /* ── Parse CSV rows into order objects ── */
+/* Supports two sheet layouts:
+   A) Single column: status = "received" / "confirmed" / "packing" / "shipped" / "delivered"
+   B) Multi-column:  separate columns named "received", "confirmed", "packing", "shipped", "delivered"
+      — each cell is truthy (YES, TRUE, ✓, a date, any non-empty value) when that stage is reached.
+      The rightmost truthy stage column becomes the current status. */
 function parseCsv(text) {
   const lines = text.trim().split('\n').map(l => l.split(',').map(c => c.trim().replace(/^"|"$/g, '')));
   if (lines.length < 2) return [];
   const headers = lines[0].map(h => h.toLowerCase().replace(/\s+/g, '_'));
+  const STATUS_KEYS = ['received', 'confirmed', 'packing', 'shipped', 'delivered'];
+  const hasMultiCol = STATUS_KEYS.some(k => headers.includes(k));
   return lines.slice(1).map(row => {
     const obj = {};
     headers.forEach((h, i) => { obj[h] = row[i] || ''; });
+    if (hasMultiCol && !obj.status) {
+      // Derive status from the rightmost truthy stage column
+      let derivedStatus = 'received';
+      for (const k of STATUS_KEYS) {
+        const val = (obj[k] || '').trim();
+        if (val && val.toLowerCase() !== 'false' && val !== '0' && val !== 'no') {
+          derivedStatus = k;
+        }
+      }
+      obj.status = derivedStatus;
+    }
     return obj;
   });
 }
@@ -353,7 +371,10 @@ async function doTrack() {
   }
 
   try {
-    const res = await fetch(SHEET_CSV_URL + '&t=' + Date.now());
+    const res = await fetch(SHEET_CSV_URL + '&t=' + Date.now(), {
+      cache: 'no-store',
+      headers: { 'Cache-Control': 'no-cache, no-store, must-revalidate', 'Pragma': 'no-cache' }
+    });
     if (!res.ok) throw new Error('fetch failed');
     const text = await res.text();
     const orders = parseCsv(text);
