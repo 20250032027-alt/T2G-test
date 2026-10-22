@@ -19,8 +19,8 @@ window.T2G_CONFIG = {
      NEVER put the secret / service_role key here.
      Leave empty and the site still works: orders are emailed (Formspree)
      and tracking uses the Google Sheet above. See SUPABASE-SETUP.md. */
-  SUPABASE_URL:      '',   // e.g. 'https://abcdefghijkl.supabase.co'
-  SUPABASE_ANON_KEY: '',   // e.g. 'sb_publishable_...' or 'eyJhbGciOi...'
+  SUPABASE_URL:      '',   // e.g. https://xagccdkmigkpqpteclav.supabase.co,
+  SUPABASE_ANON_KEY: '',   // e.g. sb_publishable_Q5Cd_r8b5adHDdQzPJXX6Q_iJQOpeuC,
   PROOF_BUCKET:      'payment-proofs',
 
   /* Send a Formspree email when a customer uploads a payment proof.
