@@ -7,7 +7,9 @@
   <title>Track Your Order | Trunk to Gold</title>
   <meta name="description" content="Track your T2G order status. Enter your Order ID to see where your order is.">
   <link rel="icon" type="image/png" href="/assets/img/logo.png">
-  <link rel="stylesheet" href="/assets/style.css?v=11">
+  <meta name="theme-color" content="#45a349">
+  <link rel="apple-touch-icon" href="/assets/img/logo.png">
+  <link rel="stylesheet" href="/assets/style.css?v=14">
   <style>
     .track-page { padding: 60px 0 80px; min-height: 60vh; }
     .track-wrap { max-width: 560px; margin-inline: auto; }
@@ -58,7 +60,7 @@
     .step-dot svg { width: 14px; height: 14px; stroke: #bbb; fill: none; stroke-width: 2.5; stroke-linecap: round; }
     .step-dot.done { background: var(--green); border-color: var(--green); }
     .step-dot.done svg { stroke: #fff; }
-    .step-dot.active { background: #fff; border-color: var(--green); box-shadow: 0 0 0 4px #43a04722; }
+    .step-dot.active { background: #fff; border-color: var(--green); box-shadow: 0 0 0 4px #3d944122; }
     .step-dot.active svg { stroke: var(--green); }
     .step-label { font-size: .68rem; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; text-align: center; color: var(--text-light); line-height: 1.3; max-width: 68px; }
     .step-label.active { color: var(--green); }
@@ -112,6 +114,10 @@
     .contact-footer { margin-top: 32px; text-align: center; padding: 20px; background: var(--grey-bg); border-radius: 4px; }
     .contact-footer p { font-size: .8rem; color: var(--text-mid); margin: 0; line-height: 1.7; }
     .contact-footer a { color: var(--green); font-weight: 700; }
+      .track-recent { display:flex; flex-wrap:wrap; gap:6px; align-items:center; margin:-4px 0 18px; font-size:.75rem; color:var(--text-light); }
+    .track-recent button { font:inherit; font-size:.72rem; font-weight:700; letter-spacing:.03em; background:var(--grey-bg,#f3f3f3); border:1px solid var(--border,#e2e2e2); border-radius:3px; padding:4px 10px; cursor:pointer; color:var(--text); }
+    .track-recent button:hover { border-color:var(--green); color:var(--green); }
+      .status-badge.cancelled { background:#fdecea; color:#b3261e; }
   </style>
   <script>
     window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
@@ -250,7 +256,7 @@
       </ul></div>
     </div>
     <div class="footer-bottom">
-      <span>&copy; T2G Trunk to Gold Copyright 2025</span>
+      <span>&copy; <span data-year>2026</span> T2G Trunk to Gold &middot; <a href="/privacy">Privacy Policy</a></span>
       <div class="footer-social"><a href="https://www.facebook.com/trunk2gold" target="_blank" rel="noopener">Facebook</a></div>
     </div>
   </div>
@@ -267,20 +273,23 @@
   </div>
 </div>
 
-<script src="/assets/products-data.js?v=11"></script>
-<script src="/assets/main.js?v=11"></script>
-<script src="/assets/cart.js?v=11"></script>
-<script src="/assets/devmode.js?v=11"></script>
+<script src="/assets/site-config.js?v=14"></script>
+<script src="/assets/t2g-db.js?v=14"></script>
+<script src="/assets/reviews.js?v=14"></script>
+<script src="/assets/products-data.js?v=14"></script>
+<script src="/assets/main.js?v=14"></script>
+<script src="/assets/cart.js?v=14"></script>
+<script src="/assets/devmode.js?v=14"></script>
 
 <script>
 'use strict';
 
 /* ─────────────────────────────────────────────────────────────
    CONFIGURATION
-   Replace SHEET_CSV_URL with your published Google Sheet CSV URL.
+   The sheet link is set in assets/site-config.js (TRACKING_SHEET_CSV_URL).
    See TRACKING-SETUP.md for how to get this URL.
    ───────────────────────────────────────────────────────────── */
-const SHEET_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vR5yLYIkdJ0W1_so3YBW22BTz7DNGmiqSPBUEdxdqrcHQZSBWhbAdNB99Lhn9Eoho6bDciKJs2XId85/pub?gid=1723511987&single=true&output=csv';
+const SHEET_CSV_URL = (window.T2G_CONFIG && window.T2G_CONFIG.TRACKING_SHEET_CSV_URL) || '';
 
 /* ── Step definitions ── */
 const STEPS = [
@@ -292,14 +301,30 @@ const STEPS = [
 ];
 
 const STATUS_STEP = { received: 0, confirmed: 1, packing: 2, shipped: 3, delivered: 4 };
-const STATUS_CLASS = { received: 'received', confirmed: 'confirmed', packing: 'packing', shipped: 'shipped', delivered: 'delivered' };
+const STATUS_CLASS = { received: 'received', confirmed: 'confirmed', packing: 'packing', shipped: 'shipped', delivered: 'delivered', cancelled: 'cancelled' };
 const STATUS_MSG = {
   received:  'Your order has been received by T2G and is being reviewed. You will be contacted at the email and phone number you provided within 24 hours.',
   confirmed: 'T2G has verified your payment and your order is being prepared for packing.',
   packing:   'Your items are being carefully packed and inspected at the T2G facility in San Isidro, Jasaan.',
   shipped:   'Your order is on its way. T2G has handed your package to the courier.',
   delivered: 'Your order has been delivered. Thank you for choosing T2G!',
+  cancelled: 'This order has been cancelled. If you did not expect this, please contact T2G at (0917) 716 4225.',
 };
+
+/* Wording that depends on how the order is being received or paid */
+function statusMessage(status, order) {
+  const where = order.pickup_location === 'cdo' ? 'Rizal St, Cagayan de Oro' : 'San Isidro, Jasaan';
+  if (order.delivery_method === 'pickup') {
+    if (status === 'shipped')   return `Your order is ready for pickup at T2G ${where}. Bring your Order ID when you collect it.`;
+    if (status === 'delivered') return 'Your order has been collected. Thank you for choosing T2G!';
+  }
+  if (status === 'received' && (order.payment_method === 'gcash' || order.payment_method === 'bpi')) {
+    return order.proof_received
+      ? 'Your order and payment proof have been received. T2G is checking the payment and will confirm within 24 hours.'
+      : 'Your order has been received. T2G is waiting for your payment proof. Upload it from your order confirmation screen, or email it to t2gcorp2017@yahoo.com with your Order ID.';
+  }
+  return STATUS_MSG[status] || '';
+}
 
 /* ── Render steps UI ── */
 function renderSteps(activeKey) {
@@ -326,8 +351,31 @@ function renderSteps(activeKey) {
    B) Multi-column:  separate columns named "received", "confirmed", "packing", "shipped", "delivered"
       — each cell is truthy (YES, TRUE, ✓, a date, any non-empty value) when that stage is reached.
       The rightmost truthy stage column becomes the current status. */
+/* RFC 4180 CSV splitter: handles quoted cells containing commas
+   (e.g. "PHP 1,190.00"), escaped quotes ("") and line breaks inside quotes. */
+function splitCsvRows(text) {
+  const rows = [];
+  let row = [], cell = '', inQuotes = false;
+  for (let i = 0; i < text.length; i++) {
+    const ch = text[i];
+    if (inQuotes) {
+      if (ch === '"') {
+        if (text[i + 1] === '"') { cell += '"'; i++; }
+        else inQuotes = false;
+      } else cell += ch;
+    } else if (ch === '"') inQuotes = true;
+    else if (ch === ',') { row.push(cell.trim()); cell = ''; }
+    else if (ch === '\n' || ch === '\r') {
+      if (ch === '\r' && text[i + 1] === '\n') i++;
+      row.push(cell.trim()); rows.push(row); row = []; cell = '';
+    } else cell += ch;
+  }
+  if (cell !== '' || row.length) { row.push(cell.trim()); rows.push(row); }
+  return rows.filter(r => r.some(c => c !== ''));
+}
+
 function parseCsv(text) {
-  const lines = text.trim().split('\n').map(l => l.split(',').map(c => c.trim().replace(/^"|"$/g, '')));
+  const lines = splitCsvRows(text);
   if (lines.length < 2) return [];
   const headers = lines[0].map(h => h.toLowerCase().replace(/\s+/g, '_'));
   const STATUS_KEYS = ['received', 'confirmed', 'packing', 'shipped', 'delivered'];
@@ -364,13 +412,26 @@ async function doTrack() {
 
   document.getElementById('track-loading').classList.add('show');
 
-  // Demo mode when sheet not configured
-  if (!SHEET_CSV_URL) {
+  // 1. Look the order up in the T2G database (Supabase)
+  if (window.T2G_DB && T2G_DB.enabled()) {
+    try {
+      const o = await T2G_DB.rpc('track_order', { p_code: rawId });
+      if (o && o.order_code) {
+        document.getElementById('track-loading').classList.remove('show');
+        showResult(fromDb(o));
+        return;
+      }
+    } catch (e) { /* fall through to the sheet */ }
+  }
+
+  // Demo mode when nothing is configured
+  if (!SHEET_CSV_URL && !(window.T2G_DB && T2G_DB.enabled())) {
     setTimeout(() => showDemo(rawId), 800);
     return;
   }
 
   try {
+    if (!SHEET_CSV_URL) throw new Error('no sheet');
     const res = await fetch(SHEET_CSV_URL + '&t=' + Date.now(), {
       cache: 'no-store',
       headers: { 'Cache-Control': 'no-cache, no-store, must-revalidate', 'Pragma': 'no-cache' }
@@ -378,7 +439,7 @@ async function doTrack() {
     if (!res.ok) throw new Error('fetch failed');
     const text = await res.text();
     const orders = parseCsv(text);
-    const order  = orders.find(o => (o.order_id || '').toUpperCase() === rawId);
+    const order  = orders.find(o => (o.order_id || '').trim().toUpperCase() === rawId);
     document.getElementById('track-loading').classList.remove('show');
     if (order) {
       showResult(order);
@@ -392,8 +453,44 @@ async function doTrack() {
 }
 
 /* ── Render a real order ── */
+/* Turn a database result into the shape the page already renders */
+function fromDb(o) {
+  const fmt = d => d ? new Date(d).toLocaleDateString('en-PH', { year: 'numeric', month: 'long', day: 'numeric' }) : '';
+  const peso = n => 'PHP ' + Number(n || 0).toLocaleString('en-PH', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  return {
+    order_id:        o.order_code,
+    date:            fmt(o.created_at),
+    updated:         fmt(o.updated_at),
+    status:          o.status,
+    items:           (o.items || []).map(i => `${i.name}${i.variant ? ' (' + i.variant + ')' : ''} x${i.qty}`).join(' | '),
+    total:           o.shipping_known === false ? peso(o.total) + ' + shipping (to be confirmed)' : peso(o.total),
+    tracking_number: [o.courier, o.tracking_number].filter(Boolean).join(' · '),
+    delivery_method: o.delivery_method,
+    pickup_location: o.pickup_location,
+    payment_method:  o.payment_method,
+    proof_received:  o.proof_received,
+  };
+}
+
+function escapeHtml(str) {
+  return String(str).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+}
+
+/* Accept the wording people naturally type in the sheet */
+function normaliseStatus(raw) {
+  const v = String(raw || '').trim().toLowerCase();
+  if (!v) return 'received';
+  if (STATUS_STEP[v] !== undefined) return v;
+  if (/cancel|void|refund/.test(v)) return 'cancelled';
+  if (/deliver|received by|completed|done|claimed|picked up/.test(v)) return 'delivered';
+  if (/ship|out for|in transit|courier|dispatch|ready for pickup|ready/.test(v)) return 'shipped';
+  if (/pack/.test(v)) return 'packing';
+  if (/confirm|paid|verified|payment ok/.test(v)) return 'confirmed';
+  return 'received';
+}
+
 function showResult(order) {
-  const status = (order.status || 'received').toLowerCase();
+  const status = normaliseStatus(order.status);
   document.getElementById('res-order-id').textContent = order.order_id || '';
   document.getElementById('res-date').textContent      = order.date ? 'Placed ' + order.date : '';
 
@@ -402,7 +499,17 @@ function showResult(order) {
   const badge = document.getElementById('status-badge');
   badge.className = 'status-badge ' + (STATUS_CLASS[status] || 'received');
   document.getElementById('status-badge-text').textContent = status.charAt(0).toUpperCase() + status.slice(1);
-  document.getElementById('status-msg').textContent = STATUS_MSG[status] || '';
+  document.getElementById('status-msg').textContent = statusMessage(status, order);
+  if (order.updated && order.updated !== order.date) {
+    document.getElementById('res-date').textContent += ' · Updated ' + order.updated;
+  }
+  // Pickup orders: the 4th step reads "Ready for Pickup"
+  if (order.delivery_method === 'pickup') {
+    const labels = document.querySelectorAll('#track-steps .step-label');
+    if (labels[3]) labels[3].innerHTML = 'Ready for<br>Pickup';
+    if (labels[4]) labels[4].innerHTML = 'Collected';
+  }
+  document.getElementById('track-steps').style.opacity = status === 'cancelled' ? '.35' : '';
 
   const courierRow = document.getElementById('courier-row');
   if (order.tracking_number && order.tracking_number.trim()) {
@@ -417,8 +524,8 @@ function showResult(order) {
   if (order.items) {
     const rows = order.items.split('|').map(i => i.trim()).filter(Boolean);
     itemsWrap.innerHTML = `<h3>Items Ordered</h3>` + rows.map(r => {
-      return `<div class="track-item-row"><span class="track-item-name">${r}</span></div>`;
-    }).join('') + (order.total ? `<div class="track-item-row" style="margin-top:4px;"><span style="font-size:.72rem;font-weight:800;text-transform:uppercase;letter-spacing:.06em;color:var(--text-light);">Total</span><span class="track-item-price">${order.total}</span></div>` : '');
+      return `<div class="track-item-row"><span class="track-item-name">${escapeHtml(r)}</span></div>`;
+    }).join('') + (order.total ? `<div class="track-item-row" style="margin-top:4px;"><span style="font-size:.72rem;font-weight:800;text-transform:uppercase;letter-spacing:.06em;color:var(--text-light);">Total</span><span class="track-item-price">${escapeHtml(order.total)}</span></div>` : '');
   } else {
     itemsWrap.innerHTML = '';
   }
@@ -448,6 +555,23 @@ window.addEventListener('DOMContentLoaded', () => {
   if (id) {
     document.getElementById('track-input').value = id.toUpperCase();
     doTrack();
+  }
+
+  // Orders placed on this device, so customers don't have to dig for the ID
+  let recent = [];
+  try { recent = JSON.parse(localStorage.getItem('t2g_recent_orders') || '[]'); } catch (e) {}
+  if (recent.length) {
+    const wrap = document.createElement('div');
+    wrap.className = 'track-recent';
+    wrap.innerHTML = '<span>Your recent orders on this device:</span>' + recent.map(o =>
+      `<button type="button" data-id="${escapeHtml(o.id)}">${escapeHtml(o.id)}</button>`).join('');
+    wrap.addEventListener('click', e => {
+      const b = e.target.closest('button[data-id]');
+      if (!b) return;
+      document.getElementById('track-input').value = b.dataset.id;
+      doTrack();
+    });
+    document.querySelector('.track-hint')?.insertAdjacentElement('afterend', wrap);
   }
 });
 </script>

@@ -1,6 +1,7 @@
 /* ============================================================
    T2G Developer Mode - devmode.js
-   Activate: Alt+4 (or Option+4 on Mac)
+   Enable once per browser by visiting any page with ?dev=1 (disable: ?dev=0)
+   Then open/close with Alt+4 (or Option+4 on Mac)
    Products saved to localStorage under 't2g_products_v3'
    ============================================================ */
 'use strict';
@@ -8,13 +9,30 @@
 (function() {
 
 const STORAGE_KEY = 't2g_products_v3';
+const DEV_FLAG    = 't2g_dev';
 let DEV_ACTIVE = false;
+
+/* ── Dev Mode is opt-in per browser ──
+   Visit any page with ?dev=1 once to enable Alt+4 in this browser,
+   and ?dev=0 to turn it off again. Regular visitors never see it, and
+   saved product overrides only apply in a browser where it is enabled. */
+function devEnabled() {
+  try {
+    const q = new URLSearchParams(location.search).get('dev');
+    if (q === '1') localStorage.setItem(DEV_FLAG, '1');
+    if (q === '0') localStorage.removeItem(DEV_FLAG);
+    return localStorage.getItem(DEV_FLAG) === '1';
+  } catch (e) { return false; }
+}
+const DEV_ALLOWED = devEnabled();
 
 /* ── Load saved products - REPLACES defaults entirely if any saved data exists ── */
 function loadProducts() {
+  if (!DEV_ALLOWED) return; // visitors always see products-data.js as deployed
   try {
     const saved = localStorage.getItem(STORAGE_KEY);
     if (saved) {
+      showOverrideBadge();
       const parsed = JSON.parse(saved);
       // Clear ALL existing keys first so deletions are respected
       Object.keys(T2G_PRODUCTS).forEach(k => delete T2G_PRODUCTS[k]);
@@ -22,6 +40,18 @@ function loadProducts() {
       Object.assign(T2G_PRODUCTS, parsed);
     }
   } catch(e) { console.warn('T2G devmode: could not load saved products', e); }
+}
+
+function showOverrideBadge() {
+  const add = () => {
+    if (document.getElementById('t2g-dev-badge')) return;
+    const b = document.createElement('div');
+    b.id = 't2g-dev-badge';
+    b.textContent = 'DEV: showing locally saved products (not live). Alt+4 to manage, Reset to Defaults to clear.';
+    b.style.cssText = 'position:fixed;left:12px;bottom:12px;z-index:8999;background:#1a1a1a;color:#fff;font:600 11px/1.4 system-ui,sans-serif;padding:8px 12px;border-radius:4px;max-width:320px;opacity:.9;pointer-events:none;';
+    document.body.appendChild(b);
+  };
+  if (document.body) add(); else document.addEventListener('DOMContentLoaded', add);
 }
 
 function saveProducts() {
@@ -32,7 +62,7 @@ function saveProducts() {
 
 /* ── Keybind: Alt+4 ── */
 document.addEventListener('keydown', (e) => {
-  if (e.altKey && (e.key === '4' || e.code === 'Digit4')) {
+  if (DEV_ALLOWED && e.altKey && (e.key === '4' || e.code === 'Digit4')) {
     e.preventDefault();
     toggleDevMode();
   }
@@ -86,7 +116,7 @@ function buildPanelHTML() {
   return `
   <div style="display:flex;align-items:center;justify-content:space-between;padding:16px 20px;border-bottom:1px solid #eee;background:#1a1a1a;color:#fff;flex-shrink:0;">
     <div style="display:flex;align-items:center;gap:10px;">
-      <span style="background:#43a047;color:#fff;font-size:.65rem;font-weight:800;letter-spacing:.1em;padding:3px 8px;border-radius:3px;text-transform:uppercase;">Dev Mode</span>
+      <span style="background:#3d9441;color:#fff;font-size:.65rem;font-weight:800;letter-spacing:.1em;padding:3px 8px;border-radius:3px;text-transform:uppercase;">Dev Mode</span>
       <strong style="font-size:.9rem;">Product Manager</strong>
       <span style="font-size:.72rem;opacity:.5;letter-spacing:.06em;">Alt+4 to close</span>
     </div>
@@ -94,7 +124,7 @@ function buildPanelHTML() {
   </div>
   <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 20px;border-bottom:1px solid #eee;flex-shrink:0;background:#f9f9f9;">
     <span style="font-size:.78rem;color:#666;" id="dev-count">${products.length} product${products.length !== 1 ? 's' : ''}</span>
-    <button id="dev-add-product" style="background:#43a047;color:#fff;border:none;padding:8px 18px;border-radius:3px;font-size:.75rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;cursor:pointer;">+ Add Product</button>
+    <button id="dev-add-product" style="background:#3d9441;color:#fff;border:none;padding:8px 18px;border-radius:3px;font-size:.75rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;cursor:pointer;">+ Add Product</button>
   </div>
   <div id="dev-product-list" style="flex:1;overflow-y:auto;">
     ${Object.values(T2G_PRODUCTS).map(p => productRowHTML(p)).join('') || '<p style="padding:20px;color:#aaa;font-size:.85rem;">No products yet. Click Add Product.</p>'}
@@ -123,7 +153,7 @@ function productRowHTML(p) {
       <div style="font-size:.74rem;color:#888;">${p.priceDisplay}${varCount ? ' &nbsp;&middot;&nbsp; ' + varCount + ' variant' + (varCount > 1 ? 's' : '') : ''} &nbsp;&middot;&nbsp; img: <code style="background:#f0f0f0;padding:1px 4px;border-radius:2px;font-size:.7rem;">${imgName}</code></div>
     </div>
     <div style="display:flex;gap:6px;flex-shrink:0;align-items:center;">
-      <a href="/product/${p.id}" target="_blank" title="View product page" style="display:inline-flex;align-items:center;justify-content:center;width:30px;height:30px;border:1px solid #e0e0e0;border-radius:3px;color:#888;text-decoration:none;font-size:.9rem;transition:color 200ms,border-color 200ms;" onmouseover="this.style.color='#43a047';this.style.borderColor='#43a047'" onmouseout="this.style.color='#888';this.style.borderColor='#e0e0e0'">
+      <a href="/product/${p.id}" target="_blank" title="View product page" style="display:inline-flex;align-items:center;justify-content:center;width:30px;height:30px;border:1px solid #e0e0e0;border-radius:3px;color:#888;text-decoration:none;font-size:.9rem;transition:color 200ms,border-color 200ms;" onmouseover="this.style.color='#3d9441';this.style.borderColor='#3d9441'" onmouseout="this.style.color='#888';this.style.borderColor='#e0e0e0'">
         <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
       </a>
       <button class="dev-edit-btn" data-pid="${p.id}" style="background:#1a1a1a;color:#fff;border:none;padding:6px 13px;border-radius:3px;font-size:.72rem;font-weight:700;cursor:pointer;">EDIT</button>
@@ -147,7 +177,7 @@ function openEditModal(pid, isNew) {
     const p = T2G_PRODUCTS[id];
     const checked = (prod.related || []).includes(id) ? 'checked' : '';
     return `<label style="display:flex;align-items:center;gap:8px;margin-bottom:7px;cursor:pointer;font-size:.82rem;color:#333;">
-      <input type="checkbox" value="${id}" ${checked} style="width:15px;height:15px;accent-color:#43a047;cursor:pointer;">
+      <input type="checkbox" value="${id}" ${checked} style="width:15px;height:15px;accent-color:#3d9441;cursor:pointer;">
       ${p ? p.name : id}
     </label>`;
   }).join('');
@@ -157,13 +187,13 @@ function openEditModal(pid, isNew) {
   modal.style.cssText = 'position:absolute;inset:0;background:#fff;z-index:10;display:flex;flex-direction:column;overflow:hidden;';
 
   const LS = 'display:block;font-size:.7rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:#444;margin-bottom:5px;';
-  const IS = `style="width:100%;padding:9px 12px;border:1px solid #ddd;border-radius:3px;font-size:.85rem;outline:none;font-family:inherit;" onfocus="this.style.borderColor='#43a047'" onblur="this.style.borderColor='#ddd'"`;
+  const IS = `style="width:100%;padding:9px 12px;border:1px solid #ddd;border-radius:3px;font-size:.85rem;outline:none;font-family:inherit;" onfocus="this.style.borderColor='#3d9441'" onblur="this.style.borderColor='#ddd'"`;
   const TS = 'width:100%;padding:9px 12px;border:1px solid #ddd;border-radius:3px;font-size:.85rem;outline:none;font-family:inherit;resize:vertical;';
 
   modal.innerHTML = `
   <div style="display:flex;align-items:center;justify-content:space-between;padding:13px 20px;border-bottom:1px solid #eee;background:#f9f9f9;flex-shrink:0;">
     <strong style="font-size:.88rem;">${isNew ? 'New Product' : 'Edit: ' + (prod.name || '')}</strong>
-    <button id="dev-modal-back" style="background:none;border:none;font-size:.8rem;color:#43a047;cursor:pointer;font-weight:700;">&#8592; Back to list</button>
+    <button id="dev-modal-back" style="background:none;border:none;font-size:.8rem;color:#3d9441;cursor:pointer;font-weight:700;">&#8592; Back to list</button>
   </div>
   <div style="flex:1;overflow-y:auto;padding:20px 20px 32px;">
 
@@ -188,8 +218,8 @@ function openEditModal(pid, isNew) {
       <div id="ep-img-list" style="display:flex;flex-direction:column;gap:6px;margin-bottom:8px;">
         ${imgList.map((img, i) => `
         <div class="img-row" style="display:flex;align-items:center;gap:6px;">
-          <input class="ep-img-input" type="text" value="${img}" placeholder="filename.png" style="flex:1;padding:8px 10px;border:1px solid #ddd;border-radius:3px;font-size:.82rem;font-family:inherit;outline:none;" onfocus="this.style.borderColor='#43a047'" onblur="this.style.borderColor='#ddd'">
-          ${i === 0 ? '<span style="font-size:.62rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#43a047;white-space:nowrap;">Primary</span>' : `<button onclick="this.closest('.img-row').remove()" style="background:none;border:1px solid #ddd;color:#cc3333;border-radius:3px;padding:4px 8px;font-size:.7rem;cursor:pointer;white-space:nowrap;">Remove</button>`}
+          <input class="ep-img-input" type="text" value="${img}" placeholder="filename.png" style="flex:1;padding:8px 10px;border:1px solid #ddd;border-radius:3px;font-size:.82rem;font-family:inherit;outline:none;" onfocus="this.style.borderColor='#3d9441'" onblur="this.style.borderColor='#ddd'">
+          ${i === 0 ? '<span style="font-size:.62rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#3d9441;white-space:nowrap;">Primary</span>' : `<button onclick="this.closest('.img-row').remove()" style="background:none;border:1px solid #ddd;color:#cc3333;border-radius:3px;padding:4px 8px;font-size:.7rem;cursor:pointer;white-space:nowrap;">Remove</button>`}
         </div>`).join('')}
       </div>
       <button id="ep-add-img" style="background:#f5f5f5;border:1px dashed #bbb;padding:7px 14px;border-radius:3px;font-size:.75rem;font-weight:700;cursor:pointer;color:#555;width:100%;">+ Add another image</button>
@@ -218,7 +248,7 @@ function openEditModal(pid, isNew) {
         <input id="ep-weight" type="number" step="0.001" min="0.001" value="${prod.weightKg !== null && prod.weightKg !== undefined ? prod.weightKg : ''}" ${IS} style="max-width:160px;" placeholder="e.g. 0.350">
         <span style="font-size:.75rem;color:#888;line-height:1.4;">kg per unit.<br>e.g. 500g = 0.500</span>
       </div>
-      <p style="font-size:.72rem;color:#43a047;margin-top:5px;line-height:1.5;">
+      <p style="font-size:.72rem;color:#3d9441;margin-top:5px;line-height:1.5;">
         Checkout uses this to auto-calculate shipping. Must be set before a product can be saved.
       </p>
     </div>
@@ -232,10 +262,10 @@ function openEditModal(pid, isNew) {
       <label style="${LS}">Variants</label>
       <div style="display:flex;gap:20px;margin-bottom:10px;">
         <label style="display:flex;align-items:center;gap:6px;font-size:.82rem;cursor:pointer;">
-          <input type="radio" name="ep-vt" value="none" ${!prod.variants ? 'checked' : ''} style="accent-color:#43a047;"> No variants
+          <input type="radio" name="ep-vt" value="none" ${!prod.variants ? 'checked' : ''} style="accent-color:#3d9441;"> No variants
         </label>
         <label style="display:flex;align-items:center;gap:6px;font-size:.82rem;cursor:pointer;">
-          <input type="radio" name="ep-vt" value="has" ${prod.variants ? 'checked' : ''} style="accent-color:#43a047;"> Has variants
+          <input type="radio" name="ep-vt" value="has" ${prod.variants ? 'checked' : ''} style="accent-color:#3d9441;"> Has variants
         </label>
       </div>
       <div id="ep-vwrap" style="display:${prod.variants ? 'block' : 'none'};">
@@ -246,7 +276,7 @@ function openEditModal(pid, isNew) {
         <label style="${LS}">Options JSON</label>
         <div style="font-size:.72rem;color:#aaa;margin-bottom:5px;">[{"value":"cheese-caramel","label":"Cheese Caramel","price":170}]</div>
         <textarea id="ep-var-json" rows="5" style="${TS};font-family:monospace;font-size:.78rem;">${variantsJSON}</textarea>
-        <button id="ep-add-variant" style="margin-top:6px;background:none;border:1px solid #43a047;color:#43a047;padding:5px 12px;border-radius:3px;font-size:.72rem;cursor:pointer;font-weight:700;">+ Add option row</button>
+        <button id="ep-add-variant" style="margin-top:6px;background:none;border:1px solid #3d9441;color:#3d9441;padding:5px 12px;border-radius:3px;font-size:.72rem;cursor:pointer;font-weight:700;">+ Add option row</button>
       </div>
     </div>
 
@@ -258,7 +288,7 @@ function openEditModal(pid, isNew) {
     </div>
 
     <div style="display:flex;gap:10px;">
-      <button id="ep-save" style="flex:1;background:#43a047;color:#fff;border:none;padding:12px;border-radius:3px;font-size:.82rem;font-weight:800;letter-spacing:.06em;cursor:pointer;text-transform:uppercase;">Save Product</button>
+      <button id="ep-save" style="flex:1;background:#3d9441;color:#fff;border:none;padding:12px;border-radius:3px;font-size:.82rem;font-weight:800;letter-spacing:.06em;cursor:pointer;text-transform:uppercase;">Save Product</button>
       ${!isNew ? `<button id="ep-delete" style="background:#fff;border:1px solid #ffcccc;color:#cc3333;padding:12px 20px;border-radius:3px;font-size:.8rem;cursor:pointer;font-weight:700;">Delete</button>` : ''}
     </div>
 
@@ -285,7 +315,7 @@ function openEditModal(pid, isNew) {
     input.placeholder = 'e.g. coco-sugar-2.png';
     input.value = value || '';
     input.style.cssText = 'flex:1;padding:8px 10px;border:1px solid #ddd;border-radius:3px;font-size:.82rem;font-family:inherit;outline:none;';
-    input.addEventListener('focus', () => { input.style.borderColor = '#43a047'; });
+    input.addEventListener('focus', () => { input.style.borderColor = '#3d9441'; });
     input.addEventListener('blur',  () => { input.style.borderColor = '#ddd'; });
     const removeBtn = document.createElement('button');
     removeBtn.type = 'button';
@@ -508,7 +538,7 @@ window.T2G_SHOPEE_URL = "${window.T2G_SHOPEE_URL || 'https://shopee.ph/shop/1013
 
 window.T2G_PRODUCTS_DEFAULT = ${data};
 
-/* Live working copy - devmode.js will merge localStorage overrides on top */
+/* Live working copy - devmode.js applies localStorage overrides only while Dev Mode is enabled */
 window.T2G_PRODUCTS = Object.assign({}, window.T2G_PRODUCTS_DEFAULT);`;
     // Copy to clipboard
     navigator.clipboard.writeText(output).then(() => {

@@ -1,4 +1,7 @@
 User-agent: *
 Allow: /
+Disallow: /cart
+Disallow: /checkout
+Disallow: /admin
 
-Sitemap: https://trunktogold.com/sitemap.xml
+Sitemap: https://www.trunktogold.com/sitemap.xml

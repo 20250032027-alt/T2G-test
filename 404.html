@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <link rel="canonical" href="https://www.trunktogold.com/404">
+  <meta charset="UTF-8">
+  <meta name="robots" content="noindex">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="This page could not be found.">
+  <title>Page not found | T2G Trunk to Gold</title>
+  <link rel="icon" type="image/png" href="/assets/img/logo.png">
+  <meta name="theme-color" content="#45a349">
+  <link rel="apple-touch-icon" href="/assets/img/logo.png">
+  <link rel="stylesheet" href="/assets/style.css?v=14">
+  <script>
+    window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
+  </script>
+  <script defer src="/_vercel/insights/script.js"></script>
+</head>
+<body>
+
+<div id="topbar">
+  For bulk orders of more than 100 KG, contact (0917) 716 4225 or email <a href="mailto:t2gcorp2017@yahoo.com">t2gcorp2017@yahoo.com</a>
+</div>
+<header id="header">
+  <div class="container">
+    <div class="header-row">
+      <a id="logo" href="/"><img src="/assets/img/logo.png" alt="Trunk to Gold"><span id="logo-home-label">Home</span></a>
+      <div class="nav-spacer"></div>
+      <nav class="nav-links">
+        <a href="/about">About</a>
+        <a href="/products">Products</a>
+        <a href="/export">Export</a>
+        <a href="/faq">FAQ</a>
+        <a href="/blog">Blog</a>
+        <a href="/contact">Contact</a>
+        <a href="/track" style="color:var(--green);font-weight:700;">Track Order</a>
+      </nav>
+      <button class="nav-cart" id="cart-btn" aria-label="Open cart">
+        <svg viewBox="0 0 24 24"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 002 1.61h9.72a2 2 0 002-1.61L23 6H6"/></svg>
+        <span class="cart-badge">0</span>
+      </button>
+      <button class="nav-toggle" aria-label="Open menu"><span></span><span></span><span></span></button>
+    </div>
+  </div>
+</header>
+<div class="mobile-menu" id="mobile-menu">
+  <div class="mobile-backdrop" id="mobile-backdrop"></div>
+  <div class="mobile-panel">
+    <button class="mobile-close" id="mobile-close" aria-label="Close menu">&#x2715;</button>
+    <nav>
+      <a href="/about">About</a>
+      <a href="/products">Products</a>
+      <a href="/export">Export</a>
+      <a href="/faq">FAQ</a>
+      <a href="/blog">Blog</a>
+      <a href="/contact">Contact</a>
+      <a href="/track" style="color:var(--green);font-weight:700;">Track Order</a>
+    </nav>
+  </div>
+</div>
+
+<main class="notfound">
+  <div class="container notfound-wrap">
+    <p class="notfound-code">404</p>
+    <h1>We couldn't find that page</h1>
+    <p class="notfound-lead">The link may be old, or the product may have moved. These should get you where you were going.</p>
+    <div class="notfound-actions">
+      <a href="/products" class="btn btn-green">Shop products</a>
+      <a href="/track" class="btn btn-outline-dark">Track an order</a>
+      <a href="/" class="notfound-home">Back to home</a>
+    </div>
+    <div class="notfound-picks" id="notfound-picks"></div>
+  </div>
+</main>
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  setTimeout(() => {
+    const P = (typeof T2G_PRODUCTS !== 'undefined') ? T2G_PRODUCTS : {};
+    const ids = ['cocorush-500g', 'aminos', 'coco-savor', 'adlai'].filter(id => P[id]);
+    const pick = ids.length ? ids : Object.keys(P).slice(0, 4);
+    if (!pick.length) return;
+    document.getElementById('notfound-picks').innerHTML =
+      '<h2>Popular with our customers</h2><div class="notfound-grid">' +
+      pick.map(id => {
+        const p = P[id];
+        return `<a class="notfound-card" href="/product/${id}"><img src="/assets/img/${encodeURI(p.imageName)}" alt="${p.name}" loading="lazy"><span>${p.name}</span><small>${p.priceDisplay || ''}</small></a>`;
+      }).join('') + '</div>';
+  }, 0);
+});
+</script>
+<footer class="footer">
+  <div class="container">
+    <div class="footer-inner">
+      <div class="footer-brand"><img loading="lazy" src="/assets/img/logo.png" alt="T2G"></div>
+      <div class="footer-address">San Isidro, Jasaan<br>Misamis Oriental, Philippines</div>
+      <div class="footer-contact">t2gcorp2017@yahoo.com<br>(0917) 716 4225</div>
+      <div class="footer-nav-col"><ul>
+        <li><a href="/about">About</a></li><li><a href="/products">Products</a></li>
+        <li><a href="/export">Export</a></li><li><a href="/faq">FAQ</a></li>
+        <li><a href="/blog">Blog</a></li><li><a href="/contact">Contact</a></li>
+        <li><a href="/track" style="color:var(--green);font-weight:700;">Track Order</a></li>
+      </ul></div>
+    </div>
+    <div class="footer-bottom">
+      <span>&copy; <span data-year>2026</span> T2G Trunk to Gold &middot; <a href="/privacy">Privacy Policy</a></span>
+      <div class="footer-social"><a href="https://www.facebook.com/trunk2gold" target="_blank" rel="noopener" aria-label="T2G on Facebook">Facebook</a></div>
+    </div>
+  </div>
+</footer>
+
+
+<!-- CART DRAWER -->
+<div class="cart-overlay" id="cart-overlay">
+  <div class="cart-backdrop" id="cart-backdrop"></div>
+  <div class="cart-drawer">
+    <div class="cart-drawer-header">
+      <h2>Cart</h2>
+      <button class="cart-close-btn" id="cart-close-btn" aria-label="Close cart">&#x2715;</button>
+    </div>
+    <div class="cart-drawer-body">
+      <p class="cart-empty-msg">No products in the cart.</p>
+    </div>
+  </div>
+</div>
+<script src="/assets/site-config.js?v=14"></script>
+<script src="/assets/t2g-db.js?v=14"></script>
+<script src="/assets/reviews.js?v=14"></script>
+<script src="/assets/products-data.js?v=14"></script>
+<script src="/assets/main.js?v=14"></script>
+<script src="/assets/cart.js?v=14"></script>
+<script src="/assets/devmode.js?v=14"></script>
+</body>
+</html>

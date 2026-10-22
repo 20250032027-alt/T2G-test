@@ -6,7 +6,7 @@
 
 /* ── Product Catalogue ──
    Loaded from products-data.js (works on all browsers/devices).
-   Dev Mode (Alt+1) can override individual products via localStorage,
+   Dev Mode (Alt+4, see devmode.js) can override individual products via localStorage,
    but products-data.js is always the baseline. To permanently add or
    change products for everyone, edit products-data.js directly.
 ── */
@@ -16,8 +16,29 @@ const T2G_PRODUCTS = Object.assign({}, window.T2G_PRODUCTS_DEFAULT || {});
 const CART_KEY = 't2g_cart';
 
 function getCart() {
-  try { return JSON.parse(sessionStorage.getItem(CART_KEY)) || []; }
+  let cart;
+  try { cart = JSON.parse(sessionStorage.getItem(CART_KEY)) || []; }
   catch { return []; }
+  if (!Array.isArray(cart)) return [];
+  // Always re-price from the product catalogue so stale or edited
+  // sessionStorage prices never reach the order email.
+  cart.forEach(item => {
+    const prod = T2G_PRODUCTS[item.productId];
+    if (!prod) return;
+    let price = prod.price;
+    if (prod.variants && prod.variants.options && item.key.includes('::')) {
+      const val = item.key.split('::').slice(1).join('::');
+      const opt = prod.variants.options.find(o => String(o.value) === val);
+      if (opt) price = Number(opt.price);
+    }
+    if (typeof price === 'number' && isFinite(price)) {
+      item.price = price;
+      item.unitDisplay = `PHP ${price.toFixed(2)}`;
+    }
+    item.name = prod.name || item.name;
+    item.qty  = Math.max(1, Math.floor(Number(item.qty) || 1));
+  });
+  return cart;
 }
 
 function saveCart(cart) {
@@ -131,12 +152,19 @@ function productImgHTML(p, cssClass) {
 }
 
 function productImgSmart(p, cssClass, style) {
+  const esc = v => String(v == null ? '' : v).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
   const imgName = p.imageName || (p.id + '.png');
-  const src = '/assets/img/' + imgName;
-  const phId = 'iph_' + p.id + '_' + Math.random().toString(36).slice(2,6);
-  // Render a real img, onerror swaps to placeholder div
-  const ph = `<div class="${cssClass}" style="${style || ''}width:100%;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;padding:10px;text-align:center;background:var(--grey-bg,#f0f0f0);"><span style="font-size:.58rem;color:#bbb;font-weight:600;text-transform:uppercase;letter-spacing:.04em;">Add image:</span><code style="font-size:.66rem;background:#eee;padding:2px 6px;border-radius:3px;color:#888;">${imgName}</code><span style="font-size:.58rem;color:#ccc;">assets/img/</span></div>`;
-  return `<img src="${src}" alt="${p.name || ''}" id="${phId}" class="${cssClass}" style="${style || ''}width:100%;height:100%;object-fit:contain;padding:8px;" onload="this.style.background=''" onerror="this.outerHTML='${ph.replace(/'/g, "’").replace(/"/g, '\"')}'" >`;
+  const src = '/assets/img/' + encodeURI(imgName);
+  return `<img src="${src}" alt="${esc(p.name)}" class="${esc(cssClass)}" style="${esc(style || '')}width:100%;height:100%;object-fit:contain;padding:8px;" onerror="t2gImgFallback(this)">`;
+}
+
+/* Missing image: show a quiet logo tile instead of a broken image icon */
+function t2gImgFallback(img) {
+  const tile = document.createElement('div');
+  tile.className = img.className;
+  tile.style.cssText = 'width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:var(--grey-bg,#f0f0f0);';
+  tile.innerHTML = '<img src="/assets/img/logo.png" alt="" style="width:40%;max-width:90px;opacity:.3;">';
+  img.replaceWith(tile);
 }
 
 /* ── Product Modal ── */
@@ -216,45 +244,8 @@ function buildModal(productId) {
         <button class="pm-tab" data-tab="reviews">Reviews (0)</button>
       </div>
       <div class="pm-tab-content" id="pm-tab-description">${prod.description}</div>
-      <div class="pm-tab-content" id="pm-tab-info" style="display:none;"><p style="color:var(--text-light);font-size:.88rem;">Additional information will be available soon.</p></div>
-      <div class="pm-tab-content" id="pm-tab-reviews" style="display:none;">
-        <div class="review-list" id="pm-review-list"></div>
-        <div class="review-form-wrap">
-          <h3 class="review-form-title" id="pm-review-form-title">Be the first to review "${prod.name}"</h3>
-          <div class="review-form-inner">
-            <div class="review-rating-row">
-              <label class="review-label">Your rating *</label>
-              <div class="star-rating" id="pm-stars">
-                <span class="star" data-val="1">&#9733;</span>
-                <span class="star" data-val="2">&#9733;</span>
-                <span class="star" data-val="3">&#9733;</span>
-                <span class="star" data-val="4">&#9733;</span>
-                <span class="star" data-val="5">&#9733;</span>
-              </div>
-            </div>
-            <div class="review-field-group">
-              <label class="review-label">Your review *</label>
-              <textarea id="pm-review-text" class="review-textarea" rows="4" placeholder="Write your review here..."></textarea>
-            </div>
-            <div class="review-two-col">
-              <div class="review-field-group">
-                <label class="review-label">Name *</label>
-                <input id="pm-review-name" type="text" class="review-input" placeholder="Your name">
-              </div>
-              <div class="review-field-group">
-                <label class="review-label">Email *</label>
-                <input id="pm-review-email" type="email" class="review-input" placeholder="your@email.com">
-              </div>
-            </div>
-            <label class="review-save-label">
-              <input type="checkbox" id="pm-review-save">
-              Save my name and email in this browser for next time
-            </label>
-            <button class="btn btn-green pm-submit-review" style="margin-top:14px;font-size:.75rem;letter-spacing:.1em;padding:11px 24px;">SUBMIT</button>
-            <p class="review-msg" id="pm-review-msg" style="display:none;color:var(--green);font-size:.83rem;margin-top:10px;font-weight:600;"></p>
-          </div>
-        </div>
-      </div>
+      <div class="pm-tab-content" id="pm-tab-info" style="display:none;">${productInfoTable(prod)}</div>
+      <div class="pm-tab-content" id="pm-tab-reviews" style="display:none;"><div id="pm-reviews-mount"></div></div>
 
       ${prod.related && prod.related.length ? `
       <!-- Related -->
@@ -315,94 +306,13 @@ function buildModal(productId) {
     });
   });
 
-  // ── Review form logic ──
-  const REVIEW_KEY = 't2g_reviews_' + productId;
-  const savedReviewer = JSON.parse(localStorage.getItem('t2g_reviewer') || '{}');
-
-  // Pre-fill saved name/email
-  const rnEl = modal.querySelector('#pm-review-name');
-  const reEl = modal.querySelector('#pm-review-email');
-  if (rnEl && savedReviewer.name) rnEl.value = savedReviewer.name;
-  if (reEl && savedReviewer.email) reEl.value = savedReviewer.email;
-
-  // Load and render existing reviews
-  function loadReviews() {
-    const reviews = JSON.parse(localStorage.getItem(REVIEW_KEY) || '[]');
-    const listEl = modal.querySelector('#pm-review-list');
-    const titleEl = modal.querySelector('#pm-review-form-title');
-    if (!listEl) return;
-    if (reviews.length === 0) {
-      listEl.innerHTML = '<p style="font-size:.85rem;color:var(--text-light);margin-bottom:20px;">There are no reviews yet.</p>';
-      if (titleEl) titleEl.textContent = 'Be the first to review "' + prod.name + '"';
-    } else {
-      // Update tab label
-      const tabBtn = modal.querySelector('.pm-tab[data-tab="reviews"]');
-      if (tabBtn) tabBtn.textContent = 'Reviews (' + reviews.length + ')';
-      if (titleEl) titleEl.textContent = 'Add a review for "' + prod.name + '"';
-      listEl.innerHTML = reviews.map(r => {
-        const stars = '&#9733;'.repeat(r.rating) + '<span style="color:#ddd;">' + '&#9733;'.repeat(5 - r.rating) + '</span>';
-        return '<div style="border-bottom:1px solid var(--border);padding:16px 0;"><div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">' +
-          '<strong style="font-size:.88rem;color:var(--text);">' + r.name + '</strong>' +
-          '<span style="font-size:.8rem;color:var(--text-light);">' + r.date + '</span></div>' +
-          '<div style="color:#f5a623;font-size:1rem;margin-bottom:8px;">' + stars + '</div>' +
-          '<p style="font-size:.88rem;color:var(--text-mid);line-height:1.65;">' + r.text + '</p></div>';
-      }).join('');
-    }
+  // ── Reviews (stored in Supabase, shown after approval) ──
+  if (window.T2G_REVIEWS) {
+    const tabBtn = modal.querySelector('.pm-tab[data-tab="reviews"]');
+    T2G_REVIEWS.mount(modal.querySelector('#pm-reviews-mount'), prod, {
+      onCount: n => { if (tabBtn) tabBtn.textContent = `Reviews (${n})`; },
+    });
   }
-  loadReviews();
-
-  // Star rating interaction
-  let selectedRating = 0;
-  const stars = modal.querySelectorAll('.star');
-  stars.forEach(star => {
-    star.addEventListener('mouseenter', () => {
-      stars.forEach(s => { s.style.color = Number(s.dataset.val) <= Number(star.dataset.val) ? '#f5a623' : '#ddd'; });
-    });
-    star.addEventListener('mouseleave', () => {
-      stars.forEach(s => { s.style.color = Number(s.dataset.val) <= selectedRating ? '#f5a623' : '#ddd'; });
-    });
-    star.addEventListener('click', () => {
-      selectedRating = Number(star.dataset.val);
-      stars.forEach(s => { s.style.color = Number(s.dataset.val) <= selectedRating ? '#f5a623' : '#ddd'; });
-    });
-    // Init color
-    star.style.color = '#ddd';
-    star.style.fontSize = '1.4rem';
-    star.style.cursor = 'pointer';
-    star.style.padding = '2px 4px';
-    star.style.transition = 'color 150ms';
-  });
-
-  // Submit review
-  modal.querySelector('.pm-submit-review')?.addEventListener('click', () => {
-    const name = modal.querySelector('#pm-review-name').value.trim();
-    const email = modal.querySelector('#pm-review-email').value.trim();
-    const text = modal.querySelector('#pm-review-text').value.trim();
-    const msgEl = modal.querySelector('#pm-review-msg');
-
-    if (!selectedRating) { if (msgEl) { msgEl.style.color='#cc3333'; msgEl.textContent='Please select a star rating.'; msgEl.style.display='block'; } return; }
-    if (!name) { if (msgEl) { msgEl.style.color='#cc3333'; msgEl.textContent='Please enter your name.'; msgEl.style.display='block'; } return; }
-    if (!email || !email.includes('@')) { if (msgEl) { msgEl.style.color='#cc3333'; msgEl.textContent='Please enter a valid email.'; msgEl.style.display='block'; } return; }
-    if (!text) { if (msgEl) { msgEl.style.color='#cc3333'; msgEl.textContent='Please write your review.'; msgEl.style.display='block'; } return; }
-
-    const reviews = JSON.parse(localStorage.getItem(REVIEW_KEY) || '[]');
-    reviews.push({ name, text, rating: selectedRating, date: new Date().toLocaleDateString('en-PH', { year:'numeric', month:'long', day:'numeric' }) });
-    localStorage.setItem(REVIEW_KEY, JSON.stringify(reviews));
-
-    // Save reviewer if checkbox checked
-    if (modal.querySelector('#pm-review-save')?.checked) {
-      localStorage.setItem('t2g_reviewer', JSON.stringify({ name, email }));
-    }
-
-    // Reset form
-    modal.querySelector('#pm-review-text').value = '';
-    selectedRating = 0;
-    stars.forEach(s => s.style.color = '#ddd');
-
-    if (msgEl) { msgEl.style.color='var(--green)'; msgEl.textContent='Your review has been submitted. Thank you!'; msgEl.style.display='block'; }
-    setTimeout(() => { if (msgEl) msgEl.style.display = 'none'; }, 3000);
-    loadReviews();
-  });
 
   // Related product quick-add
   modal.querySelectorAll('.rel-atc').forEach(btn => {
@@ -453,3 +363,20 @@ document.addEventListener('DOMContentLoaded', () => {
   updateCartBadge();
   renderCartDrawer();
 });
+
+
+/* ── "Additional information" table, shared by the quick view and product page ── */
+function productInfoTable(prod) {
+  const esc = v => String(v == null ? '' : v).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+  const rows = [];
+  if (prod.variants && prod.variants.options && prod.variants.options.length) {
+    rows.push([prod.variants.label || 'Options', prod.variants.options.map(o => `${esc(o.label || o.value)} (PHP ${Number(o.price).toFixed(2)})`).join(', ')]);
+  }
+  if (prod.weightKg) rows.push(['Shipping weight', `${prod.weightKg < 1 ? Math.round(prod.weightKg * 1000) + ' g' : prod.weightKg + ' kg'} (used to work out the delivery fee)`]);
+  rows.push(['Made in', 'San Isidro, Jasaan, Misamis Oriental, Philippines']);
+  rows.push(['Pickup', 'Free at T2G Jasaan or T2G Cagayan de Oro (Rizal St)']);
+  rows.push(['Delivery', 'Nationwide by courier. PHP 190 for orders under 3 kg, plus PHP 80 for each additional kg.']);
+  rows.push(['Payment', 'GCash, BPI bank transfer, or cash when you pick up']);
+  if (prod.shopeeUrl) rows.push(['Also on', `<a href="${esc(prod.shopeeUrl)}" target="_blank" rel="noopener" style="color:var(--green);text-decoration:underline;">Shopee</a>`]);
+  return '<table class="info-table">' + rows.map(([k, v]) => `<tr><th scope="row">${k}</th><td>${v}</td></tr>`).join('') + '</table>';
+}

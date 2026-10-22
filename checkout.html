@@ -8,7 +8,9 @@
   <meta name="description" content="Complete your T2G order. Choose delivery or pickup, enter your details, and pay via GCash or Cash on Pickup.">
   <meta name="robots" content="noindex">
   <link rel="icon" type="image/png" href="/assets/img/logo.png">
-  <link rel="stylesheet" href="/assets/style.css?v=11">
+  <meta name="theme-color" content="#45a349">
+  <link rel="apple-touch-icon" href="/assets/img/logo.png">
+  <link rel="stylesheet" href="/assets/style.css?v=14">
   <style>
     /* ── Checkout page styles ── */
     .checkout-breadcrumb {
@@ -285,7 +287,7 @@
 
     /* Order complete screen */
     .order-complete {
-      display: none;
+      display: block;
       text-align: center;
       padding: 80px 24px;
     }
@@ -322,7 +324,7 @@
 <header id="header">
   <div class="container">
     <div class="header-row">
-      <a id="logo" href="index.html"><img src="assets/img/logo.png" alt="Trunk to Gold"><span id="logo-home-label">Home</span></a>
+      <a id="logo" href="index.html"><img src="/assets/img/logo.png" alt="Trunk to Gold"><span id="logo-home-label">Home</span></a>
       <div class="nav-spacer"></div>
       <nav class="nav-links">
         <a href="about.html">About</a>
@@ -488,7 +490,7 @@
           </div>
           <div class="co-row">
             <input class="co-input" id="co-zip" type="text" placeholder="Postcode / ZIP" autocomplete="postal-code">
-            <input class="co-input" id="co-phone" type="tel" placeholder="Phone" autocomplete="tel">
+            <input class="co-input" id="co-phone" type="tel" inputmode="tel" placeholder="Mobile number, e.g. 0917 123 4567" autocomplete="tel">
           </div>
         </div>
 
@@ -549,25 +551,30 @@
             <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" fill="none" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
             Return to Cart
           </button>
+          <label class="co-remember" style="display:flex;gap:8px;align-items:flex-start;font-size:.78rem;color:var(--text-mid);line-height:1.5;margin:0 0 12px;cursor:pointer;">
+            <input type="checkbox" id="co-remember" style="margin-top:3px;accent-color:var(--green);">
+            <span>Remember my details on this device for next time</span>
+          </label>
+          <p style="font-size:.72rem;color:var(--text-light);line-height:1.5;margin:0 0 12px;">By placing your order you agree to our <a href="/privacy" target="_blank" style="color:inherit;text-decoration:underline;">Privacy Policy</a>. We use your details only to process and deliver this order.</p>
           <button class="btn btn-green co-place-btn" onclick="placeOrder()">Place Order</button>
         </div>
 
         <!-- Trust badges -->
         <div style="margin-top:18px;display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:center;">
           <div style="display:flex;align-items:center;gap:6px;background:var(--grey-bg);border-radius:4px;padding:7px 12px;">
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#43a047" stroke-width="2.5" stroke-linecap="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#3d9441" stroke-width="2.5" stroke-linecap="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
             <span style="font-size:.68rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--text-mid);">FDA Registered</span>
           </div>
           <div style="display:flex;align-items:center;gap:6px;background:var(--grey-bg);border-radius:4px;padding:7px 12px;">
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#43a047" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#3d9441" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>
             <span style="font-size:.68rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--text-mid);">All Natural</span>
           </div>
           <div style="display:flex;align-items:center;gap:6px;background:var(--grey-bg);border-radius:4px;padding:7px 12px;">
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#43a047" stroke-width="2.5" stroke-linecap="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#3d9441" stroke-width="2.5" stroke-linecap="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
             <span style="font-size:.68rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--text-mid);">25+ Partner Farmers</span>
           </div>
           <div style="display:flex;align-items:center;gap:6px;background:var(--grey-bg);border-radius:4px;padding:7px 12px;">
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#43a047" stroke-width="2.5" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#3d9441" stroke-width="2.5" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
             <span style="font-size:.68rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--text-mid);">Est. 2017</span>
           </div>
         </div>
@@ -615,7 +622,7 @@
 
       <div id="oc-order-id" style="background:var(--grey-bg);border-radius:4px;padding:12px 18px;margin:18px 0;font-size:.82rem;color:var(--text-mid);text-align:left;">
         <span style="font-weight:700;letter-spacing:.06em;text-transform:uppercase;font-size:.72rem;">Order ID</span><br>
-        <span id="oc-order-id-val" style="font-size:1rem;font-weight:800;color:var(--text);letter-spacing:.04em;"></span>
+        <span id="oc-order-id-val" style="font-size:1rem;font-weight:800;color:var(--text);letter-spacing:.04em;"></span> <button type="button" class="copy-btn" data-copy-from="oc-order-id-val">Copy</button>
         <p style="margin:6px 0 0;font-size:.75rem;color:var(--text-light);line-height:1.5;">Save this ID. You will need it to track your order or for any follow-up with T2G.</p>
       </div>
 
@@ -625,7 +632,7 @@
         <p style="font-size:.8rem;color:var(--text-mid);margin:0 0 14px;line-height:1.6;">
           Transfer the total amount to <strong>09171178744</strong>, then upload your screenshot below. T2G will verify and confirm your order within 24 hours.
         </p>
-        <div id="proof-drop-area" style="border:2px dashed #ddd;border-radius:4px;padding:24px 16px;text-align:center;cursor:pointer;transition:border-color 200ms;margin-bottom:12px;background:#fff;">
+        <div id="proof-drop-area" style="position:relative;border:2px dashed #ddd;border-radius:4px;padding:24px 16px;text-align:center;cursor:pointer;transition:border-color 200ms;margin-bottom:12px;background:#fff;">
           <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#bbb" stroke-width="1.5" style="margin-bottom:8px;display:block;margin-inline:auto;"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
           <p style="font-size:.8rem;color:#aaa;margin:0;">Drag and drop your screenshot here, or <span style="color:var(--green);font-weight:700;text-decoration:underline;">click to browse</span></p>
           <input type="file" id="gcash-proof-file" accept="image/*,.pdf" style="position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%;" onchange="handleProofFile(this)">
@@ -685,11 +692,14 @@
   </div>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4.4.1/dist/email.min.js"></script>
 <script>emailjs.init('z0F3hrMlGiJyZ1uYn');</script>
-<script src="/assets/products-data.js?v=11"></script>
-<script src="/assets/main.js?v=11"></script>
-<script src="/assets/cart.js?v=11"></script>
+<script src="/assets/site-config.js?v=14"></script>
+<script src="/assets/t2g-db.js?v=14"></script>
+<script src="/assets/reviews.js?v=14"></script>
+<script src="/assets/products-data.js?v=14"></script>
+<script src="/assets/main.js?v=14"></script>
+<script src="/assets/cart.js?v=14"></script>
 <script>
 'use strict';
 
@@ -706,7 +716,7 @@ function _setTrackLink(id) {
   if (el) el.href = '/track?id=' + encodeURIComponent(id);
 }
 
-function showCompleteView({ orderId, fname, phone, addrFull, delivery, payment }) {
+function showCompleteView({ orderId, fname, phone, addrFull, delivery, payment, pickupLoc }) {
   document.getElementById('checkout-view').style.display  = 'none';
   document.getElementById('complete-view').style.display  = 'block';
   document.getElementById('cb-checkout').classList.remove('active');
@@ -715,7 +725,7 @@ function showCompleteView({ orderId, fname, phone, addrFull, delivery, payment }
   _setTrackLink(orderId);
   let msg = `Thank you, ${fname}! Your order (${orderId}) has been received and sent to T2G. `;
   if (delivery === 'pickup') {
-    const locLabel = selectedPickupLocation === 'cdo' ? 'Cagayan De Oro' : 'Jasaan';
+    const locLabel = (pickupLoc || selectedPickupLocation) === 'cdo' ? 'Cagayan De Oro' : 'Jasaan';
     msg += `T2G will contact you at ${phone} to arrange your pickup in ${locLabel}.`;
   } else {
     msg += `Your order will be shipped to: ${addrFull}.`;
@@ -728,14 +738,16 @@ function showCompleteView({ orderId, fname, phone, addrFull, delivery, payment }
       gcashSection.style.display = 'block';
       const title = gcashSection.querySelector('h3');
       const desc  = gcashSection.querySelector('p');
+      const gnum = (window.T2G_CONFIG && T2G_CONFIG.GCASH_NUMBER) || '09171178744';
       if (payment === 'bpi') {
         if (title) title.textContent = 'Send your BPI transfer proof';
-        if (desc)  desc.textContent  = 'Email your transfer receipt to t2gcorp2017@yahoo.com with your Order ID in the subject line.';
+        if (desc)  desc.textContent  = 'Once you have made the transfer, upload a screenshot or photo of the receipt below. T2G will verify it and confirm your order within 24 hours.';
       } else {
         if (title) title.textContent = 'Send your GCash payment proof';
-        if (desc)  desc.textContent  = 'Upload or email your GCash proof of payment to t2gcorp2017@yahoo.com.';
+        if (desc)  desc.innerHTML    = `Send the total to GCash <strong>${gnum}</strong> <button type="button" class="copy-btn" data-copy="${gnum}">Copy</button>, then upload the screenshot below. T2G will verify it and confirm your order within 24 hours.`;
       }
     }
+    setupProofSection();
     if (pickupNote) pickupNote.style.display = 'none';
   } else {
     if (gcashSection) gcashSection.style.display = 'none';
@@ -1015,64 +1027,183 @@ function generateOrderId() {
   return `T2G-${ts}-${rand}`;
 }
 
-/* ── GCash proof file handler ── */
+/* ── Payment proof upload (GCash / BPI) ──
+   Images are shrunk in the browser before upload (about 1600px, JPEG),
+   so a 4 MB phone screenshot becomes roughly 150-400 KB.
+   The file goes to Supabase Storage; Formspree only gets a short
+   text notification, so the free Formspree plan is enough. */
+const CFG = window.T2G_CONFIG || {};
+const PROOF_MAX_BYTES = 5 * 1024 * 1024;
 let proofFile = null;
-function handleProofFile(input) {
-  const file = input.files[0];
+
+function proofUploadsEnabled() {
+  return Boolean(window.T2G_DB && T2G_DB.enabled());
+}
+
+function fmtBytes(n) {
+  return n > 1024 * 1024 ? (n / 1024 / 1024).toFixed(1) + ' MB' : Math.max(1, Math.round(n / 1024)) + ' KB';
+}
+
+function loadImage(file) {
+  return new Promise((resolve, reject) => {
+    const url = URL.createObjectURL(file);
+    const img = new Image();
+    img.onload  = () => { URL.revokeObjectURL(url); resolve(img); };
+    img.onerror = () => { URL.revokeObjectURL(url); reject(new Error('Could not read image')); };
+    img.src = url;
+  });
+}
+
+async function compressImage(file) {
+  const img = await loadImage(file);
+  const attempts = [[1600, 0.82], [1280, 0.72], [1024, 0.62]];
+  let best = null;
+  for (const [maxSide, quality] of attempts) {
+    const scale  = Math.min(1, maxSide / Math.max(img.naturalWidth, img.naturalHeight));
+    const canvas = document.createElement('canvas');
+    canvas.width  = Math.round(img.naturalWidth * scale);
+    canvas.height = Math.round(img.naturalHeight * scale);
+    const ctx = canvas.getContext('2d');
+    ctx.fillStyle = '#fff';                       // transparent PNGs get a white background
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+    const blob = await new Promise(r => canvas.toBlob(r, 'image/jpeg', quality));
+    if (blob) best = blob;
+    if (blob && blob.size <= 600 * 1024) break;   // small enough, stop
+  }
+  if (!best) throw new Error('Compression failed');
+  return best.size < file.size ? best : file;     // never make it bigger
+}
+
+function setProofStatus(msg, kind) {
+  const status = document.getElementById('proof-status');
+  if (!status) return;
+  status.innerHTML   = msg;
+  status.style.color = kind === 'error' ? '#cc3333' : kind === 'ok' ? 'var(--green)' : 'var(--text-light)';
+}
+
+function proofEmailLink(orderId) {
+  const email = CFG.CONTACT_EMAIL || 't2gcorp2017@yahoo.com';
+  const subj  = encodeURIComponent(`Payment proof for order ${orderId}`);
+  return `<a href="mailto:${email}?subject=${subj}" style="color:inherit;text-decoration:underline;">${email}</a>`;
+}
+
+async function handleProofFile(input) {
+  const file = input.files && input.files[0];
   if (!file) return;
-  proofFile = file;
   const preview   = document.getElementById('proof-preview');
   const img       = document.getElementById('proof-img');
   const fname     = document.getElementById('proof-filename');
   const submitBtn = document.getElementById('proof-submit-btn');
-  if (file.type.startsWith('image/')) {
-    const reader = new FileReader();
-    reader.onload = e => { img.src = e.target.result; preview.style.display = 'block'; };
-    reader.readAsDataURL(file);
-  } else {
-    preview.style.display = 'none';
+  proofFile = null;
+  submitBtn.disabled = true;
+
+  const isImage = file.type.startsWith('image/');
+  const isPdf   = file.type === 'application/pdf' || /\.pdf$/i.test(file.name);
+  if (!isImage && !isPdf) {
+    setProofStatus('Please choose a screenshot (JPG or PNG) or a PDF.', 'error');
+    return;
   }
-  fname.textContent = file.name;
+
+  try {
+    if (isImage) {
+      setProofStatus('Preparing your screenshot…');
+      proofFile = await compressImage(file);
+      img.src = URL.createObjectURL(proofFile);
+      preview.style.display = 'block';
+    } else {
+      proofFile = file;
+      preview.style.display = 'none';
+    }
+  } catch (e) {
+    setProofStatus('We could not read that image. Try a different screenshot, or email it to ' + proofEmailLink(document.getElementById('oc-order-id-val').textContent) + '.', 'error');
+    return;
+  }
+
+  if (proofFile.size > PROOF_MAX_BYTES) {
+    proofFile = null;
+    setProofStatus(`That file is ${fmtBytes(file.size)}. The limit is 5 MB. Please send a screenshot instead.`, 'error');
+    return;
+  }
+
+  fname.textContent = isImage && proofFile.size < file.size
+    ? `${file.name} (reduced from ${fmtBytes(file.size)} to ${fmtBytes(proofFile.size)})`
+    : `${file.name} (${fmtBytes(proofFile.size)})`;
+  setProofStatus('');
   submitBtn.disabled = false;
   document.getElementById('proof-drop-area').style.borderColor = 'var(--green)';
 }
 
-/* ── Submit GCash proof to Formspree ── */
 async function submitProof() {
-  const btn    = document.getElementById('proof-submit-btn');
-  const status = document.getElementById('proof-status');
-  if (!proofFile) return;
-  btn.disabled    = true;
-  btn.textContent = 'Sending...';
-  status.textContent = '';
+  const btn     = document.getElementById('proof-submit-btn');
+  const orderId = document.getElementById('oc-order-id-val').textContent.trim();
+  if (!proofFile || !proofUploadsEnabled()) return;
 
-  const orderId = document.getElementById('oc-order-id-val').textContent;
-  const fd      = new FormData();
-  fd.append('_subject',  `[T2G] GCash Proof - Order ${orderId}`);
-  fd.append('order_id',  orderId);
-  fd.append('attachment', proofFile, proofFile.name);
+  btn.disabled    = true;
+  btn.textContent = 'Uploading…';
+  setProofStatus('');
+
+  const ext  = proofFile.type === 'application/pdf' ? 'pdf' : proofFile.type === 'image/png' ? 'png' : 'jpg';
+  const path = `${orderId}/${new Date().toISOString().replace(/[:.]/g, '-')}.${ext}`;
+  const bucket = CFG.PROOF_BUCKET || 'payment-proofs';
 
   try {
-    const res = await fetch('https://formspree.io/f/mkoazzoo', { method: 'POST', body: fd, headers: { Accept: 'application/json' } });
-    if (res.ok) {
-      btn.textContent    = 'Proof Sent!';
-      btn.style.background = '#43a047';
-      status.textContent = 'T2G received your proof. Expect a confirmation within 24 hours.';
-      status.style.color = 'var(--green)';
-    } else {
-      throw new Error('server error');
-    }
-  } catch {
+    await T2G_DB.upload(bucket, path, proofFile);
+  } catch (e) {
     btn.disabled    = false;
-    btn.textContent = 'Submit Payment Proof';
-    status.textContent = 'Could not send. Email your proof to t2gcorp2017@yahoo.com with your Order ID.';
-    status.style.color = '#cc3333';
+    btn.textContent = 'Try again';
+    setProofStatus('Upload failed. Please try again, or email your proof to ' + proofEmailLink(orderId) + ' with your Order ID.', 'error');
+    return;
   }
+  // Link the file to the order so it shows in the admin page (best effort)
+  try { await T2G_DB.rpc('attach_proof', { p_code: orderId, p_path: path }); } catch (e) { /* file is still saved */ }
+
+  // Tell T2G a proof arrived (text only, so the free Formspree plan accepts it).
+  if (CFG.EMAIL_ON_PROOF !== false) {
+    const fd = new FormData();
+    fd.append('_subject', `[T2G] Payment proof received - Order ${orderId}`);
+    fd.append('order_id', orderId);
+    fd.append('view_in_admin', `${location.origin}/admin#order=${orderId}`);
+    fetch('https://formspree.io/f/mkoazzoo', { method: 'POST', body: fd, headers: { Accept: 'application/json' } }).catch(() => {});
+  }
+
+  btn.textContent = 'Proof sent';
+  btn.style.background = '#3d9441';
+  setProofStatus('T2G received your proof. Expect a confirmation within 24 hours.', 'ok');
+  document.getElementById('gcash-proof-file').disabled = true;
+}
+
+/* If uploads aren't set up yet, show the email option instead of a dead upload box. */
+function setupProofSection() {
+  if (proofUploadsEnabled()) return;
+  const drop = document.getElementById('proof-drop-area');
+  const btn  = document.getElementById('proof-submit-btn');
+  if (drop) drop.style.display = 'none';
+  if (btn)  btn.style.display  = 'none';
+  const orderId = document.getElementById('oc-order-id-val')?.textContent.trim() || '';
+  setProofStatus('Please email your screenshot to ' + proofEmailLink(orderId) + ' and include your Order ID.');
 }
 
 /* ── Drag-and-drop wiring ── */
 
-function placeOrder() {
+let placingOrder = false;
+async function placeOrder() {
+  if (placingOrder) return;
+  if (getCart().length === 0) {
+    const btn = document.querySelector('.co-place-btn');
+    let box = document.getElementById('co-order-error');
+    if (!box && btn) {
+      box = document.createElement('p');
+      box.id = 'co-order-error';
+      box.style.cssText = 'color:#cc3333;font-size:.82rem;line-height:1.5;margin-top:10px;';
+      btn.insertAdjacentElement('afterend', box);
+    }
+    if (box) {
+      box.innerHTML = 'Your cart is empty. <a href="/products" style="color:inherit;text-decoration:underline;">Browse products</a> to add something first.';
+      box.style.display = 'block';
+    }
+    return;
+  }
   coClearErrors();
   let valid = true;
   let firstBad = null;
@@ -1100,12 +1231,12 @@ function placeOrder() {
       coFieldError(el, `${label} is required.`);
       if (!firstBad) firstBad = el;
       valid = false;
-    } else if (type === 'email' && !val.includes('@')) {
+    } else if (type === 'email' && !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(val)) {
       coFieldError(el, 'Please enter a valid email address.');
       if (!firstBad) firstBad = el;
       valid = false;
-    } else if (id === 'co-phone' && !/^[\d\s\+\-\(\)]{7,}$/.test(val)) {
-      coFieldError(el, 'Please enter a valid phone number.');
+    } else if (id === 'co-phone' && !(/^[\d\s\+\-\(\)]+$/.test(val) && val.replace(/\D/g, '').length >= 10 && val.replace(/\D/g, '').length <= 13)) {
+      coFieldError(el, 'Please enter a mobile number like 0917 123 4567 or +63 917 123 4567.');
       if (!firstBad) firstBad = el;
       valid = false;
     }
@@ -1120,7 +1251,7 @@ function placeOrder() {
   const cart     = getCart();
   const subtotal = cart.reduce((s, i) => s + i.price * i.qty, 0);
   const totalAmt = subtotal + shippingFee;
-  const orderId  = generateOrderId();
+  let   orderId  = '';
 
   const fname  = coVal('co-fname');
   const lname  = coVal('co-lname');
@@ -1134,39 +1265,138 @@ function placeOrder() {
   const note   = coVal('order-note');
   const addrFull = [addr, apt, city, zip, region, 'Philippines'].filter(Boolean).join(', ');
 
-  /* ── Send order to Formspree ── */
-  const itemsList = cart.map(i => `${i.name} x${i.qty} @ PHP ${i.price.toFixed(2)}`).join(' | ');
+  const pickupLabel  = selectedPickupLocation === 'cdo'
+    ? 'Pickup at T2G Cagayan De Oro (Rizal St)'
+    : 'Pickup at T2G Jasaan (San Isidro)';
+  const deliveryText = currentDelivery === 'ship' ? `Ship to: ${addrFull}` : pickupLabel;
+  const paymentText  = currentPayment === 'gcash' ? 'GCash'
+                     : currentPayment === 'bpi'   ? 'BPI Bank Transfer'
+                     : 'Cash on Pickup';
+  const shippingText = currentDelivery !== 'ship' ? 'N/A'
+                     : shippingKnown ? `PHP ${shippingFee.toFixed(2)}`
+                     : 'To be confirmed';
+  const totalText    = (currentDelivery === 'ship' && !shippingKnown)
+                     ? `PHP ${subtotal.toFixed(2)} + shipping TBC`
+                     : `PHP ${totalAmt.toFixed(2)}`;
+
+  const itemsList = cart.map(i => `${i.name}${i.variantLabel ? ' - ' + i.variantLabel : ''} x${i.qty} @ PHP ${i.price.toFixed(2)}`).join(' | ');
+
+  const placeBtn  = document.querySelector('.co-place-btn');
+  const btnLabel  = placeBtn ? placeBtn.textContent : '';
+  const setBusy = busy => {
+    placingOrder = busy;
+    if (!placeBtn) return;
+    placeBtn.disabled    = busy;
+    placeBtn.textContent = busy ? 'Placing order…' : btnLabel;
+  };
+  let errBox = document.getElementById('co-order-error');
+  if (!errBox && placeBtn) {
+    errBox = document.createElement('p');
+    errBox.id = 'co-order-error';
+    errBox.style.cssText = 'display:none;color:#cc3333;font-size:.82rem;line-height:1.5;margin-top:10px;';
+    placeBtn.insertAdjacentElement('afterend', errBox);
+  }
+  if (errBox) errBox.style.display = 'none';
+  const showOrderError = html => {
+    setBusy(false);
+    if (!errBox) return;
+    errBox.innerHTML = html;
+    errBox.style.display = 'block';
+    errBox.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  };
+
+  setBusy(true);
+
+  /* ── 1. Save the order in the T2G database (Supabase) ──
+     If the database can't be reached, we fall back to email-only (Formspree)
+     so a customer is never stopped from ordering. */
+  let savedInDb = false;
+  if (window.T2G_DB && T2G_DB.enabled()) {
+    try {
+      orderId = await T2G_DB.rpc('place_order', { p: {
+        first_name: fname, last_name: lname, email, phone,
+        delivery_method: currentDelivery,
+        pickup_location: currentDelivery === 'pickup' ? selectedPickupLocation : null,
+        address: currentDelivery === 'ship' ? { street: addr, apt, city, region, zip } : null,
+        payment_method: currentPayment,
+        shipping_fee: currentDelivery === 'ship' && shippingKnown ? shippingFee : null,
+        shipping_known: currentDelivery !== 'ship' || shippingKnown,
+        note,
+        items: cart.map(i => ({ product_id: i.productId, name: i.name, variant: i.variantLabel || null, qty: i.qty, unit_price: i.price })),
+      } });
+      savedInDb = typeof orderId === 'string' && orderId.startsWith('T2G-');
+    } catch (e) {
+      if (e && e.userFacing) {               // a problem with what was entered: tell the customer
+        showOrderError(e.message);
+        return;
+      }
+      savedInDb = false;                       // database unreachable: fall back below
+    }
+  }
+  if (!savedInDb) orderId = generateOrderId();
+
+  /* ── 2. Email the order to T2G (Formspree) ──
+     Required when the database was not used; otherwise just a heads-up. */
   const fd = new FormData();
   fd.append('_subject',       `[T2G] New Order ${orderId} from ${fname} ${lname}`);
   fd.append('order_id',       orderId);
   fd.append('customer_name',  `${fname} ${lname}`);
   fd.append('email',          email);
+  fd.append('_replyto',       email);
   fd.append('phone',          phone);
-  fd.append('delivery',       currentDelivery === 'ship' ? `Ship to: ${addrFull}` : 'Pickup at T2G Jasaan');
-  fd.append('payment',        currentPayment === 'gcash' ? 'GCash' : 'Cash on Pickup');
+  fd.append('delivery',       deliveryText);
+  fd.append('payment',        paymentText);
   fd.append('items',          itemsList);
   fd.append('subtotal',       `PHP ${subtotal.toFixed(2)}`);
-  fd.append('shipping',       currentDelivery === 'ship' ? `PHP ${shippingFee.toFixed(2)}` : 'N/A');
-  fd.append('total',          `PHP ${totalAmt.toFixed(2)}`);
+  fd.append('shipping',       shippingText);
+  fd.append('total',          totalText);
+  fd.append('saved_in_admin', savedInDb ? 'Yes - see admin page' : 'NO - database unavailable, this email is the only record');
   if (note) fd.append('note', note);
 
-  fetch('https://formspree.io/f/mkoazzoo', { method: 'POST', body: fd, headers: { Accept: 'application/json' } })
-    .catch(() => {}); // silent fail -- order still proceeds locally
+  const wantEmail = !savedInDb || (window.T2G_CONFIG || {}).EMAIL_ON_ORDER !== false;
+  const emailT2G = wantEmail
+    ? fetch('https://formspree.io/f/mkoazzoo', { method: 'POST', body: fd, headers: { Accept: 'application/json' } }).then(r => r.ok).catch(() => false)
+    : Promise.resolve(true);
 
-  /* ── Send customer confirmation via EmailJS ── */
-  emailjs.send('service_g1ru818', 'template_q05df77', {
-    order_id:      orderId,
-    customer_name: `${fname} ${lname}`,
-    email:         email,
-    items:         itemsList,
-    delivery:      currentDelivery === 'ship' ? `Ship to: ${addrFull}` : 'Pickup at T2G Jasaan',
-    payment:       currentPayment === 'gcash' ? 'GCash' : currentPayment === 'bpi' ? 'BPI Bank Transfer' : 'Cash on Pickup',
-    total:         `PHP ${totalAmt.toFixed(2)}`,
-  }).catch(() => {}); // silent fail
+  if (!savedInDb) {
+    const sent = await emailT2G;
+    if (!sent) {
+      showOrderError('Sorry, your order could not be sent. Your cart has been kept, so please try again in a moment. ' +
+        'If it keeps failing, message us at (0917) 716 4225 or email <a href="mailto:t2gcorp2017@yahoo.com" style="color:inherit;text-decoration:underline;">t2gcorp2017@yahoo.com</a>.');
+      return;
+    }
+  }
+  setBusy(false);
+
+  /* ── Send customer confirmation via EmailJS (nice-to-have; order is already recorded) ── */
+  try {
+    emailjs.send('service_g1ru818', 'template_q05df77', {
+      order_id:      orderId,
+      customer_name: `${fname} ${lname}`,
+      email:         email,
+      items:         itemsList,
+      delivery:      deliveryText,
+      payment:       paymentText,
+      total:         totalText,
+    }).catch(() => {});
+  } catch (e) { /* EmailJS script failed to load - ignore */ }
+
+  /* ── Remember (or forget) customer details on this device ── */
+  try {
+    if (document.getElementById('co-remember')?.checked) {
+      localStorage.setItem('t2g_customer', JSON.stringify({ fname, lname, email, phone, addr, apt, city, zip, region }));
+    } else {
+      localStorage.removeItem('t2g_customer');
+    }
+    // Keep a short list of recent order IDs so the tracking page can offer them
+    const recent = JSON.parse(localStorage.getItem('t2g_recent_orders') || '[]').filter(o => o.id !== orderId);
+    recent.unshift({ id: orderId, date: new Date().toISOString().slice(0, 10) });
+    localStorage.setItem('t2g_recent_orders', JSON.stringify(recent.slice(0, 5)));
+  } catch (e) { /* storage unavailable (private mode) */ }
 
   /* ── Clear cart and show complete view ── */
   sessionStorage.removeItem('t2g_cart');
-  const orderData = { orderId, fname, phone, addrFull, delivery: currentDelivery, payment: currentPayment };
+  const orderData = { orderId, fname, phone, addrFull, delivery: currentDelivery, payment: currentPayment, pickupLoc: selectedPickupLocation };
   sessionStorage.setItem('t2g_last_order', JSON.stringify(orderData));
   showCompleteView(orderData);
 
@@ -1176,9 +1406,9 @@ function placeOrder() {
   const step3Title = document.getElementById('next-step-3-title');
   const step3Desc  = document.getElementById('next-step-3-desc');
 
-  if (currentPayment === 'gcash') {
+  if (currentPayment === 'gcash' || currentPayment === 'bpi') {
     if (step2Title) step2Title.textContent = 'Payment verified';
-    if (step2Desc)  step2Desc.textContent  = 'Once T2G verifies your GCash proof, your order will be packed and prepared.';
+    if (step2Desc)  step2Desc.textContent  = `Once T2G verifies your ${currentPayment === 'bpi' ? 'bank transfer' : 'GCash'} proof, your order will be packed and prepared.`;
   } else {
     if (step2Title) step2Title.textContent = 'Pickup arranged';
     const locLabel = selectedPickupLocation === 'cdo' ? 'Cagayan De Oro' : 'Jasaan';
@@ -1187,7 +1417,9 @@ function placeOrder() {
 
   if (currentDelivery === 'pickup') {
     if (step3Title) step3Title.textContent = 'Collect your order';
-    if (step3Desc)  step3Desc.textContent  = 'Bring your Order ID when you come to collect. Have the exact amount ready.';
+    if (step3Desc)  step3Desc.textContent  = currentPayment === 'cash'
+      ? 'Bring your Order ID when you come to collect. Have the exact amount ready.'
+      : 'Bring your Order ID when you come to collect. Your order is already paid.';
   } else {
     if (step3Title) step3Title.textContent = 'Order shipped';
     if (step3Desc)  step3Desc.textContent  = 'T2G will send you the courier tracking number once your order is on its way.';
@@ -1198,6 +1430,20 @@ function placeOrder() {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
+  try {
+    const saved = JSON.parse(localStorage.getItem('t2g_customer') || 'null');
+    if (saved) {
+      const map = { 'co-fname': saved.fname, 'co-lname': saved.lname, 'co-email': saved.email, 'co-phone': saved.phone,
+                    'co-addr': saved.addr, 'apt-field': saved.apt, 'co-city': saved.city, 'co-zip': saved.zip };
+      Object.entries(map).forEach(([id, v]) => { const el = document.getElementById(id); if (el && v && !el.value) el.value = v; });
+      const reg = document.getElementById('co-region');
+      if (reg && saved.region) { reg.value = saved.region; reg.dispatchEvent(new Event('change')); }
+      if (saved.apt) { const af = document.getElementById('apt-field'); if (af) af.style.display = 'block'; }
+      const cb = document.getElementById('co-remember');
+      if (cb) cb.checked = true;
+    }
+  } catch (e) {}
+
 
   /* ── Restore complete view if returning to page after order ── */
   const lastOrder = sessionStorage.getItem('t2g_last_order');
@@ -1238,6 +1484,6 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 });
 </script>
-<script src="/assets/devmode.js?v=11"></script>
+<script src="/assets/devmode.js?v=14"></script>
 </body>
 </html>

@@ -11,7 +11,9 @@
   <meta property="og:title" id="og-title" content="Product | T2G">
   <meta property="og:description" id="og-desc" content="">
   <meta property="og:image" id="og-image" content="">  <link rel="icon" type="image/png" href="/assets/img/logo.png">
-  <link rel="stylesheet" href="/assets/style.css?v=12">
+  <meta name="theme-color" content="#45a349">
+  <link rel="apple-touch-icon" href="/assets/img/logo.png">
+  <link rel="stylesheet" href="/assets/style.css?v=14">
   <style>
     .product-page { padding: 48px 0 72px; }
     .product-layout {
@@ -120,6 +122,11 @@
     .product-not-found { text-align: center; padding: 80px 20px; }
     .product-not-found h1 { font-size: 1.4rem; font-weight: 800; margin-bottom: 12px; }
     .product-not-found p { font-size: .9rem; color: var(--text-mid); margin-bottom: 24px; line-height: 1.7; }
+      .product-rating { display:inline-flex; align-items:center; gap:8px; font-size:.8rem; color:var(--text-mid); margin:-8px 0 16px; text-decoration:none; }
+    .product-rating:hover span { text-decoration:underline; }
+    .product-extra { display:grid; grid-template-columns: minmax(0, 2fr) minmax(0, 3fr); gap:48px; margin-top:56px; padding-top:40px; border-top:1px solid var(--border); }
+    .product-extra-block h2 { font-size:.8rem; font-weight:800; letter-spacing:.1em; text-transform:uppercase; color:var(--text-light); margin-bottom:18px; }
+    @media (max-width: 860px) { .product-extra { grid-template-columns: 1fr; gap:36px; } }
   </style>
   <script>
     window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
@@ -192,7 +199,7 @@
       </ul></div>
     </div>
     <div class="footer-bottom">
-      <span>&copy; T2G Trunk to Gold Copyright 2025</span>
+      <span>&copy; <span data-year>2026</span> T2G Trunk to Gold &middot; <a href="/privacy">Privacy Policy</a></span>
       <div class="footer-social"><a href="https://www.facebook.com/trunk2gold" target="_blank" rel="noopener">Facebook</a></div>
     </div>
   </div>
@@ -209,10 +216,13 @@
   </div>
 </div>
 
-<script src="/assets/products-data.js?v=11"></script>
-<script src="/assets/main.js?v=12"></script>
-<script src="/assets/cart.js?v=11"></script>
-<script src="/assets/devmode.js?v=11"></script>
+<script src="/assets/site-config.js?v=14"></script>
+<script src="/assets/t2g-db.js?v=14"></script>
+<script src="/assets/reviews.js?v=14"></script>
+<script src="/assets/products-data.js?v=14"></script>
+<script src="/assets/main.js?v=14"></script>
+<script src="/assets/cart.js?v=14"></script>
+<script src="/assets/devmode.js?v=14"></script>
 
 <script>
 'use strict';
@@ -264,11 +274,13 @@ function renderProduct(p) {
 
   /* Update <head> meta dynamically */
   document.title = p.name + ' | Trunk to Gold (T2G)';
-  document.getElementById('page-desc').content      = p.description || p.name;
+  const plainDesc = (p.description || '').replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim();
+  document.getElementById('page-desc').content      = (plainDesc || p.name).slice(0, 300);
   document.getElementById('og-title').content       = p.name + ' | T2G';
-  document.getElementById('og-desc').content        = p.description || '';
-  document.getElementById('og-image').content       = 'https://trunktogold.com/assets/img/' + imgName;
-  document.getElementById('page-canonical').href    = 'https://trunktogold.com/product/' + p.id;  document.getElementById('page-title').textContent = p.name + ' | Trunk to Gold (T2G)';
+  document.getElementById('og-desc').content        = plainDesc.slice(0, 300);
+  document.getElementById('og-image').content       = 'https://www.trunktogold.com/assets/img/' + imgName;
+  document.getElementById('page-canonical').href    = 'https://www.trunktogold.com/product/' + p.id;
+  document.getElementById('page-title').textContent = p.name + ' | Trunk to Gold (T2G)';
 
   /* Breadcrumb name */
   const breadcrumbName = document.createElement('span');
@@ -355,11 +367,12 @@ function renderProduct(p) {
             <h1 class="product-name">${p.name}</h1>
             <p class="product-tagline">${p.tagline || ''}</p>
             <div class="product-price" id="product-price-display">${p.priceDisplay || 'PHP ' + (p.price || 0).toFixed(2)}</div>
+            <a href="#reviews" class="product-rating" id="product-rating" hidden></a>
 
             <div class="trust-row">
-              <span class="trust-chip" style="color:#43a047;">${ICONS.shield} FDA Registered</span>
-              <span class="trust-chip" style="color:#43a047;">${ICONS.check} All Natural</span>
-              <span class="trust-chip" style="color:#43a047;">${ICONS.home} Made in Jasaan, MisOr</span>
+              <span class="trust-chip" style="color:#3d9441;">${ICONS.shield} FDA Registered</span>
+              <span class="trust-chip" style="color:#3d9441;">${ICONS.check} All Natural</span>
+              <span class="trust-chip" style="color:#3d9441;">${ICONS.home} Made in Jasaan, MisOr</span>
             </div>
 
             ${bulletsHTML ? `<ul class="product-bullets">${bulletsHTML}</ul>` : ''}
@@ -370,7 +383,7 @@ function renderProduct(p) {
 
             <div class="product-actions">
               <button class="btn btn-green" id="add-to-cart-btn" style="width:100%;justify-content:center;">
-                ${hasVariants ? 'Select Options' : 'Add to Cart'}
+                Add to Cart
               </button>
               <a href="${shopeeUrl}" target="_blank" rel="noopener" class="btn shopee-btn" style="width:100%;">
                 <span class="shopee-icon-wrap">
@@ -386,6 +399,17 @@ function renderProduct(p) {
             </p>
           </div>
 
+        </div>
+
+        <div class="product-extra">
+          <section class="product-extra-block">
+            <h2>Product details</h2>
+            ${typeof productInfoTable === 'function' ? productInfoTable(p) : ''}
+          </section>
+          <section class="product-extra-block" id="reviews">
+            <h2>Customer reviews</h2>
+            <div id="product-reviews"></div>
+          </section>
         </div>
 
         ${relatedHTML ? `
@@ -422,6 +446,22 @@ function renderProduct(p) {
   /* Start auto-cycling gallery images on a loop */
   startGalleryAutoplay(images);
 
+  /* Reviews + star summary under the price */
+  if (window.T2G_REVIEWS) {
+    T2G_REVIEWS.mount(document.getElementById('product-reviews'), p);
+    T2G_REVIEWS.summary().then(sum => {
+      const r = sum && sum[p.id];
+      const el = document.getElementById('product-rating');
+      if (r && r.count > 0 && el) {
+        el.innerHTML = `${T2G_REVIEWS.starsHtml(r.avg)} <span>${Number(r.avg).toFixed(1)} · ${r.count} review${r.count > 1 ? 's' : ''}</span>`;
+        el.hidden = false;
+      }
+      addProductSchema(p, imgName, plainDesc, r);
+    });
+  } else {
+    addProductSchema(p, imgName, plainDesc, null);
+  }
+
   cartBtn.addEventListener('click', () => {
     let variantValue = null;
     let variantLabel = null;
@@ -440,6 +480,28 @@ function renderProduct(p) {
       document.body.style.overflow = 'hidden';
     }
   });
+}
+
+/* ── Structured data so search engines can show price and rating ── */
+function addProductSchema(p, imgName, desc, rating) {
+  const data = {
+    '@context': 'https://schema.org', '@type': 'Product',
+    name: 'T2G ' + p.name,
+    image: 'https://www.trunktogold.com/assets/img/' + encodeURI(imgName),
+    description: desc || p.name,
+    brand: { '@type': 'Brand', name: 'Trunk to Gold (T2G)' },
+    offers: {
+      '@type': 'Offer', url: 'https://www.trunktogold.com/product/' + p.id,
+      priceCurrency: 'PHP', price: String(p.price), availability: 'https://schema.org/InStock',
+    },
+  };
+  if (rating && rating.count > 0) {
+    data.aggregateRating = { '@type': 'AggregateRating', ratingValue: String(rating.avg), reviewCount: String(rating.count) };
+  }
+  const tag = document.createElement('script');
+  tag.type = 'application/ld+json';
+  tag.textContent = JSON.stringify(data);
+  document.head.appendChild(tag);
 }
 
 /* ── Thumbnail switcher ── */

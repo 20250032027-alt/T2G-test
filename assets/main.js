@@ -214,3 +214,70 @@ document.addEventListener('DOMContentLoaded', () => {
   });
   observer.observe(document.documentElement, { childList: true, subtree: true });
 })();
+
+/* ============================================================
+   Small site-wide helpers
+   ============================================================ */
+document.addEventListener('DOMContentLoaded', () => {
+
+  /* Mark the current page in the nav (for styling and screen readers) */
+  const here = location.pathname.replace(/\.html$/, '').replace(/\/$/, '') || '/';
+  document.querySelectorAll('.nav-links a[href], .mobile-menu a[href], #mobile-menu a[href]').forEach(a => {
+    const raw = (a.getAttribute('href') || '').replace(/#.*$/, '').replace(/\?.*$/, '');
+    if (!raw || /^(https?:|mailto:|tel:)/.test(raw)) return;
+    const target = ('/' + raw.replace(/^\.?\//, '')).replace(/\.html$/, '');
+    const norm = target === '/index' ? '/' : target;
+    if (norm && norm === here) {
+      a.classList.add('active');
+      a.setAttribute('aria-current', 'page');
+    }
+  });
+
+  /* Keep the footer year current */
+  document.querySelectorAll('[data-year]').forEach(el => { el.textContent = new Date().getFullYear(); });
+});
+
+/* Copy-to-clipboard for any element with data-copy (order IDs, GCash number) */
+document.addEventListener('click', async e => {
+  const btn = e.target.closest('[data-copy], [data-copy-from]');
+  if (!btn) return;
+  const text = btn.dataset.copy
+    || (document.getElementById(btn.dataset.copyFrom) || {}).textContent || '';
+  if (!text.trim()) return;
+  try {
+    await navigator.clipboard.writeText(text.trim());
+  } catch {
+    const ta = document.createElement('textarea');
+    ta.value = text.trim();
+    ta.style.cssText = 'position:fixed;opacity:0;';
+    document.body.appendChild(ta); ta.select();
+    try { document.execCommand('copy'); } catch {}
+    ta.remove();
+  }
+  const old = btn.textContent;
+  btn.textContent = 'Copied';
+  btn.classList.add('copied');
+  setTimeout(() => { btn.textContent = old; btn.classList.remove('copied'); }, 1600);
+});
+
+/* "Skip to content" link for keyboard users: jumps past the header and menu */
+(function addSkipLink() {
+  const run = () => {
+    if (document.querySelector('.skip-link')) return;
+    let target = document.querySelector('main');
+    if (!target) {
+      const menu = document.getElementById('mobile-menu') || document.querySelector('header');
+      target = menu && menu.nextElementSibling;
+      while (target && /^(SCRIPT|STYLE|NOSCRIPT)$/.test(target.tagName)) target = target.nextElementSibling;
+    }
+    if (!target) return;
+    if (!target.id) target.id = 'main-content';
+    if (!target.hasAttribute('tabindex')) target.setAttribute('tabindex', '-1');
+    const link = document.createElement('a');
+    link.className = 'skip-link';
+    link.href = '#' + target.id;
+    link.textContent = 'Skip to content';
+    document.body.insertBefore(link, document.body.firstChild);
+  };
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', run); else run();
+})();

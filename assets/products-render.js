@@ -26,7 +26,7 @@ function renderProductGrid() {
 
   const products = Object.values(T2G_PRODUCTS);
   if (!products.length) {
-    grid.innerHTML = '<p style="color:var(--text-light);font-size:.9rem;padding:20px 0;grid-column:1/-1;">No products found. Press Alt+1 to open Dev Mode and add products.</p>';
+    grid.innerHTML = '<p style="color:var(--text-light);font-size:.9rem;padding:20px 0;grid-column:1/-1;">No products found.</p>';
     return;
   }
 

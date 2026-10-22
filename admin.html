@@ -1,0 +1,993 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="robots" content="noindex, nofollow">
+  <title>T2G Admin</title>
+  <link rel="icon" type="image/png" href="/assets/img/logo.png">
+  <meta name="theme-color" content="#3d9441">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700;900&family=Playfair+Display:wght@600;700&display=swap">
+  <style>
+    :root {
+      --green: #3d9441;
+      --green-dark: #2f7433;
+      --green-soft: #eaf3ea;
+      --brown: #5b3d1f;
+      --gold: #c8930f;
+      --ink: #26231f;
+      --ink-2: #5a554d;
+      --ink-3: #8a847a;
+      --line: #e6e2da;
+      --surface: #ffffff;
+      --bg: #f6f5f2;
+      --red: #b3261e;
+      --red-soft: #fbeceb;
+      --amber: #9a6400;
+      --amber-soft: #fdf3e0;
+      --blue: #1f5f99;
+      --blue-soft: #e8f0f8;
+      --radius-sm: 4px;
+      --radius: 8px;
+      --shadow: 0 10px 30px rgba(60, 45, 20, .12);
+      --font: 'Lato', system-ui, -apple-system, 'Segoe UI', sans-serif;
+      --serif: 'Playfair Display', Georgia, serif;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { -webkit-text-size-adjust: 100%; }
+    body { font-family: var(--font); color: var(--ink); background: var(--bg); font-size: 15px; line-height: 1.5; min-height: 100dvh; }
+    button, input, select, textarea { font: inherit; color: inherit; }
+    a { color: var(--green-dark); }
+    [hidden] { display: none !important; }
+    :focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
+    .num { font-variant-numeric: tabular-nums; }
+
+    /* Buttons */
+    .b { display: inline-flex; align-items: center; justify-content: center; gap: 6px; border: 1px solid var(--line); background: var(--surface); border-radius: var(--radius-sm); padding: 8px 14px; font-size: .86rem; font-weight: 700; cursor: pointer; text-decoration: none; color: var(--ink); transition: background 150ms, border-color 150ms, transform 80ms; white-space: nowrap; }
+    .b:hover { border-color: #cfc9bd; }
+    .b:active { transform: translateY(1px); }
+    .b:disabled { opacity: .55; cursor: not-allowed; }
+    .b-primary { background: var(--green); border-color: var(--green); color: #fff; }
+    .b-primary:hover { background: var(--green-dark); border-color: var(--green-dark); }
+    .b-danger { color: var(--red); }
+    .b-danger:hover { background: var(--red-soft); border-color: #efc2bf; }
+    .b-ghost { border-color: transparent; background: transparent; color: var(--ink-2); }
+    .b-ghost:hover { background: #ece9e3; }
+    .b-sm { padding: 5px 10px; font-size: .8rem; }
+
+    input[type=text], input[type=email], input[type=password], input[type=search], input[type=number], select, textarea {
+      width: 100%; border: 1px solid var(--line); border-radius: var(--radius-sm); background: #fff; padding: 9px 11px; font-size: .9rem; transition: border-color 150ms;
+    }
+    input:focus, select:focus, textarea:focus { border-color: var(--green); outline: none; }
+    textarea { resize: vertical; min-height: 70px; }
+    label.f { display: block; font-size: .8rem; font-weight: 700; color: var(--ink-2); margin-bottom: 5px; }
+
+    /* ── Sign in ── */
+    .auth { min-height: 100dvh; display: grid; place-items: center; padding: 24px; }
+    .auth-card { width: 100%; max-width: 380px; background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 32px 28px; }
+    .auth-card img { width: 56px; height: auto; display: block; margin-bottom: 18px; }
+    .auth-card h1 { font-family: var(--serif); font-size: 1.6rem; font-weight: 700; margin-bottom: 6px; }
+    .auth-card p { color: var(--ink-2); font-size: .88rem; margin-bottom: 22px; }
+    .auth-card .f-row { margin-bottom: 14px; }
+    .auth-card .b { width: 100%; padding: 11px; }
+    .auth-msg { font-size: .85rem; margin-top: 14px; min-height: 1.2em; }
+    .auth-msg.err { color: var(--red); }
+    .auth-msg.ok { color: var(--green-dark); }
+    .auth-link { background: none; border: 0; color: var(--ink-2); text-decoration: underline; font-size: .82rem; cursor: pointer; margin-top: 14px; }
+
+    /* ── App shell ── */
+    .top { position: sticky; top: 0; z-index: 20; background: var(--surface); border-bottom: 1px solid var(--line); padding-top: env(safe-area-inset-top); }
+    .top-in { max-width: 1240px; margin: 0 auto; display: flex; align-items: center; gap: 18px; padding: 10px 20px; }
+    .brand { display: flex; align-items: center; gap: 10px; text-decoration: none; color: var(--ink); font-weight: 900; }
+    .brand img { width: 34px; height: auto; }
+    .tabs { display: flex; gap: 4px; margin-left: 8px; }
+    .tab { border: 0; background: none; padding: 8px 12px; border-radius: var(--radius-sm); font-weight: 700; font-size: .9rem; color: var(--ink-2); cursor: pointer; display: inline-flex; align-items: center; gap: 6px; }
+    .tab:hover { background: #f1efea; }
+    .tab[aria-selected="true"] { color: var(--ink); background: var(--green-soft); }
+    .count { min-width: 20px; height: 20px; padding: 0 6px; border-radius: 10px; background: var(--gold); color: #fff; font-size: .72rem; font-weight: 900; display: inline-grid; place-items: center; }
+    .top-right { margin-left: auto; display: flex; align-items: center; gap: 10px; font-size: .82rem; color: var(--ink-3); }
+    .who { max-width: 200px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    main { max-width: 1240px; margin: 0 auto; padding: 28px 20px 80px; }
+
+    /* ── Orders ── */
+    .lede { font-family: var(--serif); font-size: clamp(1.45rem, 3.2vw, 2.05rem); font-weight: 600; line-height: 1.25; max-width: 30ch; margin-bottom: 6px; text-wrap: balance; }
+    .lede em { font-style: normal; color: var(--green-dark); }
+    .lede-sub { color: var(--ink-3); font-size: .86rem; margin-bottom: 24px; }
+    .toolbar { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin-bottom: 14px; }
+    .chips { display: flex; flex-wrap: wrap; gap: 6px; }
+    .chip { border: 1px solid var(--line); background: var(--surface); border-radius: 999px; padding: 5px 12px; font-size: .82rem; font-weight: 700; color: var(--ink-2); cursor: pointer; }
+    .chip span { color: var(--ink-3); font-weight: 400; margin-left: 5px; }
+    .chip[aria-pressed="true"] { background: var(--ink); color: #fff; border-color: var(--ink); }
+    .chip[aria-pressed="true"] span { color: #d8d3c8; }
+    .search { flex: 1 1 220px; max-width: 320px; margin-left: auto; }
+
+    .olist { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden; }
+    .orow { display: grid; grid-template-columns: 178px minmax(0, 1.4fr) minmax(0, 1fr) 110px 128px; gap: 14px; align-items: center; padding: 13px 18px; border-bottom: 1px solid var(--line); cursor: pointer; width: 100%; text-align: left; background: none; border-left: 0; border-right: 0; border-top: 0; }
+    .orow:last-child { border-bottom: 0; }
+    .orow:hover { background: #faf9f6; }
+    .orow.is-open { background: var(--green-soft); }
+    .o-code { font-weight: 900; font-size: .86rem; letter-spacing: .01em; white-space: nowrap; }
+    .o-when { font-size: .78rem; color: var(--ink-3); }
+    .o-name { font-weight: 700; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .o-items { font-size: .8rem; color: var(--ink-3); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .o-how { font-size: .82rem; color: var(--ink-2); }
+    .o-how small { display: block; color: var(--ink-3); font-size: .76rem; }
+    .o-total { font-weight: 900; text-align: right; }
+    .o-new { display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: var(--gold); margin-right: 6px; vertical-align: middle; }
+    .empty { padding: 48px 20px; text-align: center; color: var(--ink-3); }
+    .empty strong { display: block; color: var(--ink); font-size: 1rem; margin-bottom: 4px; }
+
+    .pill { display: inline-flex; align-items: center; gap: 5px; padding: 3px 9px; border-radius: 999px; font-size: .76rem; font-weight: 700; white-space: nowrap; justify-self: start; }
+    .st-received  { background: var(--amber-soft); color: var(--amber); }
+    .st-confirmed { background: var(--blue-soft); color: var(--blue); }
+    .st-packing   { background: #f1ebf8; color: #5e3a8c; }
+    .st-shipped   { background: #e5f4f3; color: #1d6b66; }
+    .st-delivered { background: var(--green-soft); color: var(--green-dark); }
+    .st-cancelled { background: #efedea; color: var(--ink-3); text-decoration: line-through; }
+    .flag { font-size: .72rem; font-weight: 700; color: var(--amber); }
+    .flag.ok { color: var(--green-dark); }
+
+    /* ── Order panel ── */
+    .scrim { position: fixed; inset: 0; background: rgba(38, 35, 31, .35); z-index: 40; opacity: 0; pointer-events: none; transition: opacity 200ms; }
+    .scrim.open { opacity: 1; pointer-events: auto; }
+    .panel { position: fixed; top: 0; right: 0; bottom: 0; width: min(560px, 100%); background: var(--surface); z-index: 41; box-shadow: var(--shadow); transform: translateX(102%); transition: transform 240ms cubic-bezier(.2, .8, .2, 1); display: flex; flex-direction: column; padding-top: env(safe-area-inset-top); }
+    .panel.open { transform: none; }
+    .p-head { padding: 18px 22px 14px; border-bottom: 1px solid var(--line); display: flex; align-items: flex-start; gap: 12px; }
+    .p-head h2 { font-size: 1.15rem; font-weight: 900; }
+    .p-head p { font-size: .8rem; color: var(--ink-3); }
+    .p-close { margin-left: auto; }
+    .p-body { flex: 1; overflow-y: auto; padding: 18px 22px 28px; }
+    .p-foot { border-top: 1px solid var(--line); padding: 12px 22px calc(12px + env(safe-area-inset-bottom)); display: flex; gap: 10px; align-items: center; background: var(--surface); }
+    .p-foot .dirty { font-size: .8rem; color: var(--amber); margin-right: auto; }
+    .sec { padding: 16px 0; border-bottom: 1px solid var(--line); }
+    .sec:last-child { border-bottom: 0; }
+    .sec h3 { font-size: .8rem; font-weight: 900; color: var(--ink-2); margin-bottom: 10px; }
+    .next-step { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+    .next-step p { flex-basis: 100%; font-size: .84rem; color: var(--ink-2); margin-bottom: 2px; }
+    .kv { display: grid; grid-template-columns: 110px 1fr; gap: 6px 12px; font-size: .88rem; }
+    .kv dt { color: var(--ink-3); }
+    .kv dd { word-break: break-word; }
+    .contact-actions { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
+    .items { width: 100%; border-collapse: collapse; font-size: .86rem; }
+    .items td { padding: 6px 0; border-bottom: 1px dashed var(--line); vertical-align: top; }
+    .items td:last-child { text-align: right; white-space: nowrap; }
+    .items tr.tot td { border-bottom: 0; padding-top: 8px; }
+    .items tr.grand td { font-weight: 900; font-size: .95rem; }
+    .note { background: #fbf8f1; border-left: 3px solid var(--gold); padding: 8px 12px; font-size: .86rem; border-radius: 0 var(--radius-sm) var(--radius-sm) 0; white-space: pre-wrap; }
+    .proofs { display: flex; flex-wrap: wrap; gap: 10px; }
+    .proof { width: 110px; text-decoration: none; color: var(--ink-2); font-size: .74rem; }
+    .proof img, .proof .pdf { width: 110px; height: 140px; object-fit: cover; border-radius: var(--radius-sm); border: 1px solid var(--line); display: grid; place-items: center; background: #faf9f6; font-weight: 900; color: var(--ink-3); }
+    .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    .history { list-style: none; font-size: .82rem; color: var(--ink-2); }
+    .history li { padding: 3px 0; }
+    .history time { color: var(--ink-3); margin-left: 6px; }
+
+    /* ── Reviews ── */
+    .rcard { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 16px 18px; margin-bottom: 10px; display: grid; grid-template-columns: 72px 1fr; gap: 16px; }
+    .rcard img { width: 72px; height: 72px; object-fit: contain; background: #faf9f6; border-radius: var(--radius-sm); }
+    .r-top { display: flex; flex-wrap: wrap; gap: 6px 12px; align-items: baseline; margin-bottom: 4px; }
+    .r-prod { font-weight: 900; }
+    .r-meta { font-size: .8rem; color: var(--ink-3); }
+    .r-stars { color: var(--gold); letter-spacing: 1px; }
+    .r-stars span { color: #ddd6c8; }
+    .r-body { font-size: .9rem; color: var(--ink-2); margin: 6px 0 12px; white-space: pre-wrap; max-width: 70ch; }
+    .r-actions { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+    .r-reply { margin-top: 10px; }
+
+    /* ── Usage ── */
+    .ugrid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 14px; margin-bottom: 26px; }
+    .ucard { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 18px 20px; }
+    .ucard h3 { font-size: .9rem; font-weight: 900; margin-bottom: 2px; }
+    .ucard .u-big { font-family: var(--serif); font-size: 1.7rem; font-weight: 700; line-height: 1.2; margin: 8px 0 2px; }
+    .ucard .u-of { color: var(--ink-3); font-size: .84rem; }
+    .bar { height: 8px; background: #efece6; border-radius: 4px; overflow: hidden; margin: 12px 0 8px; }
+    .bar i { display: block; height: 100%; background: var(--green); border-radius: 4px; transition: width 600ms ease; }
+    .bar.warn i { background: #d99a1a; }
+    .bar.bad i { background: var(--red); }
+    .ucard p { font-size: .82rem; color: var(--ink-2); }
+    .ucard p + p { margin-top: 6px; }
+    .stat-row { display: flex; flex-wrap: wrap; gap: 26px; margin: 4px 0 26px; }
+    .stat b { display: block; font-family: var(--serif); font-size: 1.5rem; }
+    .stat span { font-size: .8rem; color: var(--ink-3); }
+    .callout { background: var(--surface); border: 1px solid var(--line); border-left: 4px solid var(--gold); border-radius: var(--radius-sm); padding: 14px 18px; font-size: .88rem; color: var(--ink-2); margin-bottom: 14px; }
+    .callout.bad { border-left-color: var(--red); }
+    .callout strong { color: var(--ink); }
+    h2.h { font-size: 1.05rem; font-weight: 900; margin: 6px 0 12px; }
+
+    /* Toast */
+    .toast { position: fixed; left: 50%; bottom: calc(20px + env(safe-area-inset-bottom)); transform: translate(-50%, 20px); background: var(--ink); color: #fff; padding: 10px 16px; border-radius: var(--radius-sm); font-size: .88rem; opacity: 0; transition: opacity 200ms, transform 200ms; z-index: 60; pointer-events: none; max-width: calc(100% - 32px); }
+    .toast.show { opacity: 1; transform: translate(-50%, 0); }
+    .toast.err { background: var(--red); }
+
+    .loading { color: var(--ink-3); padding: 30px 0; }
+
+    @media (max-width: 860px) {
+      .orow { grid-template-columns: 1fr auto; grid-template-areas: "a e" "b d" "c c"; gap: 4px 12px; }
+      .orow > :nth-child(1) { grid-area: a; }
+      .orow > :nth-child(2) { grid-area: b; }
+      .orow > :nth-child(3) { grid-area: c; }
+      .orow > :nth-child(4) { grid-area: d; }
+      .orow > :nth-child(5) { grid-area: e; justify-self: end; }
+      .search { max-width: none; margin-left: 0; flex-basis: 100%; }
+    }
+    @media (max-width: 640px) {
+      .top-in { flex-wrap: wrap; gap: 8px; padding: 8px 14px; }
+      .tabs { order: 3; width: 100%; margin: 0; overflow-x: auto; }
+      .who { display: none; }
+      main { padding: 20px 14px 80px; }
+      .p-head, .p-body { padding-left: 16px; padding-right: 16px; }
+      .p-foot { padding-left: 16px; padding-right: 16px; }
+      .kv { grid-template-columns: 90px 1fr; }
+      .grid2 { grid-template-columns: 1fr; }
+      .rcard { grid-template-columns: 1fr; }
+      .rcard img { display: none; }
+    }
+    @media (max-width: 640px) { .toast { bottom: calc(84px + env(safe-area-inset-bottom)); } }
+    @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+  </style>
+</head>
+<body>
+
+<!-- ───────────── Not configured ───────────── -->
+<div class="auth" id="v-setup" hidden>
+  <div class="auth-card">
+    <img src="/assets/img/logo.png" alt="T2G">
+    <h1>Admin isn't connected yet</h1>
+    <p>Add your Supabase project URL and publishable key to <code>assets/site-config.js</code>, then push the change. The steps are in <code>SUPABASE-SETUP.md</code>.</p>
+    <a class="b" href="/">Back to the website</a>
+  </div>
+</div>
+
+<!-- ───────────── Sign in ───────────── -->
+<div class="auth" id="v-login" hidden>
+  <form class="auth-card" id="login-form" novalidate>
+    <img src="/assets/img/logo.png" alt="T2G">
+    <h1>T2G Admin</h1>
+    <p>Orders, payment proofs, reviews and your Supabase usage.</p>
+    <div class="f-row"><label class="f" for="l-email">Email</label><input id="l-email" type="email" autocomplete="username" required></div>
+    <div class="f-row" id="l-pass-row"><label class="f" for="l-pass">Password</label><input id="l-pass" type="password" autocomplete="current-password" required></div>
+    <button class="b b-primary" type="submit" id="l-btn">Sign in</button>
+    <button class="auth-link" type="button" id="l-forgot">Forgot your password?</button>
+    <p class="auth-msg" id="l-msg" role="status"></p>
+  </form>
+</div>
+
+<!-- ───────────── New password (after reset link) ───────────── -->
+<div class="auth" id="v-newpass" hidden>
+  <form class="auth-card" id="newpass-form" novalidate>
+    <img src="/assets/img/logo.png" alt="T2G">
+    <h1>Choose a new password</h1>
+    <p>Use at least 10 characters.</p>
+    <div class="f-row"><label class="f" for="np-pass">New password</label><input id="np-pass" type="password" autocomplete="new-password" minlength="10" required></div>
+    <button class="b b-primary" type="submit">Save password</button>
+    <p class="auth-msg" id="np-msg" role="status"></p>
+  </form>
+</div>
+
+<!-- ───────────── Not an admin ───────────── -->
+<div class="auth" id="v-denied" hidden>
+  <div class="auth-card">
+    <img src="/assets/img/logo.png" alt="T2G">
+    <h1>This account isn't an admin</h1>
+    <p id="denied-msg">You're signed in, but this account hasn't been given admin access. SUPABASE-SETUP.md (step 4) shows how to add it.</p>
+    <button class="b" type="button" data-signout>Sign out</button>
+  </div>
+</div>
+
+<!-- ───────────── App ───────────── -->
+<div id="v-app" hidden>
+  <header class="top">
+    <div class="top-in">
+      <a class="brand" href="/" title="Open the website"><img src="/assets/img/logo.png" alt="">Admin</a>
+      <nav class="tabs" role="tablist" aria-label="Sections">
+        <button class="tab" role="tab" aria-selected="true" data-tab="orders">Orders <span class="count" id="c-orders" hidden></span></button>
+        <button class="tab" role="tab" aria-selected="false" data-tab="reviews">Reviews <span class="count" id="c-reviews" hidden></span></button>
+        <button class="tab" role="tab" aria-selected="false" data-tab="usage">Usage</button>
+      </nav>
+      <div class="top-right">
+        <span class="who" id="who"></span>
+        <button class="b b-ghost b-sm" type="button" data-signout>Sign out</button>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <!-- Orders -->
+    <section id="t-orders" role="tabpanel">
+      <h1 class="lede" id="lede">Loading orders…</h1>
+      <p class="lede-sub" id="lede-sub"></p>
+      <div class="toolbar">
+        <div class="chips" id="chips" role="group" aria-label="Filter orders"></div>
+        <input class="search" type="search" id="search" placeholder="Search code, name, phone, email" aria-label="Search orders">
+      </div>
+      <div class="olist" id="olist"><p class="loading" style="padding:30px 18px;">Loading…</p></div>
+      <div class="toolbar" style="margin-top:12px;">
+        <button class="b b-sm" type="button" id="export-csv">Download these orders (CSV)</button>
+        <button class="b b-sm b-ghost" type="button" id="refresh">Refresh</button>
+        <span class="o-when" id="refreshed" style="margin-left:auto;"></span>
+      </div>
+    </section>
+
+    <!-- Reviews -->
+    <section id="t-reviews" role="tabpanel" hidden>
+      <h1 class="lede" id="r-lede">Reviews</h1>
+      <p class="lede-sub">Reviews only appear on the website after you approve them.</p>
+      <div class="toolbar"><div class="chips" id="r-chips" role="group" aria-label="Filter reviews"></div></div>
+      <div id="rlist"><p class="loading">Loading…</p></div>
+    </section>
+
+    <!-- Usage -->
+    <section id="t-usage" role="tabpanel" hidden>
+      <h1 class="lede">Free plan usage</h1>
+      <p class="lede-sub" id="u-sub">How close T2G is to the limits of the free Supabase and Formspree plans.</p>
+      <div id="u-alerts"></div>
+      <div class="ugrid" id="u-grid"><p class="loading">Loading…</p></div>
+      <div class="stat-row" id="u-stats"></div>
+      <h2 class="h">Payment proof clean-up</h2>
+      <div class="callout" id="u-cleanup">Loading…</div>
+    </section>
+  </main>
+
+  <div class="scrim" id="scrim"></div>
+  <aside class="panel" id="panel" aria-label="Order details" aria-hidden="true"></aside>
+</div>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script src="/assets/site-config.js?v=14"></script>
+<script src="/assets/products-data.js?v=14"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.117.2/dist/umd/supabase.js"></script>
+<script>
+'use strict';
+
+/* ============================================================
+   Setup
+   ============================================================ */
+const CFG     = window.T2G_CONFIG || {};
+const BUCKET  = CFG.PROOF_BUCKET || 'payment-proofs';
+const PRODUCTS = window.T2G_PRODUCTS_DEFAULT || window.T2G_PRODUCTS || {};
+const LIMITS = {                       // Supabase Free plan, per project
+  db: 500 * 1024 * 1024,               // 500 MB database
+  storage: 1024 * 1024 * 1024,         // 1 GB file storage
+  egressGB: 5,                         // 5 GB bandwidth a month (not readable from SQL)
+  formspree: 50,                       // Formspree Free: 50 submissions a month, all forms together
+  pauseDays: 7,                        // free projects pause after 7 days without activity
+};
+const STATUSES = ['received', 'confirmed', 'packing', 'shipped', 'delivered', 'cancelled'];
+const COURIERS = ['J&T Express', 'LBC', 'Ninja Van', 'Lalamove', 'Grab Express', '2GO', 'Flash Express', 'Other'];
+
+const $  = (s, r = document) => r.querySelector(s);
+const $$ = (s, r = document) => [...r.querySelectorAll(s)];
+const esc = v => String(v == null ? '' : v).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+const peso = n => n == null ? '—' : '₱' + Number(n).toLocaleString('en-PH', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+const fmtBytes = b => b >= 1024 ** 3 ? (b / 1024 ** 3).toFixed(2) + ' GB' : b >= 1024 ** 2 ? (b / 1024 ** 2).toFixed(1) + ' MB' : Math.max(0, Math.round(b / 1024)) + ' KB';
+const fmtDate = d => new Date(d).toLocaleString('en-PH', { month: 'short', day: 'numeric', year: 'numeric', hour: 'numeric', minute: '2-digit' });
+const fmtDay  = d => new Date(d).toLocaleDateString('en-PH', { month: 'short', day: 'numeric', year: 'numeric' });
+function ago(d) {
+  const s = (Date.now() - new Date(d)) / 1000;
+  if (s < 60) return 'just now';
+  if (s < 3600) return Math.floor(s / 60) + ' min ago';
+  if (s < 86400) return Math.floor(s / 3600) + ' h ago';
+  if (s < 86400 * 7) return Math.floor(s / 86400) + ' d ago';
+  return fmtDay(d);
+}
+function toast(msg, isErr) {
+  const t = $('#toast');
+  t.textContent = msg;
+  t.className = 'toast show' + (isErr ? ' err' : '');
+  clearTimeout(toast._t);
+  toast._t = setTimeout(() => { t.className = 'toast'; }, 3200);
+}
+function show(id) {
+  ['v-setup', 'v-login', 'v-newpass', 'v-denied', 'v-app'].forEach(v => { $('#' + v).hidden = v !== id; });
+}
+
+if (!CFG.SUPABASE_URL || !CFG.SUPABASE_ANON_KEY || !window.supabase) {
+  show('v-setup');
+  throw new Error('Supabase not configured');
+}
+const sb = window.supabase.createClient(CFG.SUPABASE_URL, CFG.SUPABASE_ANON_KEY, {
+  auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: true },
+});
+
+/* ============================================================
+   Auth
+   ============================================================ */
+let booted = false;
+let recovering = /type=recovery/.test(location.hash);
+
+sb.auth.onAuthStateChange((event, session) => {
+  if (event === 'PASSWORD_RECOVERY') { recovering = true; show('v-newpass'); return; }
+  if (event === 'SIGNED_OUT') { booted = false; show('v-login'); return; }
+  if (session && !booted && !recovering) boot(session);
+});
+
+(async () => {
+  const { data } = await sb.auth.getSession();
+  if (recovering) return show('v-newpass');
+  if (data.session) boot(data.session); else show('v-login');
+})();
+
+$('#login-form').addEventListener('submit', async e => {
+  e.preventDefault();
+  const email = $('#l-email').value.trim();
+  const pass  = $('#l-pass').value;
+  const msg = $('#l-msg');
+  if (!email || !pass) { msg.className = 'auth-msg err'; msg.textContent = 'Enter your email and password.'; return; }
+  $('#l-btn').disabled = true; msg.textContent = '';
+  const { error } = await sb.auth.signInWithPassword({ email, password: pass });
+  $('#l-btn').disabled = false;
+  if (error) { msg.className = 'auth-msg err'; msg.textContent = error.message === 'Invalid login credentials' ? 'That email and password don’t match an account.' : error.message; }
+});
+
+$('#l-forgot').addEventListener('click', async () => {
+  const email = $('#l-email').value.trim();
+  const msg = $('#l-msg');
+  if (!email) { msg.className = 'auth-msg err'; msg.textContent = 'Type your email above first, then press this again.'; return; }
+  const { error } = await sb.auth.resetPasswordForEmail(email, { redirectTo: location.origin + '/admin' });
+  msg.className = 'auth-msg ' + (error ? 'err' : 'ok');
+  msg.textContent = error ? error.message : 'If that email has an account, a reset link is on its way. Open it on this device.';
+});
+
+$('#newpass-form').addEventListener('submit', async e => {
+  e.preventDefault();
+  const pass = $('#np-pass').value;
+  const msg = $('#np-msg');
+  if (pass.length < 10) { msg.className = 'auth-msg err'; msg.textContent = 'Use at least 10 characters.'; return; }
+  const { error } = await sb.auth.updateUser({ password: pass });
+  if (error) { msg.className = 'auth-msg err'; msg.textContent = error.message; return; }
+  recovering = false;
+  history.replaceState(null, '', '/admin');
+  const { data } = await sb.auth.getSession();
+  if (data.session) boot(data.session);
+});
+
+document.addEventListener('click', async e => {
+  if (e.target.closest('[data-signout]')) { await sb.auth.signOut(); show('v-login'); }
+});
+
+async function boot(session) {
+  booted = true;
+  const { data: isAdmin, error } = await sb.rpc('is_admin');
+  if (error || !isAdmin) {
+    $('#denied-msg').textContent = error
+      ? 'Could not check admin access. Has supabase/schema.sql been run? (' + error.message + ')'
+      : `You're signed in as ${session.user.email}, but this account hasn't been given admin access. SUPABASE-SETUP.md (step 4) shows how to add it.`;
+    show('v-denied');
+    return;
+  }
+  $('#who').textContent = session.user.email;
+  show('v-app');
+  const fromHash = (location.hash.match(/order=([A-Z0-9-]+)/i) || [])[1];
+  await loadOrders();
+  if (fromHash) openOrder(fromHash.toUpperCase());
+  loadReviews();
+  startPolling();
+}
+
+/* ============================================================
+   Tabs
+   ============================================================ */
+$$('.tab').forEach(t => t.addEventListener('click', () => {
+  $$('.tab').forEach(x => x.setAttribute('aria-selected', String(x === t)));
+  ['orders', 'reviews', 'usage'].forEach(n => { $('#t-' + n).hidden = n !== t.dataset.tab; });
+  if (t.dataset.tab === 'usage') loadUsage();
+  if (t.dataset.tab === 'reviews') loadReviews();
+}));
+
+/* ============================================================
+   Orders
+   ============================================================ */
+let orders = [];
+let filter = 'action';
+let query = '';
+let openCode = null;
+let seenCodes = null;
+
+/* What needs doing for an order, in plain words */
+function nextAction(o) {
+  const paid = o.payment_method === 'cash' || (o.proof_paths && o.proof_paths.length);
+  switch (o.status) {
+    case 'received':
+      if (o.payment_method === 'cash') return { key: 'confirm', text: 'Confirm order (cash on pickup)' };
+      return paid ? { key: 'confirm', text: 'Check payment proof' } : { key: 'wait', text: 'Waiting for payment proof' };
+    case 'confirmed': return { key: 'pack', text: 'Pack the order' };
+    case 'packing':   return { key: 'ship', text: o.delivery_method === 'pickup' ? 'Mark ready for pickup' : 'Hand to courier' };
+    case 'shipped':   return { key: 'deliver', text: o.delivery_method === 'pickup' ? 'Waiting for pickup' : 'On the way' };
+    default: return null;
+  }
+}
+const needsAction = o => ['confirm', 'pack', 'ship'].includes((nextAction(o) || {}).key) || (o.delivery_method === 'ship' && !o.shipping_known && o.status !== 'cancelled');
+
+async function loadOrders(silent) {
+  const { data, error } = await sb.from('orders').select('*').order('created_at', { ascending: false }).limit(1000);
+  if (error) { if (!silent) $('#olist').innerHTML = `<div class="empty"><strong>Orders could not be loaded</strong>${esc(error.message)}</div>`; return; }
+  const fresh = data || [];
+  if (seenCodes) {
+    const newOnes = fresh.filter(o => !seenCodes.has(o.order_code));
+    if (newOnes.length) toast(newOnes.length === 1 ? `New order ${newOnes[0].order_code} from ${newOnes[0].first_name}` : `${newOnes.length} new orders`);
+  }
+  seenCodes = new Set(fresh.map(o => o.order_code));
+  orders = fresh;
+  $('#refreshed').textContent = 'Updated ' + new Date().toLocaleTimeString('en-PH', { hour: 'numeric', minute: '2-digit' });
+  renderOrders();
+  if (openCode && !panelDirty()) {
+    const o = orders.find(x => x.order_code === openCode);
+    if (o) renderPanel(o);
+  }
+}
+
+function renderLede() {
+  const live = orders.filter(o => o.status !== 'cancelled');
+  const c = k => live.filter(o => (nextAction(o) || {}).key === k).length;
+  const toConfirm = c('confirm'), toPack = c('pack'), toShip = c('ship');
+  const shipTbc = live.filter(o => o.delivery_method === 'ship' && !o.shipping_known).length;
+  const parts = [];
+  if (toConfirm) parts.push(`${toConfirm} ${toConfirm === 1 ? 'order' : 'orders'} to confirm`);
+  if (toPack) parts.push(`${toPack} to pack`);
+  if (toShip) parts.push(`${toShip} to send off`);
+  if (shipTbc) parts.push(`${shipTbc} shipping ${shipTbc === 1 ? 'fee' : 'fees'} to set`);
+  const total = toConfirm + toPack + toShip + shipTbc;
+  $('#lede').innerHTML = total
+    ? `You have <em>${esc(parts.join(', ').replace(/, ([^,]*)$/, ' and $1'))}</em>.`
+    : orders.length ? 'You’re all caught up.' : 'No orders yet.';
+  const waiting = c('wait');
+  const today = orders.filter(o => new Date(o.created_at).toDateString() === new Date().toDateString()).length;
+  $('#lede-sub').textContent = [
+    today ? `${today} new today` : null,
+    waiting ? `${waiting} waiting for a payment proof` : null,
+    `${orders.length} ${orders.length === 1 ? 'order' : 'orders'} in total`,
+  ].filter(Boolean).join('. ') + '.';
+  const badge = $('#c-orders');
+  badge.textContent = total; badge.hidden = !total;
+  document.title = (total ? `(${total}) ` : '') + 'T2G Admin';
+}
+
+function filtered() {
+  const q = query.trim().toLowerCase();
+  return orders.filter(o => {
+    if (filter === 'action' && !needsAction(o)) return false;
+    if (STATUSES.includes(filter) && o.status !== filter) return false;
+    if (!q) return true;
+    const hay = [o.order_code, o.first_name, o.last_name, o.email, o.phone, o.tracking_number, (o.address || {}).city].join(' ').toLowerCase();
+    return hay.includes(q) || hay.replace(/\D/g, '').includes(q.replace(/\D/g, '') || '§');
+  });
+}
+
+function renderChips() {
+  const n = k => k === 'all' ? orders.length : k === 'action' ? orders.filter(needsAction).length : orders.filter(o => o.status === k).length;
+  const labels = { action: 'Needs action', all: 'All', received: 'Received', confirmed: 'Confirmed', packing: 'Packing', shipped: 'Shipped / ready', delivered: 'Delivered', cancelled: 'Cancelled' };
+  $('#chips').innerHTML = Object.keys(labels).map(k =>
+    `<button class="chip" type="button" data-f="${k}" aria-pressed="${filter === k}">${labels[k]}<span>${n(k)}</span></button>`).join('');
+}
+$('#chips').addEventListener('click', e => {
+  const b = e.target.closest('[data-f]'); if (!b) return;
+  filter = b.dataset.f; renderOrders();
+});
+$('#search').addEventListener('input', e => { query = e.target.value; if (query && filter === 'action') filter = 'all'; renderOrders(); });
+$('#refresh').addEventListener('click', () => loadOrders());
+
+const statusLabel = (s, o) => o && o.delivery_method === 'pickup' && s === 'shipped' ? 'Ready for pickup'
+  : o && o.delivery_method === 'pickup' && s === 'delivered' ? 'Collected'
+  : s.charAt(0).toUpperCase() + s.slice(1);
+const pill = (o) => `<span class="pill st-${o.status}">${esc(statusLabel(o.status, o))}</span>`;
+const payLabel = m => ({ gcash: 'GCash', bpi: 'BPI transfer', cash: 'Cash on pickup' }[m] || m);
+const whereLabel = o => o.delivery_method === 'pickup'
+  ? `Pickup, ${o.pickup_location === 'cdo' ? 'Cagayan de Oro' : 'Jasaan'}`
+  : `Ship to ${esc((o.address || {}).city || '—')}`;
+
+function renderOrders() {
+  renderLede();
+  renderChips();
+  const list = filtered();
+  if (!list.length) {
+    $('#olist').innerHTML = `<div class="empty"><strong>${filter === 'action' && !query ? 'Nothing needs your attention' : 'No orders match'}</strong>${filter === 'action' && !query ? 'New orders and payment proofs will show up here.' : 'Try another filter or search.'}</div>`;
+    return;
+  }
+  const isNew = o => o.status === 'received' && (Date.now() - new Date(o.created_at)) < 86400000;
+  $('#olist').innerHTML = list.map(o => {
+    const items = (o.items || []).map(i => `${i.name} ×${i.qty}`).join(', ');
+    const proofFlag = o.payment_method === 'cash' ? '' : (o.proof_paths && o.proof_paths.length)
+      ? '<span class="flag ok">Proof received</span>' : (o.status === 'received' ? '<span class="flag">No proof yet</span>' : '');
+    return `<button type="button" class="orow${o.order_code === openCode ? ' is-open' : ''}" data-code="${esc(o.order_code)}">
+      <div><div class="o-code">${isNew(o) ? '<span class="o-new" title="New"></span>' : ''}${esc(o.order_code)}</div><div class="o-when">${ago(o.created_at)}</div></div>
+      <div><div class="o-name">${esc(o.first_name)} ${esc(o.last_name)}</div><div class="o-items">${esc(items)}</div></div>
+      <div class="o-how">${whereLabel(o)}<small>${payLabel(o.payment_method)} ${proofFlag}</small></div>
+      <div class="o-total num">${peso(o.total)}${o.delivery_method === 'ship' && !o.shipping_known ? '<div class="flag">+ shipping</div>' : ''}</div>
+      <div>${pill(o)}</div>
+    </button>`;
+  }).join('');
+}
+$('#olist').addEventListener('click', e => {
+  const row = e.target.closest('[data-code]'); if (row) openOrder(row.dataset.code);
+});
+
+/* CSV export of what is on screen */
+$('#export-csv').addEventListener('click', () => {
+  const rows = filtered();
+  const cols = ['order_code', 'created_at', 'status', 'first_name', 'last_name', 'email', 'phone', 'delivery_method', 'pickup_location', 'address', 'payment_method', 'items', 'subtotal', 'shipping_fee', 'total', 'tracking_number', 'courier', 'customer_note', 'admin_notes'];
+  const cell = v => {
+    if (v && typeof v === 'object') v = Array.isArray(v) ? v.map(i => i.name ? `${i.name}${i.variant ? ' (' + i.variant + ')' : ''} x${i.qty} @ ${i.unit_price}` : i).join(' | ') : Object.values(v).filter(Boolean).join(', ');
+    const s = v == null ? '' : String(v);
+    return /[",\n]/.test(s) ? '"' + s.replace(/"/g, '""') + '"' : s;
+  };
+  const csv = [cols.join(',')].concat(rows.map(o => cols.map(c => cell(o[c])).join(','))).join('\n');
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(new Blob(['\ufeff' + csv], { type: 'text/csv' }));
+  a.download = `t2g-orders-${new Date().toISOString().slice(0, 10)}.csv`;
+  a.click();
+  setTimeout(() => URL.revokeObjectURL(a.href), 2000);
+});
+
+/* ── Order panel ── */
+const panel = $('#panel');
+function panelDirty() { return Boolean(panel.dataset.dirty); }
+function openOrder(code) {
+  const o = orders.find(x => x.order_code === code);
+  if (!o) { toast(`Order ${code} not found`, true); return; }
+  if (openCode && openCode !== code && panelDirty() && !confirm('You have unsaved changes on this order. Discard them?')) return;
+  openCode = code;
+  renderPanel(o);
+  panel.classList.add('open'); panel.setAttribute('aria-hidden', 'false');
+  $('#scrim').classList.add('open');
+  history.replaceState(null, '', '#order=' + code);
+  renderOrders();
+  setTimeout(() => panel.querySelector('.p-close')?.focus(), 50);
+}
+function closePanel() {
+  if (panelDirty() && !confirm('You have unsaved changes on this order. Discard them?')) return;
+  panel.classList.remove('open'); panel.setAttribute('aria-hidden', 'true');
+  $('#scrim').classList.remove('open');
+  openCode = null; delete panel.dataset.dirty;
+  history.replaceState(null, '', '/admin');
+  renderOrders();
+}
+$('#scrim').addEventListener('click', closePanel);
+document.addEventListener('keydown', e => { if (e.key === 'Escape' && panel.classList.contains('open')) closePanel(); });
+
+function customerMessage(o, status) {
+  const name = o.first_name;
+  const where = o.pickup_location === 'cdo' ? 'T2G Cagayan de Oro, Rizal St' : 'T2G Jasaan, San Isidro';
+  const track = `${location.origin}/track?id=${o.order_code}`;
+  const lines = {
+    received:  `we have received your order ${o.order_code}.`,
+    confirmed: `your payment for order ${o.order_code} has been confirmed. We are preparing your items now.`,
+    packing:   `your order ${o.order_code} is being packed.`,
+    shipped:   o.delivery_method === 'pickup'
+      ? `your order ${o.order_code} is ready for pickup at ${where}. Please bring your order number when you come.`
+      : `your order ${o.order_code} is on its way${o.courier ? ' with ' + o.courier : ''}.${o.tracking_number ? ' Tracking number: ' + o.tracking_number + '.' : ''}`,
+    delivered: `thank you for your order ${o.order_code}. We hope you enjoy it! If you have a moment, a review on our website would mean a lot to us.`,
+    cancelled: `your order ${o.order_code} has been cancelled. Please reply to this message if you have any questions.`,
+  };
+  return `Hi ${name}, ${lines[status] || lines.received}\n\nTrack your order: ${track}\n\nThank you,\nT2G Trunk to Gold\n(0917) 716 4225`;
+}
+
+function renderPanel(o) {
+  delete panel.dataset.dirty;
+  const na = nextAction(o);
+  const nextStatus = { received: 'confirmed', confirmed: 'packing', packing: 'shipped', shipped: 'delivered' }[o.status];
+  const nextLabel = {
+    confirmed: o.payment_method === 'cash' ? 'Confirm order' : 'Payment is OK, confirm',
+    packing: 'Start packing',
+    shipped: o.delivery_method === 'pickup' ? 'Ready for pickup' : 'Mark as shipped',
+    delivered: o.delivery_method === 'pickup' ? 'Mark as collected' : 'Mark as delivered',
+  }[nextStatus];
+  const a = o.address || {};
+  const addrLine = [a.street, a.apt, a.city, a.region, a.zip].filter(Boolean).join(', ');
+  const itemsRows = (o.items || []).map(i => `<tr><td>${esc(i.name)}${i.variant ? ` <span class="o-when">(${esc(i.variant)})</span>` : ''} <span class="o-when">× ${i.qty} @ ${peso(i.unit_price)}</span></td><td class="num">${peso(i.line_total ?? i.unit_price * i.qty)}</td></tr>`).join('');
+  const msg = customerMessage(o, o.status);
+  const phoneDigits = String(o.phone || '').replace(/[^\d+]/g, '');
+
+  panel.innerHTML = `
+    <div class="p-head">
+      <div>
+        <h2>${esc(o.order_code)}</h2>
+        <p>Placed ${fmtDate(o.created_at)}${(new Date(o.updated_at) - new Date(o.created_at)) > 60000 ? ' · updated ' + ago(o.updated_at) : ''}</p>
+      </div>
+      <button class="b b-ghost b-sm p-close" type="button" aria-label="Close">Close</button>
+    </div>
+    <div class="p-body">
+      <div class="sec">
+        <div class="next-step">
+          <p>${pill(o)} ${na ? esc(na.text) : o.status === 'delivered' ? 'Completed.' : ''}</p>
+          ${nextStatus ? `<button class="b b-primary" type="button" data-advance="${nextStatus}">${esc(nextLabel)}</button>` : ''}
+          <a class="b" href="/track?id=${encodeURIComponent(o.order_code)}" target="_blank" rel="noopener">See customer’s tracking page</a>
+        </div>
+      </div>
+
+      <div class="sec">
+        <h3>Customer</h3>
+        <dl class="kv">
+          <dt>Name</dt><dd>${esc(o.first_name)} ${esc(o.last_name)}</dd>
+          <dt>Phone</dt><dd><a href="tel:${esc(phoneDigits)}">${esc(o.phone)}</a></dd>
+          <dt>Email</dt><dd><a href="mailto:${esc(o.email)}">${esc(o.email)}</a></dd>
+          <dt>${o.delivery_method === 'pickup' ? 'Pickup' : 'Ship to'}</dt>
+          <dd>${o.delivery_method === 'pickup' ? (o.pickup_location === 'cdo' ? 'T2G Cagayan de Oro (Rizal St)' : 'T2G Jasaan (San Isidro)') : esc(addrLine)}</dd>
+          <dt>Payment</dt><dd>${payLabel(o.payment_method)}</dd>
+        </dl>
+        <div class="contact-actions">
+          <a class="b b-sm" href="mailto:${esc(o.email)}?subject=${encodeURIComponent('Your T2G order ' + o.order_code)}&body=${encodeURIComponent(msg)}">Email update</a>
+          <a class="b b-sm" href="sms:${esc(phoneDigits)}?&body=${encodeURIComponent(msg)}">Text update</a>
+          <button class="b b-sm" type="button" data-copy-msg>Copy update message</button>
+          ${o.delivery_method === 'ship' ? '<button class="b b-sm" type="button" data-copy-addr>Copy address for courier</button>' : ''}
+        </div>
+        ${o.customer_note ? `<p style="margin-top:12px;font-size:.8rem;color:var(--ink-3);">Customer’s note</p><div class="note">${esc(o.customer_note)}</div>` : ''}
+      </div>
+
+      <div class="sec">
+        <h3>Items</h3>
+        <table class="items">
+          ${itemsRows}
+          <tr class="tot"><td>Subtotal</td><td class="num">${peso(o.subtotal)}</td></tr>
+          <tr><td>Shipping${o.delivery_method === 'pickup' ? ' (pickup)' : ''}</td><td class="num">${o.delivery_method === 'pickup' ? '₱0.00' : o.shipping_known ? peso(o.shipping_fee) : '<span class="flag">To be set</span>'}</td></tr>
+          <tr class="grand"><td>Total</td><td class="num">${peso(o.total)}</td></tr>
+        </table>
+        ${o.delivery_method === 'ship' ? `
+        <div style="margin-top:12px;">
+          <label class="f" for="p-ship">${o.shipping_known ? 'Change shipping fee (₱)' : 'Set the shipping fee (₱) so the total is complete'}</label>
+          <input id="p-ship" type="number" min="0" step="1" inputmode="decimal" value="${o.shipping_fee ?? ''}" placeholder="e.g. 190" data-field>
+        </div>` : ''}
+      </div>
+
+      ${o.payment_method !== 'cash' ? `
+      <div class="sec">
+        <h3>Payment proof</h3>
+        <div class="proofs" id="p-proofs">${(o.proof_paths || []).length ? '<span class="o-when">Loading…</span>' : (o.proofs_deleted_at ? `<span class="o-when">Deleted on ${fmtDay(o.proofs_deleted_at)} (90-day clean-up).</span>` : '<span class="o-when">No proof uploaded yet. The customer can also email it to you.</span>')}</div>
+      </div>` : ''}
+
+      <div class="sec">
+        <h3>Delivery and notes</h3>
+        <div class="grid2">
+          <div>
+            <label class="f" for="p-status">Status</label>
+            <select id="p-status" data-field>${STATUSES.map(s => `<option value="${s}" ${s === o.status ? 'selected' : ''}>${statusLabel(s, o)}</option>`).join('')}</select>
+          </div>
+          <div>
+            <label class="f" for="p-courier">Courier</label>
+            <select id="p-courier" data-field><option value="">—</option>${COURIERS.map(c => `<option ${c === o.courier ? 'selected' : ''}>${c}</option>`).join('')}${o.courier && !COURIERS.includes(o.courier) ? `<option selected>${esc(o.courier)}</option>` : ''}</select>
+          </div>
+        </div>
+        <div style="margin-top:10px;">
+          <label class="f" for="p-tracking">Courier tracking number</label>
+          <input id="p-tracking" type="text" value="${esc(o.tracking_number || '')}" placeholder="Shown to the customer on the tracking page" data-field>
+        </div>
+        <div style="margin-top:10px;">
+          <label class="f" for="p-notes">Private notes (only you see these)</label>
+          <textarea id="p-notes" rows="3" data-field>${esc(o.admin_notes || '')}</textarea>
+        </div>
+      </div>
+
+      <div class="sec">
+        <h3>History</h3>
+        <ul class="history">${(o.status_history || []).slice().reverse().map(h => `<li>${esc(statusLabel(h.status, o))}<time>${fmtDate(h.at)}</time></li>`).join('') || '<li>—</li>'}</ul>
+      </div>
+    </div>
+    <div class="p-foot">
+      <span class="dirty" id="p-dirty" hidden>Unsaved changes</span>
+      <button class="b" type="button" data-cancel-panel>Close</button>
+      <button class="b b-primary" type="button" id="p-save">Save changes</button>
+    </div>`;
+
+  panel.querySelector('.p-close').onclick = closePanel;
+  panel.querySelector('[data-cancel-panel]').onclick = closePanel;
+  $$('[data-field]', panel).forEach(el => el.addEventListener('input', () => { panel.dataset.dirty = '1'; $('#p-dirty').hidden = false; }));
+  panel.querySelector('[data-copy-msg]').onclick = () => copy(customerMessage(o, $('#p-status').value), 'Update message copied');
+  const ca = panel.querySelector('[data-copy-addr]');
+  if (ca) ca.onclick = () => copy(`${o.first_name} ${o.last_name}\n${o.phone}\n${addrLine}`, 'Address copied');
+  panel.querySelector('#p-save').onclick = () => saveOrder(o);
+  const adv = panel.querySelector('[data-advance]');
+  if (adv) adv.onclick = () => { $('#p-status').value = adv.dataset.advance; saveOrder(o, true); };
+  loadProofs(o);
+}
+
+async function copy(text, done) {
+  try { await navigator.clipboard.writeText(text); toast(done); }
+  catch { prompt('Copy this:', text); }
+}
+
+async function loadProofs(o) {
+  const box = $('#p-proofs');
+  if (!box || !(o.proof_paths || []).length) return;
+  const { data, error } = await sb.storage.from(BUCKET).createSignedUrls(o.proof_paths, 60 * 30);
+  if (error) { box.innerHTML = `<span class="flag">Could not load proofs: ${esc(error.message)}</span>`; return; }
+  box.innerHTML = data.map((d, i) => {
+    const path = o.proof_paths[i];
+    const isPdf = /\.pdf$/i.test(path);
+    const when = (path.split('/')[1] || '').slice(0, 10);
+    if (!d.signedUrl) return `<span class="flag">File missing: ${esc(path)}</span>`;
+    return `<a class="proof" href="${esc(d.signedUrl)}" target="_blank" rel="noopener">${isPdf ? '<span class="pdf">PDF</span>' : `<img src="${esc(d.signedUrl)}" alt="Payment proof ${i + 1}">`}<span>${esc(when)} · open full size</span></a>`;
+  }).join('');
+}
+
+async function saveOrder(o, advancing) {
+  const btn = $('#p-save');
+  const patch = {
+    status: $('#p-status').value,
+    courier: $('#p-courier').value || null,
+    tracking_number: $('#p-tracking').value.trim() || null,
+    admin_notes: $('#p-notes').value.trim() || null,
+  };
+  const shipEl = $('#p-ship');
+  if (shipEl && shipEl.value !== '' && Number(shipEl.value) >= 0) {
+    const fee = Math.round(Number(shipEl.value) * 100) / 100;
+    if (fee !== Number(o.shipping_fee) || !o.shipping_known) {
+      patch.shipping_fee = fee;
+      patch.shipping_known = true;
+      patch.total = Math.round((Number(o.subtotal) + fee) * 100) / 100;
+    }
+  }
+  if (patch.status === 'cancelled' && o.status !== 'cancelled' && !confirm(`Cancel order ${o.order_code}? The customer will see “Cancelled” on the tracking page.`)) return;
+  if (patch.status === 'shipped' && o.delivery_method === 'ship' && !patch.tracking_number && !confirm('No tracking number yet. Mark as shipped anyway?')) return;
+  btn.disabled = true; btn.textContent = 'Saving…';
+  const { data, error } = await sb.from('orders').update(patch).eq('id', o.id).select().single();
+  btn.disabled = false; btn.textContent = 'Save changes';
+  if (error) { toast('Could not save: ' + error.message, true); return; }
+  const i = orders.findIndex(x => x.id === o.id);
+  orders[i] = data;
+  delete panel.dataset.dirty;
+  renderPanel(data);
+  renderOrders();
+  toast(advancing ? `${data.order_code}: ${statusLabel(data.status, data)}` : 'Saved');
+}
+
+/* Refresh orders every minute while the tab is visible */
+function startPolling() {
+  setInterval(() => { if (document.visibilityState === 'visible') loadOrders(true); }, 60000);
+  document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible') loadOrders(true); });
+}
+
+/* ============================================================
+   Reviews
+   ============================================================ */
+let reviews = [];
+let rFilter = 'pending';
+
+async function loadReviews() {
+  const { data, error } = await sb.from('reviews').select('*').order('created_at', { ascending: false }).limit(500);
+  if (error) { $('#rlist').innerHTML = `<div class="empty"><strong>Reviews could not be loaded</strong>${esc(error.message)}</div>`; return; }
+  reviews = data || [];
+  renderReviews();
+}
+
+function renderReviews() {
+  const pending = reviews.filter(r => r.status === 'pending').length;
+  const cb = $('#c-reviews'); cb.textContent = pending; cb.hidden = !pending;
+  $('#r-lede').textContent = pending ? `${pending} ${pending === 1 ? 'review is' : 'reviews are'} waiting for you` : 'No reviews waiting';
+  const labels = { pending: 'Waiting', approved: 'Approved', rejected: 'Hidden', all: 'All' };
+  $('#r-chips').innerHTML = Object.keys(labels).map(k =>
+    `<button class="chip" type="button" data-rf="${k}" aria-pressed="${rFilter === k}">${labels[k]}<span>${k === 'all' ? reviews.length : reviews.filter(r => r.status === k).length}</span></button>`).join('');
+  const list = reviews.filter(r => rFilter === 'all' || r.status === rFilter);
+  if (!list.length) { $('#rlist').innerHTML = `<div class="empty olist"><strong>Nothing here</strong>${rFilter === 'pending' ? 'New reviews from the website will appear here for you to approve.' : ''}</div>`; return; }
+  $('#rlist').innerHTML = list.map(r => {
+    const p = PRODUCTS[r.product_id] || {};
+    const stars = '★'.repeat(r.rating) + `<span>${'★'.repeat(5 - r.rating)}</span>`;
+    return `<article class="rcard" data-id="${r.id}">
+      ${p.imageName ? `<img src="/assets/img/${encodeURI(p.imageName)}" alt="">` : '<div></div>'}
+      <div>
+        <div class="r-top">
+          <a class="r-prod" href="/product/${encodeURIComponent(r.product_id)}#reviews" target="_blank" rel="noopener">${esc(p.name || r.product_id)}</a>
+          <span class="r-stars" aria-label="${r.rating} out of 5">${stars}</span>
+          <span class="pill st-${r.status === 'approved' ? 'delivered' : r.status === 'rejected' ? 'cancelled' : 'received'}">${{ pending: 'Waiting', approved: 'On the website', rejected: 'Hidden' }[r.status]}</span>
+        </div>
+        <div class="r-meta">${esc(r.name)} · <a href="mailto:${esc(r.email || '')}">${esc(r.email || 'no email')}</a> · ${fmtDate(r.created_at)}${r.verified ? ' · <strong style="color:var(--green-dark)">Verified buyer</strong>' : ''}</div>
+        <p class="r-body">${esc(r.body)}</p>
+        <div class="r-actions">
+          ${r.status !== 'approved' ? '<button class="b b-sm b-primary" type="button" data-r="approved">Approve</button>' : ''}
+          ${r.status !== 'rejected' ? '<button class="b b-sm" type="button" data-r="rejected">Hide</button>' : ''}
+          <button class="b b-sm b-ghost" type="button" data-r="reply">${r.reply ? 'Edit reply' : 'Reply'}</button>
+          <button class="b b-sm b-ghost b-danger" type="button" data-r="delete">Delete</button>
+        </div>
+        <div class="r-reply" hidden>
+          <label class="f">Your public reply (shown under the review)</label>
+          <textarea rows="2">${esc(r.reply || '')}</textarea>
+          <div style="margin-top:6px;"><button class="b b-sm b-primary" type="button" data-r="save-reply">Save reply</button></div>
+        </div>
+      </div>
+    </article>`;
+  }).join('');
+}
+$('#r-chips').addEventListener('click', e => { const b = e.target.closest('[data-rf]'); if (b) { rFilter = b.dataset.rf; renderReviews(); } });
+$('#rlist').addEventListener('click', async e => {
+  const b = e.target.closest('[data-r]'); if (!b) return;
+  const card = b.closest('[data-id]'); const id = card.dataset.id;
+  const act = b.dataset.r;
+  let q;
+  if (act === 'reply') { card.querySelector('.r-reply').hidden = false; card.querySelector('textarea').focus(); return; }
+  if (act === 'delete') { if (!confirm('Delete this review permanently?')) return; q = sb.from('reviews').delete().eq('id', id); }
+  if (act === 'approved') q = sb.from('reviews').update({ status: 'approved', approved_at: new Date().toISOString() }).eq('id', id);
+  if (act === 'rejected') q = sb.from('reviews').update({ status: 'rejected' }).eq('id', id);
+  if (act === 'save-reply') q = sb.from('reviews').update({ reply: card.querySelector('textarea').value.trim() || null }).eq('id', id);
+  b.disabled = true;
+  const { error } = await q;
+  if (error) { b.disabled = false; toast('Could not update: ' + error.message, true); return; }
+  toast({ approved: 'Approved, now on the website', rejected: 'Hidden from the website', delete: 'Deleted', 'save-reply': 'Reply saved' }[act]);
+  loadReviews();
+});
+
+/* ============================================================
+   Usage
+   ============================================================ */
+function meter(title, used, limit, fmt, notes) {
+  const pct = Math.min(100, (used / limit) * 100);
+  const cls = pct >= 90 ? 'bad' : pct >= 70 ? 'warn' : '';
+  return `<div class="ucard">
+    <h3>${title}</h3>
+    <div class="u-big num">${fmt(used)}</div>
+    <div class="u-of">of ${fmt(limit)} on the free plan · ${pct < 1 && used > 0 ? 'under 1' : Math.round(pct)}%</div>
+    <div class="bar ${cls}"><i style="width:${Math.max(pct, used > 0 ? 1 : 0)}%"></i></div>
+    ${notes.map(n => `<p>${n}</p>`).join('')}
+  </div>`;
+}
+
+async function loadUsage() {
+  const { data: u, error } = await sb.rpc('admin_usage');
+  if (error) { $('#u-grid').innerHTML = `<div class="empty"><strong>Usage could not be loaded</strong>${esc(error.message)}</div>`; return; }
+  const ref = (CFG.SUPABASE_URL.match(/https:\/\/([^.]+)\.supabase\.co/) || [])[1];
+  const dash = ref ? `https://supabase.com/dashboard/project/${ref}` : 'https://supabase.com/dashboard';
+  const avgProof = u.proof_files ? u.proof_bytes / u.proof_files : 300 * 1024;
+  const proofsLeft = Math.max(0, Math.floor((LIMITS.storage - u.storage_bytes) / avgProof));
+  const emails = Number(u.orders_this_month) * (CFG.EMAIL_ON_ORDER === false ? 0 : 1) + Number(u.proofs_this_month) * (CFG.EMAIL_ON_PROOF === false ? 0 : 1);
+
+  $('#u-grid').innerHTML = [
+    meter('Database', u.db_bytes, LIMITS.db, fmtBytes, [
+      `Holds orders and reviews. An order takes roughly 2 KB, so there is room for a very large number of them. Most of the space shown is Supabase’s own system tables.`,
+    ]),
+    meter('File storage', u.storage_bytes, LIMITS.storage, fmtBytes, [
+      `${u.proof_files} payment proof${u.proof_files === 1 ? '' : 's'} (${fmtBytes(u.proof_bytes)}), about ${fmtBytes(avgProof)} each.`,
+      `Room for roughly ${proofsLeft.toLocaleString()} more at that size.`,
+    ]),
+    meter('Formspree emails this month (estimate)', emails, LIMITS.formspree, n => String(Math.round(n)), [
+      `${u.orders_this_month} order email${u.orders_this_month == 1 ? '' : 's'} + ${u.proofs_this_month} payment proof email${u.proofs_this_month == 1 ? '' : 's'}. The contact and export forms also count, and aren’t included here.`,
+      `If you run out, orders are still saved here. Set <code>EMAIL_ON_ORDER</code> or <code>EMAIL_ON_PROOF</code> to <code>false</code> in site-config.js to save emails. Exact numbers: <a href="https://formspree.io/forms" target="_blank" rel="noopener">Formspree dashboard</a>.`,
+    ]),
+    `<div class="ucard">
+      <h3>Bandwidth</h3>
+      <div class="u-big">${LIMITS.egressGB} GB</div>
+      <div class="u-of">a month on the free plan</div>
+      <p style="margin-top:12px;">Supabase doesn’t let the database report this one. To see it, open the <a href="https://supabase.com/dashboard" target="_blank" rel="noopener">Supabase dashboard</a>, choose your organization, then <strong>Usage</strong>. Viewing payment proofs here uses a little; the public website uses very little because product images are hosted on Vercel.</p>
+    </div>`,
+  ].join('');
+
+  const days = u.last_order_at ? (Date.now() - new Date(u.last_order_at)) / 86400000 : null;
+  const alerts = [];
+  if (days != null && days >= 5) alerts.push(`<div class="callout ${days >= 6.5 ? 'bad' : ''}"><strong>No orders for ${Math.floor(days)} days.</strong> Free Supabase projects pause after ${LIMITS.pauseDays} days without activity. The GitHub keep-awake job in this project prevents that; if the site ever shows “orders are being emailed instead”, open the <a href="${dash}" target="_blank" rel="noopener">Supabase dashboard</a> and press Restore.</div>`);
+  if (u.db_bytes / LIMITS.db >= .8 || u.storage_bytes / LIMITS.storage >= .8) alerts.push(`<div class="callout bad"><strong>You’re close to a free plan limit.</strong> Run the payment proof clean-up below, or consider Supabase Pro ($25 a month) for 8 GB of database and 100 GB of files.</div>`);
+  $('#u-alerts').innerHTML = alerts.join('');
+
+  $('#u-stats').innerHTML = `
+    <div class="stat"><b class="num">${u.orders_30d}</b><span>orders in the last 30 days</span></div>
+    <div class="stat"><b class="num">${peso(u.sales_30d)}</b><span>sales in the last 30 days (not counting cancelled)</span></div>
+    <div class="stat"><b class="num">${u.orders_total}</b><span>orders in total</span></div>
+    <div class="stat"><b class="num">${u.reviews_total}</b><span>reviews (${u.reviews_pending} waiting)</span></div>`;
+
+  const n = u.old_proof_orders;
+  $('#u-cleanup').innerHTML = n
+    ? `<p><strong>${n} completed ${n === 1 ? 'order has' : 'orders have'}</strong> payment proofs older than 90 days. Your Privacy Policy says these are deleted after 90 days.</p>
+       <p style="margin-top:10px;"><button class="b b-sm" type="button" id="cleanup-btn">Delete those proofs</button></p>`
+    : `<p>Nothing to clean up. Payment proofs from orders that were delivered or cancelled more than 90 days ago show up here so you can delete them, as the Privacy Policy promises.</p>`;
+  const cb = $('#cleanup-btn');
+  if (cb) cb.onclick = cleanupProofs;
+  $('#u-sub').textContent = `Checked ${fmtDate(u.checked_at)}. Limits are for the free Supabase and Formspree plans.`;
+}
+
+async function cleanupProofs() {
+  const cutoff = new Date(Date.now() - 90 * 86400000).toISOString();
+  const { data: old, error } = await sb.from('orders').select('id, order_code, proof_paths')
+    .in('status', ['delivered', 'cancelled']).lt('updated_at', cutoff);
+  if (error) return toast(error.message, true);
+  const targets = (old || []).filter(o => (o.proof_paths || []).length);
+  const paths = targets.flatMap(o => o.proof_paths);
+  if (!paths.length) return loadUsage();
+  if (!confirm(`Delete ${paths.length} payment proof file${paths.length === 1 ? '' : 's'} from ${targets.length} old order${targets.length === 1 ? '' : 's'}? This can’t be undone.`)) return;
+  const { error: rmErr } = await sb.storage.from(BUCKET).remove(paths);
+  if (rmErr) return toast('Could not delete files: ' + rmErr.message, true);
+  for (const o of targets) {
+    await sb.from('orders').update({ proof_paths: [], proofs_deleted_at: new Date().toISOString() }).eq('id', o.id);
+  }
+  toast(`Deleted ${paths.length} old payment proof${paths.length === 1 ? '' : 's'}`);
+  loadUsage(); loadOrders(true);
+}
+</script>
+</body>
+</html>

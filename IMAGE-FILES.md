@@ -22,13 +22,8 @@ it will appear automatically on the site without changing any code.
 ---
 
 ## Home Page - Best Sellers Grid
-These reuse the same files as the product images below.
-| Filename | Product shown |
-|---|---|
-| `popcorn.png`       | Popcorn card |
-| `coco-balsamic.png` | Coco Balsamic Vinegar card |
-| `coco-jam.png`      | Coco Jam card |
-| `coco-sugar.png`    | Coco Sugar card |
+Uses the same image files as the products below. The four cards are in `index.html`
+(search for `bestsellers-grid`); prices update automatically from `products-data.js`.
 
 ---
 
@@ -59,29 +54,20 @@ These reuse the same files as the product images below.
 | Filename | Location |
 |---|---|
 | `about-banner.jpg`        | Full-width banner at top. Recommended: 1400 x 440 px |
-| `about-mv-award.jpg`      | Mission/Vision grid - award or trade show photo |
-| `about-mv-production.jpg` | Mission/Vision grid - production worker photo |
-| `about-mv-sugar.jpg`      | Mission/Vision grid - coco sugar close-up |
-| `about-why-experience.jpg`| Why T2G - card 1 (Our Experience) |
-| `about-why-quality.jpg`   | Why T2G - card 2 (Our Quality) |
-| `about-why-presence.jpg`  | Why T2G - card 3 (Our Presence) |
+| `about-why-experience.jpg`| Why T2G - card 1 (Our Experience). **Not added yet** (shows a logo block) |
+| `about-why-quality.jpg`   | Why T2G - card 2 (Our Quality). **Not added yet** |
+| `about-why-presence.jpg`  | Why T2G - card 3 (Our Presence). **Not added yet** |
 
 ---
 
-## Products Page
-| Filename | Used On |
-|---|---|
-| `coco-sugar.png`     | Flagship hero + product grid card |
-| `popcorn.png`        | Product grid card |
-| `coco-balsamic.png`  | Product grid card |
-| `coco-vinegar.png`   | Product grid card |
-| `coco-seasoning.png` | Product grid card |
-| `virgin-coco-oil.png`| Product grid card |
-| `coco-syrup.png`     | Product grid card |
-| `coco-jam.png`       | Product grid card |
+## Products
+Product images are set per product in `assets/products-data.js`:
+`imageName` is the main image, `images` is the gallery on the product page.
+Filenames must match exactly, including spaces and capital letters.
 
-To change a product image filename: press Alt+1, click EDIT on the product,
-update the "Image Filename" field, save, put the new file in assets/img/, push.
+To change a product image: enable Dev Mode (visit any page with `?dev=1`, then press Alt+4),
+click EDIT on the product, update the image filenames, export products-data.js, put the new
+files in assets/img/, and push. Or edit `products-data.js` directly.
 
 ---
 
@@ -104,7 +90,7 @@ update the "Image Filename" field, save, put the new file in assets/img/, push.
 
 ## Tips
 - JPG for photos (smaller file size). PNG for logos and products (transparent background).
-- Compress before uploading at squoosh.app - aim for under 200 KB per photo.
+- Compress before uploading at squoosh.app - aim for under 300 KB per image, about 900 px on the long side for product shots.
 - Product images look best square (1:1 ratio).
 - Hero and banner images: wide landscape, 16:5 or 16:6 ratio.
 - All images in this list will fall back to a named placeholder if the file is missing,

@@ -14,7 +14,7 @@ window.T2G_PRODUCTS_DEFAULT = {
     "priceDisplay": "PHP 260.00",
     "priceRange": null,
     "variants": null,
-    "description": "<p>Gluten-Free, nutrient packed rice alternative.</p><ul><li></li><li></li></ul>",
+    "description": "<p>A gluten-free, nutrient-packed grain you can eat in place of rice. It has a mild, slightly nutty taste and a chewy bite.</p><ul><li>Rinse, then cook it like rice. It needs a little more water and time.</li><li>Good in rice bowls, soups and champorado.</li></ul>",
     "related": [],
     "imageName": "adlai 1.png",
     "images": [
@@ -32,7 +32,7 @@ window.T2G_PRODUCTS_DEFAULT = {
     "priceDisplay": "PHP 160.00",
     "priceRange": null,
     "variants": null,
-    "description": "<p>Vegan, soy-free, gluten-free alternative seasoning.</p><ul><li></li><li></li></ul>",
+    "description": "<p>A vegan, soy-free and gluten-free seasoning made from coconut sap. It tastes like a milder, slightly sweet soy sauce.</p><ul><li>Use it wherever you would use soy sauce: adobo, stir-fries, marinades and dipping sauces.</li></ul>",
     "related": [],
     "imageName": "aminos 1.png",
     "images": [
@@ -53,13 +53,13 @@ window.T2G_PRODUCTS_DEFAULT = {
     "priceDisplay": "PHP 210.00",
     "priceRange": null,
     "variants": null,
-    "description": "<p>Salad dressing made by Coconut SAP that can be combine with oil , plus can be use also as seasonings. It’s light, tangy, and very versatile flavour/</p><ul><li></li><li></li></ul>",
+    "description": "<p>A light, tangy dressing made from coconut sap. Mix it with oil for a quick salad dressing, or use it on its own as a seasoning.</p><ul><li>Try it on salads, grilled vegetables, or as a dip with olive oil and bread.</li></ul>",
     "related": [],
     "imageName": "balsamic 1.png",
     "images": [
       "balsamic 1.png",
       "balsami 3.png",
-      "balsamic 2. png"
+      "balsamic 2.png"
     ],
     "weightKg": 0.38,
     "shopeeUrl": null
@@ -71,7 +71,7 @@ window.T2G_PRODUCTS_DEFAULT = {
     "priceDisplay": "PHP 160.00",
     "priceRange": null,
     "variants": null,
-    "description": "<p>Natural skin nourishment for a radiant skin, natural moisturizer</p><ul><li></li><li></li></ul>",
+    "description": "<p>A natural moisturizer that nourishes the skin and leaves it soft and glowing.</p><ul><li>Apply a small amount to clean skin.</li><li>For external use only.</li></ul>",
     "related": [],
     "imageName": "coco glow 1.png",
     "images": [
@@ -89,7 +89,7 @@ window.T2G_PRODUCTS_DEFAULT = {
     "priceDisplay": "PHP 130.00",
     "priceRange": null,
     "variants": null,
-    "description": "<p>A natural sweetener made from the sap of coconut blossoms. It offers a rich caramel-like flavor and is minimally processed, making it an excellent alternative to refined sugar</p><ul><li></li><li></li></ul>",
+    "description": "<p>Our coconut sugar in single-serve 5 g sachets, easy to carry and handy for coffee and tea. Made from the sap of coconut blossoms, it has a rich, caramel-like flavor and is minimally processed.</p>",
     "related": [],
     "imageName": "sachet 1.png",
     "images": [
@@ -107,7 +107,7 @@ window.T2G_PRODUCTS_DEFAULT = {
     "priceDisplay": "PHP 165.00",
     "priceRange": null,
     "variants": null,
-    "description": "<p>Best for massage naturally made by Oregano and VCO, for muscle pain, insect bites, fungal infections and minor wounds.</p><ul><li></li><li></li></ul>",
+    "description": "<p>A massage oil made naturally from oregano and virgin coconut oil. Use it to soothe muscle pain, insect bites, fungal infections and minor wounds.</p><ul><li>Massage a small amount onto the affected area.</li><li>For external use only.</li></ul>",
     "related": [],
     "imageName": "cocoregano 3.png",
     "images": [
@@ -125,7 +125,7 @@ window.T2G_PRODUCTS_DEFAULT = {
     "priceDisplay": "PHP 150.00",
     "priceRange": null,
     "variants": null,
-    "description": "<p>Convenient, natural sweetness in every cube.</p><ul><li></li><li></li></ul>",
+    "description": "<p>Coconut sugar pressed into cubes: natural sweetness in every cube, with no measuring.</p><ul><li>Drop one or two into coffee or tea.</li></ul>",
     "related": [],
     "imageName": "CUBES 4.png",
     "images": [
@@ -144,7 +144,7 @@ window.T2G_PRODUCTS_DEFAULT = {
     "priceDisplay": "PHP 125.00",
     "priceRange": null,
     "variants": null,
-    "description": "<p>A gluten-free flour made from finely ground dried coconut meat. Rich in dietary fiber and naturally low in carbohydrates, it is an excellent alternative to traditional flour for baking, cooking, and healthy recipes. Its mild coconut flavor adds a delicious touch to a variety of dishes.</p><ul><li></li><li></li></ul>",
+    "description": "<p>A gluten-free flour made from finely ground dried coconut meat. It is rich in dietary fiber, naturally low in carbohydrates, and has a mild coconut flavor.</p><ul><li>Use it for baking, cooking and as a coating.</li><li>Coconut flour absorbs much more liquid than wheat flour, so add extra liquid or eggs when you swap it in.</li></ul>",
     "related": [],
     "imageName": "Flour 1.png",
     "images": [
@@ -162,7 +162,7 @@ window.T2G_PRODUCTS_DEFAULT = {
     "priceDisplay": "PHP 80.00",
     "priceRange": null,
     "variants": null,
-    "description": "<p>Coconut-powered deep hydration on your lips\n</p><ul><li></li><li></li></ul>",
+    "description": "<p>A coconut-based lip balm that gives deep, lasting hydration to dry lips.</p>",
     "related": [],
     "imageName": "lip balm 2.png",
     "images": [
@@ -180,7 +180,7 @@ window.T2G_PRODUCTS_DEFAULT = {
     "priceDisplay": "PHP 110.00",
     "priceRange": null,
     "variants": null,
-    "description": "<p>Soothing relief of pain, VCO based liniment</p><ul><li></li><li></li></ul>",
+    "description": "<p>A soothing liniment made with virgin coconut oil (VCO), for relief from body aches and pains.</p><ul><li>Rub gently onto the affected area.</li><li>For external use only.</li></ul>",
     "related": [],
     "imageName": "mint 3.png",
     "images": [
@@ -198,7 +198,7 @@ window.T2G_PRODUCTS_DEFAULT = {
     "priceDisplay": "PHP 150.00",
     "priceRange": null,
     "variants": null,
-    "description": "<p>Low Sodium, allergen free, an umami flavour seasoning sauce</p><ul><li></li><li></li></ul>",
+    "description": "<p>A low-sodium, allergen-free seasoning sauce with a rich umami flavor, made from coconut sap.</p><ul><li>Use it like fish sauce or soy sauce in soups, stir-fries, marinades and dips.</li></ul>",
     "related": [],
     "imageName": "savor 1.png",
     "images": [
@@ -216,7 +216,7 @@ window.T2G_PRODUCTS_DEFAULT = {
     "priceDisplay": "PHP 90.00",
     "priceRange": null,
     "variants": null,
-    "description": "<p>A natural sweetener made from the sap of coconut blossoms. It offers a rich caramel-like flavor and is minimally processed, making it an excellent alternative to refined sugar</p><ul><li></li><li></li></ul>",
+    "description": "<p>CocoRush coconut sugar, made from the sap of coconut blossoms. It has a rich, caramel-like flavor and is minimally processed, which makes it a great alternative to refined sugar. Lab-tested glycemic index (GI) of 35.</p><ul><li>Swap it 1:1 for white or brown sugar in baking, cooking, coffee and tea.</li></ul>",
     "related": [],
     "imageName": "200 g 1.png",
     "images": [
@@ -234,7 +234,7 @@ window.T2G_PRODUCTS_DEFAULT = {
     "priceDisplay": "PHP 190.00",
     "priceRange": null,
     "variants": null,
-    "description": "<p>A natural sweetener made from the sap of coconut blossoms. It offers a rich caramel-like flavor and is minimally processed, making it an excellent alternative to refined sugar</p><ul><li></li><li></li></ul>",
+    "description": "<p>CocoRush coconut sugar in a larger 500 g pack. It is made from the sap of coconut blossoms, has a rich, caramel-like flavor and is minimally processed. Lab-tested glycemic index (GI) of 35.</p><ul><li>Swap it 1:1 for white or brown sugar in baking, cooking, coffee and tea.</li></ul>",
     "related": [],
     "imageName": "500 g 3.png",
     "images": [
@@ -253,7 +253,7 @@ window.T2G_PRODUCTS_DEFAULT = {
     "priceDisplay": "PHP 160.00",
     "priceRange": null,
     "variants": null,
-    "description": "<p>Cold pressed virgin coconut oil.</p><ul><li>Virgin coconut oil (VCO)\n</li><li>Cold-pressed</li></ul>",
+    "description": "<p>Cold-pressed virgin coconut oil (VCO), made from fresh coconut meat.</p><ul><li>Use it for cooking and baking, or on skin and hair.</li></ul>",
     "related": [],
     "imageName": "VCO 2.png",
     "images": [
@@ -266,5 +266,5 @@ window.T2G_PRODUCTS_DEFAULT = {
   }
 };
 
-/* Live working copy - devmode.js will merge localStorage overrides on top */
+/* Live working copy - devmode.js applies localStorage overrides only while Dev Mode is enabled */
 window.T2G_PRODUCTS = Object.assign({}, window.T2G_PRODUCTS_DEFAULT);
