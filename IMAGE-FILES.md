@@ -53,9 +53,10 @@ Uses the same image files as the products below. The four cards are in `index.ht
 ## About Page
 | Filename | Location |
 |---|---|
-| `about-banner.jpg`        | Full-width banner at top. Recommended: 1400 x 440 px |
-| `about-why-experience.jpg`| Why T2G - card 1 (Our Experience). **Not added yet** (shows a logo block) |
-| `about-why-quality.jpg`   | Why T2G - card 2 (Our Quality). **Not added yet** |
+| `about-banner-lineup.jpg` (+ `-1200`) | Full-width product lineup banner at the top. Shown whole, never cropped, so any size works |
+| `about-wok-to-facility.jpg` (+ `-900`) | "Our Experience" story image below The Company. Opens full size when tapped |
+| `about-why-experience.jpg`| Why T2G - card 1 (Our Experience). 4:3, cropped from the wok photo |
+| `about-why-quality.jpg`   | Why T2G - card 2 (Our Quality). 4:3, cropped from the packing photo |
 | `about-why-presence.jpg`  | Why T2G - card 3 (Our Presence). **Not added yet** |
 
 ---

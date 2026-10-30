@@ -1808,3 +1808,26 @@ p { text-wrap: pretty; }
 /* Lists inside product descriptions (usage notes) */
 .product-desc ul, #pm-tab-description ul { padding-left: 1.2em; margin: 10px 0 0; }
 .product-desc li, #pm-tab-description li { margin-bottom: 4px; line-height: 1.6; }
+
+/* ============================================================
+   About page: product lineup banner and "wok to facility" story
+   ============================================================ */
+.about-lineup { background: #efe6d6; line-height: 0; }
+.about-lineup img { display: block; width: 100%; height: auto; }
+.about-story { background: var(--white); padding: 8px 0 64px; }
+.about-story-fig { max-width: 960px; margin: 0 auto; }
+.about-story-fig a { display: block; border-radius: 6px; overflow: hidden; box-shadow: 0 12px 32px rgba(60, 40, 20, .12); }
+.about-story-fig img { display: block; width: 100%; height: auto; transition: transform 400ms var(--ease); }
+.about-story-fig a:hover img { transform: scale(1.01); }
+.about-story-fig figcaption { margin-top: 12px; font-size: .82rem; color: var(--text-light); text-align: center; line-height: 1.6; }
+.about-story-hint { display: none; }
+@media (max-width: 760px) {
+  .about-story { padding: 0 0 44px; }
+  .about-story-hint { display: inline; }
+}
+
+/* Mission & Vision photos on phones: the fixed 260px height plus 16:9 made
+   them 460px wide and pushed the About page sideways. Let the ratio decide. */
+@media (max-width: 768px) {
+  .mv-cell-photo { height: auto; width: 100%; padding: 0; }
+}

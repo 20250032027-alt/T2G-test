@@ -9,7 +9,7 @@
   <link rel="icon" type="image/png" href="/assets/img/logo.png">
   <meta name="theme-color" content="#45a349">
   <link rel="apple-touch-icon" href="/assets/img/logo.png">
-  <link rel="stylesheet" href="/assets/style.css?v=14">
+  <link rel="stylesheet" href="/assets/style.css?v=15">
   <script>
     window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
   </script>
@@ -58,16 +58,12 @@
   </div>
 </div>
 
-<!-- PRODUCT LINEUP BANNER (full-width image) -->
-<div style="width:100%;background:#e8ddd0;aspect-ratio:16/5;max-height:440px;overflow:hidden;display:flex;align-items:center;justify-content:center;color:#a09080;font-size:.8rem;letter-spacing:.08em;text-transform:uppercase;font-weight:600;">
-  <div style="position:relative;width:100%;height:100%;">
-  <img src="/assets/img/about-banner.jpg" alt="T2G product lineup" style="width:100%;height:100%;object-fit:cover;" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
-  <div style="display:none;position:absolute;inset:0;align-items:center;justify-content:center;flex-direction:column;gap:6px;background:#e8ddd0;">
-    <span style="font-size:.65rem;color:#999;font-weight:700;text-transform:uppercase;letter-spacing:.05em;">Add image:</span>
-    <code style="font-size:.75rem;background:#ddd6cc;padding:3px 10px;border-radius:3px;color:#777;">about-banner.jpg</code>
-    <small style="font-size:.6rem;color:#bbb;">assets/img/</small>
-  </div>
-</div>
+<!-- PRODUCT LINEUP BANNER -->
+<div class="about-lineup">
+  <img src="/assets/img/about-banner-lineup-1200.jpg"
+       srcset="/assets/img/about-banner-lineup-1200.jpg 1200w, /assets/img/about-banner-lineup.jpg 2400w"
+       sizes="100vw" width="2400" height="914" fetchpriority="high"
+       alt="Nourishing Lives, Uplifting Communities. Premium natural coconut and agribusiness products, sustainably sourced from the toddy tappers of Misamis Oriental, Philippines. Shown: Coco Aminos, CocoRush coconut sugar, coconut flour, virgin coconut oil, coconut sugar cubes, Coco Glow serum, Adlai and Coco Savor.">
 </div>
 
 <!-- THE COMPANY -->
@@ -87,6 +83,21 @@
   </div>
 </section>
 
+<!-- FROM A WOK TO A MECHANIZED FACILITY -->
+<section class="about-story">
+  <div class="container">
+    <figure class="about-story-fig reveal">
+      <a href="/assets/img/about-wok-to-facility.jpg" target="_blank" rel="noopener" title="Open full size">
+        <img src="/assets/img/about-wok-to-facility-900.jpg"
+             srcset="/assets/img/about-wok-to-facility-900.jpg 900w, /assets/img/about-wok-to-facility.jpg 1536w"
+             sizes="(max-width: 1000px) 100vw, 960px" width="1536" height="1024" loading="lazy"
+             alt="Our Experience. T2G was built by development workers who came out of the cooperative sector and knew the farming communities firsthand. We were among the first to commercially produce coconut sugar in Misamis Oriental, and since 2017 we have taken the process from a wok on a stove to a fully mechanized facility. Photos show coconut sap being cooked in a large wok over a wood fire, and staff in hairnets and gloves preparing and packing CocoRush coconut sugar beside a sealing machine.">
+      </a>
+      <figcaption>2017 to today: from a wok on a stove to a fully mechanized facility in San Isidro, Jasaan. <span class="about-story-hint">Tap the image to see it full size.</span></figcaption>
+    </figure>
+  </div>
+</section>
+
 <!-- MISSION & VISION (2x2 bento grid) -->
 <section class="mv-section">
   <div class="container">
@@ -94,32 +105,20 @@
     <div class="mv-grid reveal">
       <!-- Row 1 -->
       <div class="mv-cell mv-cell-photo">
-        <div class="mv-ph" style="background:#e8e0d4;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;padding:16px;text-align:center;min-height:200px;">
-       <span style="font-size:.62rem;color:#aaa;font-weight:700;text-transform:uppercase;letter-spacing:.04em;">Add image:</span>
-       <code style="font-size:.72rem;background:#ddd6cc;padding:3px 10px;border-radius:3px;color:#888;">about-mv-award.jpg</code>
-       <small style="font-size:.58rem;color:#ccc;">assets/img/</small>
-     </div>
+        <img src="/assets/img/lifestyle-2a.jpg" alt="A T2G team member holding a CocoRush pack at an event" loading="lazy">
       </div>
       <div class="mv-cell">
         We are committed to supplying our customers with the finest food products produced in the Philippines, from our farms to your table.
       </div>
       <div class="mv-cell mv-cell-photo">
-        <div class="mv-ph" style="background:#e8e0d4;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;padding:16px;text-align:center;min-height:200px;">
-       <span style="font-size:.62rem;color:#aaa;font-weight:700;text-transform:uppercase;letter-spacing:.04em;">Add image:</span>
-       <code style="font-size:.72rem;background:#ddd6cc;padding:3px 10px;border-radius:3px;color:#888;">about-mv-production.jpg</code>
-       <small style="font-size:.58rem;color:#ccc;">assets/img/</small>
-     </div>
+        <img src="/assets/img/lifestyle-5b.jpg" alt="T2G staff in hairnets preparing coconut sugar in the production room" loading="lazy">
       </div>
       <!-- Row 2 -->
       <div class="mv-cell">
         We strive to be a globally recognized company known for its world-class food selection, quality, and safety.
       </div>
       <div class="mv-cell mv-cell-photo">
-        <div class="mv-ph" style="background:#e8e0d4;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;padding:16px;text-align:center;min-height:200px;">
-       <span style="font-size:.62rem;color:#aaa;font-weight:700;text-transform:uppercase;letter-spacing:.04em;">Add image:</span>
-       <code style="font-size:.72rem;background:#ddd6cc;padding:3px 10px;border-radius:3px;color:#888;">about-mv-sugar.jpg</code>
-       <small style="font-size:.58rem;color:#ccc;">assets/img/</small>
-     </div>
+        <img src="/assets/img/hero-slide-1.jpg" alt="Coconut sugar being scooped into a CocoRush pack" loading="lazy">
       </div>
       <div class="mv-cell">
         Through our work, we are committed to making a real difference in the lives of our partner coconut tappers, their families, and the communities of Misamis Oriental.
@@ -135,7 +134,7 @@
     <div class="why-grid">
       <div class="why-card reveal" data-delay="0">
         <div class="why-card-img" style="position:relative;overflow:hidden;">
-          <img loading="lazy" src="/assets/img/about-why-experience.jpg" alt="T2G experience" style="width:100%;height:100%;object-fit:cover;" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+          <img loading="lazy" src="/assets/img/about-why-experience.jpg" alt="Coconut sap being cooked in a large wok over a wood fire, the way T2G started in 2017" style="width:100%;height:100%;object-fit:cover;" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
           <div style="display:none;position:absolute;inset:0;align-items:center;justify-content:center;background:var(--cream-mid,#e8ddd0);" data-missing-img="about-why-experience.jpg"><img src="/assets/img/logo.png" alt="" width="96" style="width:96px;height:auto;opacity:.35;"></div>
         </div>
         <div class="why-card-body">
@@ -145,7 +144,7 @@
       </div>
       <div class="why-card reveal" data-delay="80">
         <div class="why-card-img" style="position:relative;overflow:hidden;">
-          <img loading="lazy" src="/assets/img/about-why-quality.jpg" alt="T2G quality production" style="width:100%;height:100%;object-fit:cover;" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+          <img loading="lazy" src="/assets/img/about-why-quality.jpg" alt="T2G staff in hairnets and gloves packing CocoRush coconut sugar beside a sealing machine" style="width:100%;height:100%;object-fit:cover;" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
           <div style="display:none;position:absolute;inset:0;align-items:center;justify-content:center;background:var(--cream-mid,#e8ddd0);" data-missing-img="about-why-quality.jpg"><img src="/assets/img/logo.png" alt="" width="96" style="width:96px;height:auto;opacity:.35;"></div>
         </div>
         <div class="why-card-body">
