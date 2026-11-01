@@ -19,7 +19,7 @@
   <meta name="twitter:image" content="https://www.trunktogold.com/assets/img/logo.png">  <link rel="icon" type="image/png" href="/assets/img/logo.png">
   <meta name="theme-color" content="#45a349">
   <link rel="apple-touch-icon" href="/assets/img/logo.png">
-  <link rel="stylesheet" href="/assets/style.css?v=14">
+  <link rel="stylesheet" href="/assets/style.css?v=16">
   <script type="application/ld+json">
 [
   {
@@ -1001,6 +1001,33 @@
   </div>
 </div>
 
+<!-- COCORUSH VIDEO SPOTLIGHT -->
+<section class="cr-spotlight" id="cocorush-video" aria-labelledby="cr-title">
+  <div class="container cr-grid">
+    <figure class="cr-media">
+      <video class="cr-video" muted loop playsinline preload="none"
+        poster="/assets/img/cocorush-poster.jpg"
+        aria-label="Short video: a coconut, coconut sugar poured into a bowl and stirred into coffee, then the CocoRush pack">
+        <source src="/assets/video/cocorush.mp4" type="video/mp4">
+      </video>
+      <button type="button" class="cr-toggle" aria-label="Pause video" hidden>
+        <svg class="cr-i-pause" viewBox="0 0 24 24" aria-hidden="true"><rect x="6" y="5" width="4" height="14" rx="1"/><rect x="14" y="5" width="4" height="14" rx="1"/></svg>
+        <svg class="cr-i-play" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13a1 1 0 0 0 1.5.86l10.5-6.5a1 1 0 0 0 0-1.72L9.5 4.64A1 1 0 0 0 8 5.5z"/></svg>
+      </button>
+    </figure>
+    <div class="cr-copy">
+      <h2 id="cr-title">CocoRush coconut sugar</h2>
+      <p>Made from the sap of coconut blossoms gathered by our partner farmers in Misamis Oriental. It has a rich, caramel-like taste and a lab-tested glycemic index of 35.</p>
+      <p>Use it 1:1 wherever you would use white or brown sugar: in your coffee, your baking and your cooking.</p>
+      <ul class="cr-packs">
+        <li><a href="/product/cocorush-500g">500 g pack <span data-price-for="cocorush-500g">PHP 190.00</span></a></li>
+        <li><a href="/product/cocorush-200g">200 g pack <span data-price-for="cocorush-200g">PHP 90.00</span></a></li>
+      </ul>
+      <a href="/product/cocorush-500g" class="btn btn-green">Shop CocoRush</a>
+    </div>
+  </div>
+</section>
+
 <!-- BEST SELLERS -->
 <section class="bestsellers">
   <div class="container">
@@ -1201,6 +1228,54 @@ document.addEventListener('DOMContentLoaded', () => {
     if (typeof initProductCards === 'function') initProductCards();
   }, 0);
 });
+</script>
+<script>
+/* CocoRush video: plays muted only while on screen, pauses when scrolled away,
+   respects "reduce motion", and hides itself if the video file is missing. */
+(function () {
+  const section = document.getElementById('cocorush-video');
+  if (!section) return;
+  const video  = section.querySelector('video');
+  const source = video.querySelector('source');
+  const toggle = section.querySelector('.cr-toggle');
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  let userPaused = reduceMotion;
+  let visible = false;
+
+  source.addEventListener('error', () => { section.hidden = true; });
+
+  function sync() {
+    toggle.hidden = false;
+    const playing = !video.paused;
+    section.classList.toggle('is-playing', playing);
+    toggle.setAttribute('aria-label', playing ? 'Pause video' : 'Play video');
+  }
+  function tryPlay() {
+    if (userPaused || !visible) return;
+    const p = video.play();
+    if (p && p.catch) p.catch(() => { sync(); });
+  }
+  video.addEventListener('play', sync);
+  video.addEventListener('pause', sync);
+  video.addEventListener('loadeddata', sync);
+
+  toggle.addEventListener('click', () => {
+    if (video.paused) { userPaused = false; video.play().catch(() => {}); }
+    else { userPaused = true; video.pause(); }
+  });
+
+  if ('IntersectionObserver' in window) {
+    new IntersectionObserver(entries => {
+      entries.forEach(e => {
+        visible = e.isIntersecting;
+        if (visible) tryPlay(); else if (!video.paused) video.pause();
+      });
+    }, { threshold: 0.35 }).observe(video);
+  } else {
+    visible = true; tryPlay();
+  }
+  if (reduceMotion) toggle.hidden = false;
+})();
 </script>
 </body>
 </html>

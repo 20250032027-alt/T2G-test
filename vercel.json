@@ -21,6 +21,15 @@
   ],
   "headers": [
     {
+      "source": "/assets/video/(.*)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=604800"
+        }
+      ]
+    },
+    {
       "source": "/assets/site-config.js",
       "headers": [
         {
