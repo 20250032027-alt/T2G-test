@@ -1847,19 +1847,26 @@ p { text-wrap: pretty; }
   background: rgba(0, 0, 0, .5); color: #fff; backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px);
   transition: background 150ms, transform 120ms;
 }
-.cr-toggle { width: 40px; }
-.cr-sound { padding: 0 14px 0 11px; font-size: .78rem; font-weight: 700; letter-spacing: .02em; }
+.cr-toggle, .cr-sound { width: 40px; }
+.cr-sound-label { display: none; font-size: .78rem; font-weight: 700; letter-spacing: .02em; }
+.cr-sound.show-label { width: auto; padding: 0 14px 0 11px; }
+.cr-sound.show-label .cr-sound-label { display: inline; }
+.cr-replay { display: none; height: 40px; padding: 0 14px 0 11px; border-radius: 999px; align-items: center; gap: 8px;
+  background: var(--green-btn); color: #fff; font-size: .78rem; font-weight: 700; transition: background 150ms, transform 120ms; }
+.cr-replay svg { width: 18px; height: 18px; fill: currentColor; }
+.cr-replay:hover { background: var(--green-dark); }
+.cr-media.is-ended .cr-replay { display: inline-flex; }
+.cr-media.is-ended .cr-toggle { display: none; }
 .cr-sound:hover, .cr-toggle:hover, .cr-sound:focus-visible, .cr-toggle:focus-visible { background: rgba(0, 0, 0, .72); }
 .cr-sound:active, .cr-toggle:active { transform: scale(.96); }
 .cr-sound svg, .cr-toggle svg { width: 18px; height: 18px; fill: currentColor; flex: none; }
 .cr-i-sound, .cr-i-pause { display: none; }
-.cr-spotlight.has-sound .cr-i-sound { display: block; }
-.cr-spotlight.has-sound .cr-i-muted { display: none; }
-.cr-spotlight.is-playing .cr-i-pause { display: block; }
-.cr-spotlight.is-playing .cr-i-play { display: none; }
-.cr-spotlight.has-sound .cr-sound { background: var(--green-btn); }
-/* one-time nudge so people notice there is sound */
-.cr-sound.nudge { animation: cr-nudge 1.6s ease-out 2; }
+.cr-media.has-sound .cr-i-sound { display: block; }
+.cr-media.has-sound .cr-i-muted { display: none; }
+.cr-media.is-playing .cr-i-pause { display: block; }
+.cr-media.is-playing .cr-i-play { display: none; }
+/* soft pulse while waiting for a first tap to start the music */
+.cr-sound.show-label { animation: cr-nudge 1.8s ease-out 3; }
 @keyframes cr-nudge {
   0% { box-shadow: 0 0 0 0 rgba(255, 255, 255, .55); }
   70% { box-shadow: 0 0 0 12px rgba(255, 255, 255, 0); }
@@ -1879,21 +1886,19 @@ p { text-wrap: pretty; }
   opacity: 0; transform: translateY(10px); pointer-events: none;
   transition: opacity 350ms ease, transform 350ms cubic-bezier(.2, .8, .2, 1);
 }
-.cr-spotlight.show-chip .cr-chip { opacity: 1; transform: none; pointer-events: auto; }
+.cr-media.show-chip .cr-chip { opacity: 1; transform: none; pointer-events: auto; }
 .cr-chip-name { font-weight: 800; font-size: .86rem; }
 .cr-chip-price { font-weight: 700; font-size: .82rem; color: var(--text-mid); font-variant-numeric: tabular-nums; }
 .cr-chip-cta { grid-column: 1 / -1; font-size: .74rem; font-weight: 800; letter-spacing: .05em; text-transform: uppercase; color: var(--green-dark); margin-top: 2px; }
 .cr-chip:hover .cr-chip-cta { text-decoration: underline; }
 @media (max-width: 520px) {
-  .cr-sound-label { display: none; }
-  .cr-sound { width: 40px; padding: 0; }
   .cr-chip { left: 10px; bottom: 12px; padding: 8px 11px; column-gap: 8px; }
   .cr-chip-name { font-size: .76rem; }
   .cr-chip-price { display: none; }
   .cr-chip-cta { grid-column: auto; margin-top: 0; font-size: .66rem; }
 }
 @media (prefers-reduced-motion: reduce) {
-  .cr-sound.nudge { animation: none; }
+  .cr-sound.show-label { animation: none; }
   .cr-chip { transition: opacity 200ms; transform: none; }
 }
 .cr-copy h2 { font-size: 1.6rem; font-weight: 700; color: var(--text); margin-bottom: 14px; line-height: 1.25; }
@@ -1907,4 +1912,12 @@ p { text-wrap: pretty; }
   .cr-spotlight { padding: 40px 0 44px; }
   .cr-grid { grid-template-columns: 1fr; gap: 26px; }
   .cr-copy h2 { font-size: 1.35rem; }
+}
+
+/* CocoRush video on the CocoRush product pages */
+.cr-embed { max-width: 860px; margin: 56px auto 0; }
+.cr-embed .cr-media { position: relative; margin: 0; border-radius: 6px; overflow: hidden; background: #dfe7d8; aspect-ratio: 16 / 9; box-shadow: 0 14px 34px rgba(40, 60, 30, .14); }
+.cr-embed-note { margin-top: 12px; font-size: .84rem; color: var(--text-light); text-align: center; }
+@media (max-width: 520px) {
+  .cr-chip { top: 10px; bottom: auto; }
 }

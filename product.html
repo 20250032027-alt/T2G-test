@@ -13,7 +13,7 @@
   <meta property="og:image" id="og-image" content="">  <link rel="icon" type="image/png" href="/assets/img/logo.png">
   <meta name="theme-color" content="#45a349">
   <link rel="apple-touch-icon" href="/assets/img/logo.png">
-  <link rel="stylesheet" href="/assets/style.css?v=14">
+  <link rel="stylesheet" href="/assets/style.css?v=17">
   <style>
     .product-page { padding: 48px 0 72px; }
     .product-layout {
@@ -222,6 +222,7 @@
 <script src="/assets/products-data.js?v=14"></script>
 <script src="/assets/main.js?v=14"></script>
 <script src="/assets/cart.js?v=14"></script>
+<script src="/assets/cocorush-video.js?v=1"></script>
 <script src="/assets/devmode.js?v=14"></script>
 
 <script>
@@ -401,6 +402,12 @@ function renderProduct(p) {
 
         </div>
 
+        ${/^cocorush/.test(p.id) && window.T2GVideo ? `
+        <section class="cr-embed" aria-label="CocoRush video">
+          ${T2GVideo.markup({ chip: false })}
+          <p class="cr-embed-note">Stirred into a morning coffee: CocoRush swaps 1:1 for white or brown sugar.</p>
+        </section>` : ''}
+
         <div class="product-extra">
           <section class="product-extra-block">
             <h2>Product details</h2>
@@ -445,6 +452,10 @@ function renderProduct(p) {
 
   /* Start auto-cycling gallery images on a loop */
   startGalleryAutoplay(images);
+
+  /* CocoRush pages: start the video player */
+  const crFig = document.querySelector('.cr-embed .cr-media');
+  if (crFig && window.T2GVideo) T2GVideo.mount(crFig);
 
   /* Reviews + star summary under the price */
   if (window.T2G_REVIEWS) {
