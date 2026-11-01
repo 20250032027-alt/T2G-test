@@ -11,7 +11,7 @@
 
    Not overplaying it
    - After it has played through SOUND_PLAYS times with music, it fades out
-     and rests on the CocoRush pack with "Shop now" and a replay button.
+     and rests on the CocoRush pack with a replay button.
    - Within one browsing session the full jingle plays once; on later
      homepage visits in the same session it plays silently unless the
      visitor turns the sound on.
@@ -33,8 +33,10 @@
     set: (s, k, v) => { try { v == null ? s.removeItem(k) : s.setItem(k, v); } catch (e) {} },
   };
 
-  function mount(root) {
-    if (!root || root.dataset.crReady) return;
+  /* opts.manual: don't start on scroll; the page calls .play() (product gallery) */
+  function mount(root, opts) {
+    opts = opts || {};
+    if (!root || root.dataset.crReady) return root && root._crApi;
     root.dataset.crReady = '1';
 
     const section = root.closest('.cr-spotlight, .cr-embed') || root;
@@ -45,14 +47,13 @@
     const soundLb = root.querySelector('.cr-sound-label');
     const replay  = root.querySelector('.cr-replay');
     const bar     = root.querySelector('.cr-progress i');
-    const productAt = parseFloat(root.dataset.productAt || '6.5');
 
     const userMuted  = store.get(localStorage, KEY_MUTED) === '1';
     const heardAlready = store.get(sessionStorage, KEY_HEARD) === '1';
-    let wantSound  = !userMuted && !heardAlready;   // what we're aiming for
+    let wantSound  = !userMuted && (opts.manual || !heardAlready);   // what we're aiming for
     let userPaused = false;
     let ended      = false;
-    let visible    = false;
+    let visible    = !!opts.manual;
     let covered    = false;    // cart or menu open
     let soundPlays = 0;
     let lastT      = 0;
@@ -139,7 +140,6 @@
       ended = true;                                  // stops start() and further counting
       store.set(sessionStorage, KEY_HEARD, '1');
       video.loop = false;                            // let this last play run out on the pack
-      root.classList.add('show-chip');
       // fade the music out over the final second; the video then stops by
       // itself on its last frame (the pack), because looping is off
       const left = Math.max(0, ((video.duration || 0) - video.currentTime) / (video.playbackRate || 1));
@@ -153,13 +153,13 @@
     function tick() {
       const d = video.duration || 0;
       if (d && bar) bar.style.transform = `scaleX(${video.currentTime / d})`;
-      root.classList.toggle('show-chip', ended || video.currentTime >= productAt);
       raf = video.paused ? 0 : requestAnimationFrame(tick);
     }
 
     ['play', 'pause', 'volumechange', 'loadeddata'].forEach(ev => video.addEventListener(ev, sync));
     video.addEventListener('play', () => { if (!raf) raf = requestAnimationFrame(tick); });
     video.addEventListener('timeupdate', onTime);
+    video.addEventListener('ended', () => { if (!video.loop) { ended = true; sync(); } });
 
     /* ── buttons ── */
     toggle.addEventListener('click', () => {
@@ -197,7 +197,6 @@
       soundPlays = 0;
       lastT = 0;
       userPaused = false;
-      root.classList.remove('show-chip');
       video.currentTime = 0;
       if (wantSound) { video.muted = false; video.volume = 0; }
       video.play().then(() => { if (!video.muted) fade(MAX_VOL, 600); }).catch(() => {});
@@ -208,7 +207,10 @@
     /* ── pause when not seen ── */
     if ('IntersectionObserver' in window) {
       new IntersectionObserver(entries => {
-        entries.forEach(e => { visible = e.isIntersecting; if (visible) start(); else stopSoftly(); });
+        entries.forEach(e => {
+          visible = e.isIntersecting;
+          if (!visible) stopSoftly(); else if (!opts.manual) start();
+        });
       }, { threshold: 0.3 }).observe(video);
     } else {
       visible = true;
@@ -228,19 +230,31 @@
     }
 
     sync();
-    if (!('IntersectionObserver' in window)) start();
+    if (!('IntersectionObserver' in window) && !opts.manual) start();
+
+    root._crApi = {
+      /* start from the beginning with sound (call from a click, so browsers allow it) */
+      play() {
+        ended = false; soundPlays = 0; lastT = 0; userPaused = false; visible = true;
+        try { video.currentTime = 0; } catch (e) {}
+        if (wantSound) { video.muted = false; video.volume = 0; }
+        video.play().then(() => { if (!video.muted) fade(MAX_VOL, 500); }).catch(() => { video.muted = true; video.play().catch(() => {}); sync(); });
+        sync();
+      },
+      stop() { userPaused = true; clearInterval(fadeTimer); video.pause(); },
+    };
+    return root._crApi;
   }
 
   /* Markup for pages that add the video with JavaScript (product pages) */
   function markup(opts) {
     opts = opts || {};
     return `
-      <figure class="cr-media" data-product-at="${opts.productAt || 6.5}">
-        <video class="cr-video" muted loop playsinline preload="metadata" poster="/assets/img/cocorush-poster.jpg"
+      <figure class="cr-media${opts.className ? ' ' + opts.className : ''}">
+        <video class="cr-video" muted${opts.loop === false ? '' : ' loop'} playsinline preload="metadata" poster="/assets/img/cocorush-poster.jpg"
           aria-label="Short video with music: a spoonful of CocoRush coconut sugar stirred into coffee at a breakfast table, then the CocoRush coconut sugar pack">
           <source src="/assets/video/cocorush.mp4" type="video/mp4">
         </video>
-        ${opts.chip === false ? '' : `<a class="cr-chip" href="/product/cocorush-500g" tabindex="-1" aria-hidden="true"><span class="cr-chip-name">CocoRush 500 g</span><span class="cr-chip-price" data-price-for="cocorush-500g">PHP 190.00</span><span class="cr-chip-cta">Shop now &rarr;</span></a>`}
         ${controlsHtml()}
         <div class="cr-progress" aria-hidden="true"><i></i></div>
       </figure>`;

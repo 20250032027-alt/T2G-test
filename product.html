@@ -13,7 +13,7 @@
   <meta property="og:image" id="og-image" content="">  <link rel="icon" type="image/png" href="/assets/img/logo.png">
   <meta name="theme-color" content="#45a349">
   <link rel="apple-touch-icon" href="/assets/img/logo.png">
-  <link rel="stylesheet" href="/assets/style.css?v=17">
+  <link rel="stylesheet" href="/assets/style.css?v=18">
   <style>
     .product-page { padding: 48px 0 72px; }
     .product-layout {
@@ -222,7 +222,7 @@
 <script src="/assets/products-data.js?v=14"></script>
 <script src="/assets/main.js?v=14"></script>
 <script src="/assets/cart.js?v=14"></script>
-<script src="/assets/cocorush-video.js?v=1"></script>
+<script src="/assets/cocorush-video.js?v=2"></script>
 <script src="/assets/devmode.js?v=14"></script>
 
 <script>
@@ -402,12 +402,6 @@ function renderProduct(p) {
 
         </div>
 
-        ${/^cocorush/.test(p.id) && window.T2GVideo ? `
-        <section class="cr-embed" aria-label="CocoRush video">
-          ${T2GVideo.markup({ chip: false })}
-          <p class="cr-embed-note">Stirred into a morning coffee: CocoRush swaps 1:1 for white or brown sugar.</p>
-        </section>` : ''}
-
         <div class="product-extra">
           <section class="product-extra-block">
             <h2>Product details</h2>
@@ -453,9 +447,8 @@ function renderProduct(p) {
   /* Start auto-cycling gallery images on a loop */
   startGalleryAutoplay(images);
 
-  /* CocoRush pages: start the video player */
-  const crFig = document.querySelector('.cr-embed .cr-media');
-  if (crFig && window.T2GVideo) T2GVideo.mount(crFig);
+  /* CocoRush pages: the video sits in the gallery as the last thumbnail */
+  if (/^cocorush/.test(p.id) && window.T2GVideo) addGalleryVideo(images);
 
   /* Reviews + star summary under the price */
   if (window.T2G_REVIEWS) {
@@ -521,6 +514,7 @@ let galleryImages = [];
 let galleryIndex = 0;
 
 function switchImage(src, btn, index) {
+  hideGalleryVideo();
   const mainImg = document.getElementById('product-main-img');
   const ph      = document.getElementById('product-img-ph');
   if (mainImg) {
@@ -536,6 +530,57 @@ function switchImage(src, btn, index) {
   if (typeof index === 'number') galleryIndex = index;
 }
 
+/* ── CocoRush video as a gallery item ── */
+let galleryVideo = null;   // player API while the video is showing
+
+function addGalleryVideo(images) {
+  let strip = document.getElementById('thumbnail-strip');
+  const wrap = document.getElementById('main-img-wrap');
+  if (!wrap) return;
+  if (!strip) {
+    strip = document.createElement('div');
+    strip.id = 'thumbnail-strip';
+    strip.style.cssText = 'display:flex;gap:8px;margin-top:10px;flex-wrap:wrap;';
+    wrap.insertAdjacentElement('afterend', strip);
+  }
+  const btn = document.createElement('button');
+  btn.type = 'button';
+  btn.className = 'thumb-video';
+  btn.setAttribute('aria-label', 'Play the CocoRush video (with music)');
+  btn.style.cssText = 'width:64px;height:64px;border-radius:4px;overflow:hidden;border:2px solid var(--border);padding:0;background:var(--grey-bg);cursor:pointer;flex-shrink:0;transition:border-color 200ms;';
+  btn.style.position = 'relative';
+  btn.innerHTML = '<img src="/assets/img/cocorush-poster.jpg" alt="" style="width:100%;height:100%;object-fit:cover;display:block;">' +
+    '<span class="thumb-play" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M9 6.5v11l9-5.5z"/></svg></span>';
+  btn.addEventListener('click', () => showGalleryVideo(btn));
+  strip.appendChild(btn);
+}
+
+function showGalleryVideo(btn) {
+  if (galleryTimer) { clearInterval(galleryTimer); galleryTimer = null; }
+  const wrap = document.getElementById('main-img-wrap');
+  let fig = wrap.querySelector('.pg-video');
+  if (!fig) {
+    wrap.insertAdjacentHTML('beforeend', T2GVideo.markup({ loop: false, className: 'pg-video' }));
+    fig = wrap.querySelector('.pg-video');
+    fig.querySelector('source').addEventListener('error', () => { hideGalleryVideo(); btn.remove(); });
+    galleryVideo = T2GVideo.mount(fig, { manual: true });
+  }
+  fig.hidden = false;
+  document.getElementById('product-main-img').style.visibility = 'hidden';
+  document.querySelectorAll('#thumbnail-strip button').forEach(b => { b.style.borderColor = 'var(--border)'; });
+  btn.style.borderColor = 'var(--green)';
+  galleryVideo.play();
+}
+
+function hideGalleryVideo() {
+  const fig = document.querySelector('#main-img-wrap .pg-video');
+  if (!fig || fig.hidden) return;
+  if (galleryVideo) galleryVideo.stop();
+  fig.hidden = true;
+  const img = document.getElementById('product-main-img');
+  if (img) img.style.visibility = '';
+}
+
 /* ── Auto-cycle gallery images on a loop, pausing on manual interaction/hover ── */
 function startGalleryAutoplay(images) {
   if (galleryTimer) clearInterval(galleryTimer);
@@ -544,6 +589,8 @@ function startGalleryAutoplay(images) {
   if (galleryImages.length <= 1) return; // nothing to cycle through
 
   function advance() {
+    const v = document.querySelector('#main-img-wrap .pg-video');
+    if (v && !v.hidden) return;              // the video is showing: leave it alone
     galleryIndex = (galleryIndex + 1) % galleryImages.length;
     const nextSrc = '/assets/img/' + galleryImages[galleryIndex];
     const nextBtn = document.querySelectorAll('#thumbnail-strip button')[galleryIndex];
@@ -558,7 +605,7 @@ function startGalleryAutoplay(images) {
   restartTimer();
 
   // Manual thumbnail click: sync index and restart the loop from there
-  document.querySelectorAll('#thumbnail-strip button').forEach((b, i) => {
+  document.querySelectorAll('#thumbnail-strip button:not(.thumb-video)').forEach((b, i) => {
     b.addEventListener('click', () => {
       galleryIndex = i;
       restartTimer();
@@ -569,7 +616,10 @@ function startGalleryAutoplay(images) {
   const wrap = document.getElementById('main-img-wrap');
   if (wrap) {
     wrap.addEventListener('mouseenter', () => { if (galleryTimer) clearInterval(galleryTimer); });
-    wrap.addEventListener('mouseleave', restartTimer);
+    wrap.addEventListener('mouseleave', () => {
+      const v = wrap.querySelector('.pg-video');
+      if (!v || v.hidden) restartTimer();
+    });
   }
 }
 

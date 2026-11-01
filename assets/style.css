@@ -1877,29 +1877,8 @@ p { text-wrap: pretty; }
 .cr-progress { position: absolute; left: 0; right: 0; bottom: 0; height: 3px; background: rgba(255, 255, 255, .25); z-index: 1; }
 .cr-progress i { display: block; height: 100%; background: #fff; transform-origin: left; transform: scaleX(0); }
 
-/* "Shop now" tag that slides in when the pack appears */
-.cr-chip {
-  position: absolute; left: 14px; bottom: 16px; z-index: 2;
-  display: grid; grid-template-columns: auto auto; column-gap: 12px; align-items: baseline;
-  padding: 10px 14px; border-radius: 8px; background: rgba(255, 255, 255, .94); color: var(--text);
-  text-decoration: none; box-shadow: 0 8px 24px rgba(0, 0, 0, .18);
-  opacity: 0; transform: translateY(10px); pointer-events: none;
-  transition: opacity 350ms ease, transform 350ms cubic-bezier(.2, .8, .2, 1);
-}
-.cr-media.show-chip .cr-chip { opacity: 1; transform: none; pointer-events: auto; }
-.cr-chip-name { font-weight: 800; font-size: .86rem; }
-.cr-chip-price { font-weight: 700; font-size: .82rem; color: var(--text-mid); font-variant-numeric: tabular-nums; }
-.cr-chip-cta { grid-column: 1 / -1; font-size: .74rem; font-weight: 800; letter-spacing: .05em; text-transform: uppercase; color: var(--green-dark); margin-top: 2px; }
-.cr-chip:hover .cr-chip-cta { text-decoration: underline; }
-@media (max-width: 520px) {
-  .cr-chip { left: 10px; bottom: 12px; padding: 8px 11px; column-gap: 8px; }
-  .cr-chip-name { font-size: .76rem; }
-  .cr-chip-price { display: none; }
-  .cr-chip-cta { grid-column: auto; margin-top: 0; font-size: .66rem; }
-}
 @media (prefers-reduced-motion: reduce) {
   .cr-sound.show-label { animation: none; }
-  .cr-chip { transition: opacity 200ms; transform: none; }
 }
 .cr-copy h2 { font-size: 1.6rem; font-weight: 700; color: var(--text); margin-bottom: 14px; line-height: 1.25; }
 .cr-copy p { color: var(--text-mid); line-height: 1.75; margin-bottom: 12px; max-width: 46ch; }
@@ -1914,10 +1893,11 @@ p { text-wrap: pretty; }
   .cr-copy h2 { font-size: 1.35rem; }
 }
 
-/* CocoRush video on the CocoRush product pages */
-.cr-embed { max-width: 860px; margin: 56px auto 0; }
-.cr-embed .cr-media { position: relative; margin: 0; border-radius: 6px; overflow: hidden; background: #dfe7d8; aspect-ratio: 16 / 9; box-shadow: 0 14px 34px rgba(40, 60, 30, .14); }
-.cr-embed-note { margin-top: 12px; font-size: .84rem; color: var(--text-light); text-align: center; }
-@media (max-width: 520px) {
-  .cr-chip { top: 10px; bottom: auto; }
-}
+/* CocoRush video inside the product gallery */
+.pg-video.cr-media { aspect-ratio: auto; box-shadow: none; border-radius: 0; overflow: visible; }
+.pg-video { position: absolute; inset: 0; margin: 0; display: flex; align-items: center; justify-content: center; background: var(--white); }
+.pg-video .cr-video { width: 100%; height: auto; max-height: 100%; aspect-ratio: 16 / 9; object-fit: cover; border-radius: 4px; }
+.pg-video .cr-controls { bottom: calc(50% - (100% * 9 / 32) + 12px); }
+.pg-video .cr-progress { display: none; }
+.thumb-play { position: absolute; inset: 0; display: grid; place-items: center; pointer-events: none; }
+.thumb-play svg { width: 26px; height: 26px; padding: 5px 4px 5px 6px; border-radius: 50%; background: rgba(0, 0, 0, .55); fill: #fff; box-sizing: border-box; }
