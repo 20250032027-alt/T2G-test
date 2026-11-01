@@ -19,7 +19,7 @@
   <meta name="twitter:image" content="https://www.trunktogold.com/assets/img/logo.png">  <link rel="icon" type="image/png" href="/assets/img/logo.png">
   <meta name="theme-color" content="#45a349">
   <link rel="apple-touch-icon" href="/assets/img/logo.png">
-  <link rel="stylesheet" href="/assets/style.css?v=16">
+  <link rel="stylesheet" href="/assets/style.css?v=17">
   <script type="application/ld+json">
 [
   {
@@ -1004,16 +1004,29 @@
 <!-- COCORUSH VIDEO SPOTLIGHT -->
 <section class="cr-spotlight" id="cocorush-video" aria-labelledby="cr-title">
   <div class="container cr-grid">
-    <figure class="cr-media">
-      <video class="cr-video" muted loop playsinline preload="none"
+    <figure class="cr-media" data-product-at="6.5">
+      <video class="cr-video" autoplay muted loop playsinline preload="auto"
         poster="/assets/img/cocorush-poster.jpg"
-        aria-label="Short video: a coconut, coconut sugar poured into a bowl and stirred into coffee, then the CocoRush pack">
+        aria-label="Short video with music: a spoonful of CocoRush coconut sugar stirred into coffee at a breakfast table, then the CocoRush coconut sugar pack">
         <source src="/assets/video/cocorush.mp4" type="video/mp4">
       </video>
-      <button type="button" class="cr-toggle" aria-label="Pause video" hidden>
-        <svg class="cr-i-pause" viewBox="0 0 24 24" aria-hidden="true"><rect x="6" y="5" width="4" height="14" rx="1"/><rect x="14" y="5" width="4" height="14" rx="1"/></svg>
-        <svg class="cr-i-play" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13a1 1 0 0 0 1.5.86l10.5-6.5a1 1 0 0 0 0-1.72L9.5 4.64A1 1 0 0 0 8 5.5z"/></svg>
-      </button>
+      <a class="cr-chip" href="/product/cocorush-500g" tabindex="-1" aria-hidden="true">
+        <span class="cr-chip-name">CocoRush 500 g</span>
+        <span class="cr-chip-price" data-price-for="cocorush-500g">PHP 190.00</span>
+        <span class="cr-chip-cta">Shop now &rarr;</span>
+      </a>
+      <div class="cr-controls">
+        <button type="button" class="cr-sound" aria-pressed="false">
+          <svg class="cr-i-muted" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9H4z"/><path d="M16 9l5 6M21 9l-5 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" fill="none"/></svg>
+          <svg class="cr-i-sound" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9H4z"/><path d="M16.5 8.5a5 5 0 0 1 0 7M19 6a8.5 8.5 0 0 1 0 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" fill="none"/></svg>
+          <span class="cr-sound-label">Tap for sound</span>
+        </button>
+        <button type="button" class="cr-toggle" aria-label="Pause video">
+          <svg class="cr-i-pause" viewBox="0 0 24 24" aria-hidden="true"><rect x="6" y="5" width="4" height="14" rx="1"/><rect x="14" y="5" width="4" height="14" rx="1"/></svg>
+          <svg class="cr-i-play" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13a1 1 0 0 0 1.5.86l10.5-6.5a1 1 0 0 0 0-1.72L9.5 4.64A1 1 0 0 0 8 5.5z"/></svg>
+        </button>
+      </div>
+      <div class="cr-progress" aria-hidden="true"><i></i></div>
     </figure>
     <div class="cr-copy">
       <h2 id="cr-title">CocoRush coconut sugar</h2>
@@ -1230,51 +1243,124 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 </script>
 <script>
-/* CocoRush video: plays muted only while on screen, pauses when scrolled away,
-   respects "reduce motion", and hides itself if the video file is missing. */
+/* ============================================================
+   CocoRush video
+   - Starts playing muted as soon as it's on screen (browsers only allow
+     autoplay without sound). "Tap for sound" restarts it from the top with
+     the music, fading the volume in.
+   - Fades out and pauses when scrolled away or when the tab is hidden,
+     and picks up again on return.
+   - When the pack appears (data-product-at, in seconds), a "Shop now"
+     tag slides in over the video.
+   - Hides the whole section if the video file is missing.
+   ============================================================ */
 (function () {
   const section = document.getElementById('cocorush-video');
   if (!section) return;
-  const video  = section.querySelector('video');
-  const source = video.querySelector('source');
-  const toggle = section.querySelector('.cr-toggle');
-  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  let userPaused = reduceMotion;
-  let visible = false;
+  const media   = section.querySelector('.cr-media');
+  const video   = section.querySelector('video');
+  const source  = video.querySelector('source');
+  const toggle  = section.querySelector('.cr-toggle');
+  const soundBt = section.querySelector('.cr-sound');
+  const soundLb = section.querySelector('.cr-sound-label');
+  const bar     = section.querySelector('.cr-progress i');
+  const productAt = parseFloat(media.dataset.productAt || '6.5');
+  const MAX_VOL = 0.85;
+
+  let userPaused = false;
+  let visible = true;
+  let fadeTimer = null;
 
   source.addEventListener('error', () => { section.hidden = true; });
 
+  /* Smoothly move the volume to `to` over `ms`, then run `done` */
+  function fade(to, ms, done) {
+    clearInterval(fadeTimer);
+    if (video.muted) { if (done) done(); return; }
+    const from = video.volume, steps = Math.max(1, Math.round(ms / 30));
+    let n = 0;
+    fadeTimer = setInterval(() => {
+      n++;
+      video.volume = Math.min(1, Math.max(0, from + (to - from) * (n / steps)));
+      if (n >= steps) { clearInterval(fadeTimer); if (done) done(); }
+    }, 30);
+  }
+
   function sync() {
-    toggle.hidden = false;
     const playing = !video.paused;
     section.classList.toggle('is-playing', playing);
     toggle.setAttribute('aria-label', playing ? 'Pause video' : 'Play video');
+    const soundOn = !video.muted;
+    section.classList.toggle('has-sound', soundOn);
+    soundBt.setAttribute('aria-pressed', String(soundOn));
+    soundLb.textContent = soundOn ? 'Sound on' : 'Tap for sound';
+    soundBt.setAttribute('aria-label', soundOn ? 'Turn sound off' : 'Turn sound on');
   }
-  function tryPlay() {
-    if (userPaused || !visible) return;
+
+  function play() {
+    if (userPaused || !visible || document.hidden) return;
     const p = video.play();
-    if (p && p.catch) p.catch(() => { sync(); });
+    if (p && p.catch) p.catch(() => sync());     // autoplay blocked (low power / data saver): play button stays
+    if (!video.muted) { video.volume = 0; fade(MAX_VOL, 500); }
   }
-  video.addEventListener('play', sync);
-  video.addEventListener('pause', sync);
-  video.addEventListener('loadeddata', sync);
+  function pauseSoftly() {
+    if (video.paused) return;
+    fade(0, 250, () => video.pause());
+  }
+
+  ['play', 'pause', 'volumechange', 'loadeddata'].forEach(ev => video.addEventListener(ev, sync));
+
+  /* Shop tag + progress bar */
+  let raf = 0;
+  function tick() {
+    const d = video.duration || 0;
+    if (d) bar.style.transform = `scaleX(${video.currentTime / d})`;
+    section.classList.toggle('show-chip', video.currentTime >= productAt);
+    raf = video.paused ? 0 : requestAnimationFrame(tick);
+  }
+  video.addEventListener('play', () => { if (!raf) raf = requestAnimationFrame(tick); });
+  video.addEventListener('seeked', tick);
 
   toggle.addEventListener('click', () => {
-    if (video.paused) { userPaused = false; video.play().catch(() => {}); }
-    else { userPaused = true; video.pause(); }
+    if (video.paused) { userPaused = false; play(); }
+    else { userPaused = true; pauseSoftly(); }
+  });
+
+  soundBt.addEventListener('click', () => {
+    soundBt.classList.remove('nudge');
+    if (video.muted) {
+      video.muted = false;
+      video.volume = 0;
+      video.currentTime = 0;                      // hear it from the beginning
+      userPaused = false;
+      const p = video.play();
+      if (p && p.catch) p.catch(() => {});
+      fade(MAX_VOL, 600);
+    } else {
+      fade(0, 250, () => { video.muted = true; video.volume = MAX_VOL; });
+    }
+    sync();
+  });
+
+  /* Gently point out the sound button once, a moment after it starts */
+  video.addEventListener('playing', function once() {
+    video.removeEventListener('playing', once);
+    setTimeout(() => { if (video.muted) soundBt.classList.add('nudge'); }, 1800);
   });
 
   if ('IntersectionObserver' in window) {
     new IntersectionObserver(entries => {
       entries.forEach(e => {
         visible = e.isIntersecting;
-        if (visible) tryPlay(); else if (!video.paused) video.pause();
+        if (visible) play(); else pauseSoftly();
       });
-    }, { threshold: 0.35 }).observe(video);
-  } else {
-    visible = true; tryPlay();
+    }, { threshold: 0.2 }).observe(video);
   }
-  if (reduceMotion) toggle.hidden = false;
+  document.addEventListener('visibilitychange', () => { if (document.hidden) pauseSoftly(); else play(); });
+
+  video.muted = true;   // some browsers only allow autoplay when muted is also set in script
+  sync();
+  play();
 })();
 </script>
 </body>

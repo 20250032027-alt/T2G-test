@@ -1840,16 +1840,62 @@ p { text-wrap: pretty; }
 .cr-grid { display: grid; grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr); gap: 48px; align-items: center; }
 .cr-media { position: relative; margin: 0; border-radius: 6px; overflow: hidden; background: #dfe7d8; aspect-ratio: 16 / 9; box-shadow: 0 14px 34px rgba(40, 60, 30, .14); }
 .cr-video { display: block; width: 100%; height: 100%; object-fit: cover; }
-.cr-toggle {
-  position: absolute; right: 12px; bottom: 12px; width: 40px; height: 40px; border-radius: 50%;
-  display: grid; place-items: center; background: rgba(0, 0, 0, .45); color: #fff;
-  transition: background 150ms, opacity 200ms; opacity: .85;
+/* Controls: sound pill + play/pause, bottom right */
+.cr-controls { position: absolute; right: 12px; bottom: 14px; display: flex; gap: 8px; align-items: center; z-index: 2; }
+.cr-sound, .cr-toggle {
+  height: 40px; border-radius: 999px; display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  background: rgba(0, 0, 0, .5); color: #fff; backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px);
+  transition: background 150ms, transform 120ms;
 }
-.cr-toggle:hover, .cr-toggle:focus-visible { background: rgba(0, 0, 0, .7); opacity: 1; }
-.cr-toggle svg { width: 18px; height: 18px; fill: currentColor; }
-.cr-toggle .cr-i-pause { display: none; }
-.cr-spotlight.is-playing .cr-toggle .cr-i-pause { display: block; }
-.cr-spotlight.is-playing .cr-toggle .cr-i-play { display: none; }
+.cr-toggle { width: 40px; }
+.cr-sound { padding: 0 14px 0 11px; font-size: .78rem; font-weight: 700; letter-spacing: .02em; }
+.cr-sound:hover, .cr-toggle:hover, .cr-sound:focus-visible, .cr-toggle:focus-visible { background: rgba(0, 0, 0, .72); }
+.cr-sound:active, .cr-toggle:active { transform: scale(.96); }
+.cr-sound svg, .cr-toggle svg { width: 18px; height: 18px; fill: currentColor; flex: none; }
+.cr-i-sound, .cr-i-pause { display: none; }
+.cr-spotlight.has-sound .cr-i-sound { display: block; }
+.cr-spotlight.has-sound .cr-i-muted { display: none; }
+.cr-spotlight.is-playing .cr-i-pause { display: block; }
+.cr-spotlight.is-playing .cr-i-play { display: none; }
+.cr-spotlight.has-sound .cr-sound { background: var(--green-btn); }
+/* one-time nudge so people notice there is sound */
+.cr-sound.nudge { animation: cr-nudge 1.6s ease-out 2; }
+@keyframes cr-nudge {
+  0% { box-shadow: 0 0 0 0 rgba(255, 255, 255, .55); }
+  70% { box-shadow: 0 0 0 12px rgba(255, 255, 255, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(255, 255, 255, 0); }
+}
+
+/* Thin progress line along the bottom edge */
+.cr-progress { position: absolute; left: 0; right: 0; bottom: 0; height: 3px; background: rgba(255, 255, 255, .25); z-index: 1; }
+.cr-progress i { display: block; height: 100%; background: #fff; transform-origin: left; transform: scaleX(0); }
+
+/* "Shop now" tag that slides in when the pack appears */
+.cr-chip {
+  position: absolute; left: 14px; bottom: 16px; z-index: 2;
+  display: grid; grid-template-columns: auto auto; column-gap: 12px; align-items: baseline;
+  padding: 10px 14px; border-radius: 8px; background: rgba(255, 255, 255, .94); color: var(--text);
+  text-decoration: none; box-shadow: 0 8px 24px rgba(0, 0, 0, .18);
+  opacity: 0; transform: translateY(10px); pointer-events: none;
+  transition: opacity 350ms ease, transform 350ms cubic-bezier(.2, .8, .2, 1);
+}
+.cr-spotlight.show-chip .cr-chip { opacity: 1; transform: none; pointer-events: auto; }
+.cr-chip-name { font-weight: 800; font-size: .86rem; }
+.cr-chip-price { font-weight: 700; font-size: .82rem; color: var(--text-mid); font-variant-numeric: tabular-nums; }
+.cr-chip-cta { grid-column: 1 / -1; font-size: .74rem; font-weight: 800; letter-spacing: .05em; text-transform: uppercase; color: var(--green-dark); margin-top: 2px; }
+.cr-chip:hover .cr-chip-cta { text-decoration: underline; }
+@media (max-width: 520px) {
+  .cr-sound-label { display: none; }
+  .cr-sound { width: 40px; padding: 0; }
+  .cr-chip { left: 10px; bottom: 12px; padding: 8px 11px; column-gap: 8px; }
+  .cr-chip-name { font-size: .76rem; }
+  .cr-chip-price { display: none; }
+  .cr-chip-cta { grid-column: auto; margin-top: 0; font-size: .66rem; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .cr-sound.nudge { animation: none; }
+  .cr-chip { transition: opacity 200ms; transform: none; }
+}
 .cr-copy h2 { font-size: 1.6rem; font-weight: 700; color: var(--text); margin-bottom: 14px; line-height: 1.25; }
 .cr-copy p { color: var(--text-mid); line-height: 1.75; margin-bottom: 12px; max-width: 46ch; }
 .cr-packs { list-style: none; padding: 0; margin: 18px 0 22px; border-top: 1px solid var(--border); max-width: 46ch; }
